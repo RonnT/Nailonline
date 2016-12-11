@@ -4,7 +4,7 @@ package com.nailonline.client.entity;
  * Created by Roman on 10.12.2016.
  */
 
-public class Theme {
+public class UserTheme {
 
     private Integer themeId;
     private String themeAC;

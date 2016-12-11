@@ -7,7 +7,8 @@
     android:orientation="vertical"
     tools:context="com.nailonline.client.MainActivity">
 
-    <View
+    <cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:background="@android:color/holo_red_dark" />
@@ -69,9 +70,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:onClick="onGiftClick"
         android:background="?attr/selectableItemBackground"
         android:clickable="true"
+        android:onClick="onGiftClick"
         android:orientation="horizontal">
 
         <ImageView
@@ -103,9 +104,9 @@
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:onClick="onProfileClick"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="8dp"/>
+            android:layout_marginLeft="8dp"
+            android:onClick="onProfileClick" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -117,11 +118,11 @@
 
     </LinearLayout>
 
-    <include layout="@layout/gray_divider"/>
+    <include layout="@layout/gray_divider" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/windowGrayBackground">
-    </LinearLayout>
+        android:background="@color/windowGrayBackground"></LinearLayout>
 
 </LinearLayout>

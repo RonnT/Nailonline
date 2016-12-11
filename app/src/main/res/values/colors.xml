@@ -5,6 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="windowGrayBackground">#EEEEEE</color>
 
+    <!-- used in progressBar -->
+    <color name="green">#0d8b42</color>
+
     <color name="grayDivider">#D8D8D8</color>
 
 </resources>

@@ -4,12 +4,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
+
 public class MainActivity extends BaseActivity {
+
+    public AutoScrollViewPager pager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        initViewPager();
+    }
+
+    private void initViewPager(){
+        pager = (AutoScrollViewPager) findViewById(R.id.viewPager);
+
     }
 
     public void onMasterClick(View v){
