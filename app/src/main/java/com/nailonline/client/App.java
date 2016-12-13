@@ -1,11 +1,9 @@
 package com.nailonline.client;
 
 import android.app.Application;
+import android.content.Context;
 
-import com.nailonline.client.api.Api;
-
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import com.facebook.stetho.Stetho;
 
 /**
  * Created by Roman T. on 11.12.2016.
@@ -13,21 +11,23 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class App extends Application{
 
-    private static Api api;
-    private Retrofit retrofit;
+    private static Context sContext;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://185.20.225.17:8080/core/core.php") //TODO move to BuildConfig
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        api = retrofit.create(Api.class);
+        Stetho.initializeWithDefaults(this);
+        sContext = getApplicationContext();
     }
 
-    public static Api getApi(){
-        return api;
+    public static Context getAppContext() {
+        return sContext;
     }
+
+    @Override
+    public void onTerminate() {
+        sContext = null;
+        super.onTerminate();
+    }
+
 }
