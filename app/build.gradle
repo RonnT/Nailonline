@@ -17,7 +17,22 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        buildTypes.each {
+            it.buildConfigField('String', 'SERVER', "\"http://185.20.225.17:8080/core/core.php\"");
+            it.buildConfigField('String', 'SERVER_IMAGE_PRESENTS', "\"https://www.nail-on-line.pro:8443/images/\"");
+            it.buildConfigField('String', 'SERVER_IMAGE_PROMO', "\"http://185.20.225.17/images/promo/\"");
+        }
     }
+    /*
+    static NSString *const kERegionsUrl = @"https://www.nail-on-line.pro:8443/images/eRegions.json";
+    static NSString *const kUrlImages = @"https://www.nail-on-line.pro:8443/images/";
+    static NSString *const kUrlImagesPresents = @"https://www.nail-on-line.pro:8443/images/presents/";
+    static NSString *const kUrlImagesPromo = @"http://185.20.225.17/images/promo/";
+    static NSString *const tUUID = @"";
+    static NSString *const kUrlImagesTbs = @"http://185.20.225.17/images/mastersTbs/";
+    static NSString *const kUrlImagesMasterPhoto = @"http://185.20.225.17/images/mastersPhoto/";
+    Eregions  это районы города
+       */
 }
 
 dependencies {
@@ -32,15 +47,13 @@ dependencies {
 
     //api requests
     compile 'com.android.volley:volley:1.0.0'
-    compile 'com.squareup.retrofit2:retrofit:2.1.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-
+    compile 'com.google.code.gson:gson:2.4'
 
     compile 'com.facebook.stetho:stetho:1.4.1'
     compile 'com.facebook.stetho:stetho-okhttp3:1.4.1'
 
     //autoscroll view pager
-    compile ('cn.trinea.android.view.autoscrollviewpager:android-auto-scroll-view-pager:1.1.2') {
+    compile('cn.trinea.android.view.autoscrollviewpager:android-auto-scroll-view-pager:1.1.2') {
         exclude module: 'support-v4'
     }
 
