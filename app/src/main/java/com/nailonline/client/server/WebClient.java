@@ -1,36 +1,12 @@
 package com.nailonline.client.server;
 
-import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.oliabric.nailonline.master.MasterApp;
-import com.oliabric.nailonline.master.realm.models.ModelJobs;
-import com.oliabric.nailonline.master.realm.models.ModelMaster;
-import com.oliabric.nailonline.master.utils.Constants;
-import com.oliabric.nailonline.master.utils.SettingsMaster;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
 /**
  * Created by Olga Riabkova on 17.10.2016.
  * Cheese
  */
 
-public class WebClient {
-    
+public class WebClient {}
+    /*
     private static final String TAG = "WebClient";
     
     private static String RESPONSE_IS_NULL = "Response is null";
@@ -1514,46 +1490,7 @@ public class WebClient {
     }
 
     private static ResponseHttp getResponse(String rawStr) {
-        ResponseHttp response = new ResponseHttp();
-        try {
-            response.setCode(ResponseHttp.OK);
-            response.setType(Api.ResponseType.SUCCESS);
-            JSONObject raw = new JSONObject(rawStr);
-
-            if (raw.has("success")) {
-
-                String res = raw.getString("success");
-                if (res.equals("true")) {
-
-                } else {
-                    JSONObject suc = new JSONObject(raw.getString("success"));
-                    response.setContent(suc);
-                }
-
-                return response;
-            }
-
-            if (raw.has("error")) {
-                ErrorHttp error = new ErrorHttp();
-
-                String e = raw.getString("error");
-                error.setMessage(e);
-                if (e.equals("empty")) error.setType(ErrorHttp.ErrorType.EMPTY);
-                if (e.equals("not_found")) error.setType(ErrorHttp.ErrorType.NOT_FOUND);
-                if (e.equals("incorrect")) error.setType(ErrorHttp.ErrorType.INCORRECT);
-                if (e.equals("403")) error.setType(ErrorHttp.ErrorType.INCORRECT);
-                if (e.equals("401"))
-                    error.setType(ErrorHttp.ErrorType.ENTITY_NOT_FOUND);
-                if (e.equals("Entity not found"))
-                    error.setType(ErrorHttp.ErrorType.ENTITY_NOT_FOUND);
-                response.setError(error);
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return response;
+        return new ResponseHttp(rawStr);
     }
 
     private static void showParam(Map<String, String> map) {
@@ -1562,3 +1499,4 @@ public class WebClient {
         }
     }
 }
+*/

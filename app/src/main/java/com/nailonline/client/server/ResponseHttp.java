@@ -1,5 +1,6 @@
 package com.nailonline.client.server;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -7,9 +8,38 @@ import org.json.JSONObject;
  * Cheese
  */
 public class ResponseHttp {
-    public static final int SERVER_ERROR = 403;
-    public static final int OK = 200;
-    private Api.ResponseType type;
+
+    public ResponseHttp(JSONObject raw) {
+        try {
+            if (raw.has("success")) {
+
+                String res = raw.getString("success");
+                if (!res.equals("true")) {
+                    JSONObject suc = new JSONObject(raw.getString("success"));
+                    this.setContent(suc);
+                }
+            }
+
+            if (raw.has("error")) {
+                ErrorHttp error = new ErrorHttp();
+
+                String e = raw.getString("error");
+                error.setMessage(e);
+                if (e.equals("empty")) error.setType(ErrorHttp.ErrorType.EMPTY);
+                if (e.equals("not_found")) error.setType(ErrorHttp.ErrorType.NOT_FOUND);
+                if (e.equals("incorrect")) error.setType(ErrorHttp.ErrorType.INCORRECT);
+                if (e.equals("403")) error.setType(ErrorHttp.ErrorType.INCORRECT);
+                if (e.equals("401"))
+                    error.setType(ErrorHttp.ErrorType.ENTITY_NOT_FOUND);
+                if (e.equals("Entity not found"))
+                    error.setType(ErrorHttp.ErrorType.ENTITY_NOT_FOUND);
+                this.setError(error);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     private JSONObject content;
     private ErrorHttp error;
     private int code;
@@ -29,14 +59,6 @@ public class ResponseHttp {
 
     public void setCode(int code) {
         this.code = code;
-    }
-
-    public Api.ResponseType getType() {
-        return type;
-    }
-
-    public void setType(Api.ResponseType type) {
-        this.type = type;
     }
 
     public JSONObject getContent() {

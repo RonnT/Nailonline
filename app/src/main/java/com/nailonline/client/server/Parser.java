@@ -1,43 +1,12 @@
 package com.nailonline.client.server;
 
-import android.util.Log;
-
-import com.oliabric.nailonline.master.MasterApp;
-import com.oliabric.nailonline.master.realm.RealmDutyChart;
-import com.oliabric.nailonline.master.realm.RealmJob;
-import com.oliabric.nailonline.master.realm.RealmLocation;
-import com.oliabric.nailonline.master.realm.RealmMaster;
-import com.oliabric.nailonline.master.realm.RealmPresent;
-import com.oliabric.nailonline.master.realm.RealmPromo;
-import com.oliabric.nailonline.master.realm.RealmRegion;
-import com.oliabric.nailonline.master.realm.RealmSkill;
-import com.oliabric.nailonline.master.realm.RealmTemplate;
-import com.oliabric.nailonline.master.realm.RealmUser;
-import com.oliabric.nailonline.master.realm.models.ModelDutyChart;
-import com.oliabric.nailonline.master.realm.models.ModelJobs;
-import com.oliabric.nailonline.master.realm.models.ModelLocation;
-import com.oliabric.nailonline.master.realm.models.ModelPresent;
-import com.oliabric.nailonline.master.realm.models.ModelPromo;
-import com.oliabric.nailonline.master.realm.models.ModelRegion;
-import com.oliabric.nailonline.master.realm.models.ModelSkills;
-import com.oliabric.nailonline.master.realm.models.ModelTemplate;
-import com.oliabric.nailonline.master.realm.models.ModelUser;
-import com.oliabric.nailonline.master.utils.Constants;
-import com.oliabric.nailonline.master.utils.SettingsMaster;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import io.realm.Realm;
-
 /**
  * Created by Olga Riabkova on 17.10.2016.
  * Cheese
  */
 
 class Parser {
-
+/*
     static String getToken(String response) {
         String res = SettingsMaster.DEFAULT_STRING;
 
@@ -58,7 +27,7 @@ class Parser {
 
     static void parseGetMaster(String response) {
 
-        Realm realm = Realm.getInstance(MasterApp.getRealmConfig());
+        Realm realm = Realm.getDefaultInstance();
         try {
             JSONObject o = new JSONObject(response);
             final JSONObject jsonObjectUser = o.optJSONObject("master");
@@ -126,7 +95,7 @@ class Parser {
 
         ModelSkills.deleteInfo();
 
-        Realm realm = Realm.getInstance(MasterApp.getRealmConfig());
+        Realm realm = Realm.getDefaultInstance();
         try {
             JSONObject o = new JSONObject(response);
             final JSONArray jsonObjectUser = o.optJSONArray("list");
@@ -148,7 +117,7 @@ class Parser {
 
     static void parseGetMasterJobs(String response) {
 
-        Realm realm = Realm.getInstance(MasterApp.getRealmConfig());
+        Realm realm = Realm.getDefaultInstance();
         try {
             JSONObject o = new JSONObject(response);
             final JSONArray jsonObjectJobs = o.optJSONArray("list");
@@ -175,7 +144,7 @@ class Parser {
 
         ModelUser.deleteInfo();
 
-        Realm realm = Realm.getInstance(MasterApp.getRealmConfig());
+        Realm realm = Realm.getDefaultInstance();
         try {
             JSONObject o = new JSONObject(response);
             final JSONArray jsonObjectUser = o.optJSONArray("list");
@@ -199,7 +168,7 @@ class Parser {
 
         ModelTemplate.deleteInfo();
 
-        Realm realm = Realm.getInstance(MasterApp.getRealmConfig());
+        Realm realm = Realm.getDefaultInstance();
         try {
             JSONObject o = new JSONObject(response);
             final JSONArray jsonObjectUser = o.optJSONArray("list");
@@ -223,7 +192,7 @@ class Parser {
 
         ModelRegion.deleteInfo();
 
-        Realm realm = Realm.getInstance(MasterApp.getRealmConfig());
+        Realm realm = Realm.getDefaultInstance();
         try {
             JSONObject o = new JSONObject(response);
             final JSONArray jsonArray = o.optJSONArray("Data");
@@ -240,5 +209,5 @@ class Parser {
 
         realm.close();
 
-    }
+    }*/
 }
