@@ -1,5 +1,6 @@
 package com.nailonline.client;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
@@ -11,9 +12,13 @@ public class MainActivity extends BaseActivity {
     public AutoScrollViewPager pager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    protected int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    protected void setData(Bundle savedInstanceState) {
+        super.setData(savedInstanceState);
         initViewPager();
     }
 
@@ -35,7 +40,8 @@ public class MainActivity extends BaseActivity {
     }
 
     public void onProfileClick(View v){
-        Toast.makeText(this,"onProfileClick", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, UserThemeActivity.class);
+        startActivity(intent);
     }
 
 }

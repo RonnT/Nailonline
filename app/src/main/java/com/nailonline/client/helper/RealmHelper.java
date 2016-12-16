@@ -24,6 +24,20 @@ public class RealmHelper {
         realm.close();
     }
 
+    public static UserTheme getDefaultTheme(){
+        Realm realm = Realm.getDefaultInstance();
+        UserTheme result = realm.copyFromRealm(realm.where(UserTheme.class).equalTo("themeDefault", 1).findFirst());
+        realm.close();
+        return result;
+    }
+
+    public static UserTheme getUserTheme(int id){
+        Realm realm = Realm.getDefaultInstance();
+        UserTheme result = realm.copyFromRealm(realm.where(UserTheme.class).equalTo("themeId", id).findFirst());
+        realm.close();
+        return result;
+    }
+
     public static List<UserTheme> getAllThemes(){
         Realm realm = Realm.getDefaultInstance();
         List<UserTheme> result = realm.copyFromRealm(realm.where(UserTheme.class).findAll());

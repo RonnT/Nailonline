@@ -25,7 +25,8 @@ public class PrefsHelper {
     private static final String
             PREFS_NAME = "com.nailonline.client.prefs",
 
-            PREF_FREE_TOKEN = "PREF_FREE_TOKEN";
+            PREF_FREE_TOKEN = "PREF_FREE_TOKEN",
+            PREF_USER_THEME = "PREF_USER_THEME";
 
     private SharedPreferences mPrefs;
     private SharedPreferences.Editor mEditor;
@@ -72,5 +73,13 @@ public class PrefsHelper {
 
     public String getFreeToken(){
         return getString(PREF_FREE_TOKEN, "");
+    }
+
+    public void setUserThemeId(int id){
+        putInt(PREF_USER_THEME, id);
+    }
+
+    public int getUserThemeId(){
+        return mPrefs.getInt(PREF_USER_THEME, -1);
     }
 }

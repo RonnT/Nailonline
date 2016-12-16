@@ -10,4 +10,16 @@
 
     <color name="grayDivider">#D8D8D8</color>
 
+    <color name="themeAC">#9e4624ff</color>
+    <color name="themeBC">#464646ff</color>
+    <color name="themeGC">#fafafaff</color>
+    <color name="themeMC">#af9483ff</color>
+    <color name="themeWC">#ffffffff</color>
+
+    <color name="themeAC1">#066e51ff</color>
+    <color name="themeBC1">#464646ff</color>
+    <color name="themeGC1">#fafafaff</color>
+    <color name="themeMC1">#4e6a92ff</color>
+    <color name="themeWC1">#ffffffff</color>
+
 </resources>

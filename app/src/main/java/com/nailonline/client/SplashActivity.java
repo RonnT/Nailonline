@@ -1,8 +1,8 @@
 package com.nailonline.client;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -17,8 +17,6 @@ import com.nailonline.client.server.ResponseHttp;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.List;
-
 /**
  * Created by Roman T. on 11.12.2016.
  */
@@ -28,10 +26,13 @@ public class SplashActivity extends BaseActivity {
     private static final String TAG = "SplashActivity";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+    protected int getLayoutId() {
+        return R.layout.activity_splash;
+    }
 
+    @Override
+    protected void setData(Bundle savedInstanceState) {
+        super.setData(savedInstanceState);
         if (PrefsHelper.getInstance().getFreeToken().isEmpty()) getTokenFromApi();
         else syncronizeData();
     }
@@ -64,8 +65,6 @@ public class SplashActivity extends BaseActivity {
         ApiVolley.getInstance().getThemes(new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-
-                Log.d(TAG, response.toString());
                 ResponseHttp responseHttp = new ResponseHttp(response);
                 if (responseHttp != null) {
                     if (responseHttp.getError() != null) {
@@ -73,7 +72,7 @@ public class SplashActivity extends BaseActivity {
                         Log.d(TAG, "get_master_skills error " + responseHttp.getError().getType());
                         Log.d(TAG, "get_master_skills content " + responseHttp.getError().getMessage());
 
-                        if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) {
+                        if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) { //TODO уточнить с ошибкой
                             RealmHelper.clearAllForClass(UserTheme.class);
                         }
                         return;
@@ -81,16 +80,14 @@ public class SplashActivity extends BaseActivity {
 
                     try {
                         ParserHelper.parseAndSaveThemes(response);
+                        Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                        startActivity(intent);
                     } catch (JSONException e) {
                         //TODO make error
                         e.printStackTrace();
                     }
-//                            context.sendBroadcast(new Intent(Constants.INTENT_GET_MASTER));
                 }
 
-                /*UserThemeWrapper wrapper = new Gson().fromJson(response.toString(), UserThemeWrapper.class);
-                List<UserTheme> themeList = wrapper.getList();
-                Log.d("Splash", String.valueOf(themeList.size()));*/
 
             }
         }, new Response.ErrorListener() {
@@ -99,12 +96,5 @@ public class SplashActivity extends BaseActivity {
 
             }
         });
-    }
-
-    public void onButtonClick(View view){
-        List<UserTheme> list = RealmHelper.getAllThemes();
-        for (UserTheme theme : list){
-            Log.d(TAG, theme.toString());
-        }
     }
 }
