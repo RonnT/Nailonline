@@ -5,11 +5,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import com.nailonline.client.entity.Promo;
+import com.nailonline.client.helper.RealmHelper;
+import com.nailonline.client.promo.PromoSlidePageAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
 public class MainActivity extends BaseActivity {
 
-    public AutoScrollViewPager pager;
+    private static int AUTOSCROLL_INTERVAL = 5000;
+
+    private List<Promo> promoList = new ArrayList<>();
+    private AutoScrollViewPager pager;
+    private PromoSlidePageAdapter adapter;
 
     @Override
     protected int getLayoutId() {
@@ -23,12 +34,18 @@ public class MainActivity extends BaseActivity {
     }
 
     private void initViewPager(){
-        pager = (AutoScrollViewPager) findViewById(R.id.viewPager);
-
+        promoList.clear();
+        promoList.addAll(RealmHelper.getAllPromo());
+        pager = (AutoScrollViewPager) findViewById(R.id.promoPager);
+        pager.setInterval(AUTOSCROLL_INTERVAL);
+        pager.startAutoScroll();
+        adapter = new PromoSlidePageAdapter(getSupportFragmentManager(), promoList);
+        pager.setAdapter(adapter);
     }
 
     public void onMasterClick(View v){
-        Toast.makeText(this,"onMasterClick", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, MasterTabActivity.class);
+        startActivity(intent);
     }
 
     public void onServiceClick(View v){

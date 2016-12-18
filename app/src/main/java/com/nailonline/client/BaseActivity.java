@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nailonline.client.entity.UserTheme;
@@ -43,28 +46,54 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
     //to set themes
 
-    protected void deepChangeTextColor() {
-        if (toolbar != null) toolbar.setBackgroundColor(Color.parseColor("#" + userTheme.getThemeMC()));
-
+    protected void changeColorsForTheme() {
+        if (toolbar != null) {
+            toolbar.setBackgroundColor(userTheme.getParsedMC());
+            toolbar.setTitleTextColor(Color.WHITE);
+        }
         ViewGroup viewGroup = (ViewGroup) findViewById(R.id.activityContent);
-        deepChangeTextColor(viewGroup);
+        changeColorsForTheme(viewGroup);
     }
 
-    private void deepChangeTextColor(ViewGroup parentLayout) {
+    private void changeColorsForTheme(ViewGroup parentLayout) {
+        if (parentLayout == null){
+            Log.e("Nail", "activity content id not found");
+            return;
+        }
         for (int count = 0; count < parentLayout.getChildCount(); count++) {
             View view = parentLayout.getChildAt(count);
-            if (view instanceof TextView) {
-                ((TextView) view).setTextColor(Color.parseColor("#" + userTheme.getThemeAC()));
+            if (view instanceof TextView && view.getTag() != null) {
+                if (view.getTag().equals(getString(R.string.tag_painted))) {
+                    ((TextView)view).setTextColor(userTheme.getParcedAC());
+                }
+            } else if (view instanceof ImageView && view.getTag() != null) {
+                if (view.getTag().equals(getString(R.string.tag_painted))){
+                    ((ImageView)view).setColorFilter(userTheme.getParcedAC());
+                }
             } else if (view instanceof ViewGroup) {
-                deepChangeTextColor((ViewGroup) view);
+                changeColorsForTheme((ViewGroup) view);
             }
         }
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public UserTheme getUserTheme(){
+        return userTheme;
+    }
+
+    @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        deepChangeTextColor();
+        changeColorsForTheme();
     }
 
     protected void setData(Bundle savedInstanceState){

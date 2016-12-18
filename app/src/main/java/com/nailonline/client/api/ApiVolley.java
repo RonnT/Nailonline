@@ -86,10 +86,6 @@ public class ApiVolley {
         return params;
     }
 
-    /*public void sendRequest(int pMethod, String pUrl, Response.Listener<JSONObject> pRL,
-                            Response.ErrorListener pEL) {
-        sendRequest(pMethod, pUrl, null, pRL, pEL);
-    }*/
 
     public void sendRequest(int pMethod, final Map<String, String> pParams,
                             Response.Listener<JSONObject> pRL,
@@ -121,5 +117,11 @@ public class ApiVolley {
         sendRequest(POST, getDefaultParams("get_themes"), pRL, pEL);
     }
 
+    public void getAllSliderPromo(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        sendRequest(POST, getDefaultParams("get_all_sliderPromo"), pRL, pEL);
+    }
 
+    public void getAllMasters(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        sendRequest(POST, getDefaultParams("get_all_masters"), pRL, pEL);
+    }
 }

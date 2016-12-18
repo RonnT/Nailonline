@@ -5,21 +5,23 @@
     <color name="colorAccent">#FF4081</color>
     <color name="windowGrayBackground">#EEEEEE</color>
 
+    <color name="promo_text_background">#40000000</color>
+
     <!-- used in progressBar -->
     <color name="green">#0d8b42</color>
 
     <color name="grayDivider">#D8D8D8</color>
 
-    <color name="themeAC">#9e4624ff</color>
-    <color name="themeBC">#464646ff</color>
-    <color name="themeGC">#fafafaff</color>
-    <color name="themeMC">#af9483ff</color>
+    <color name="themeAC">#ff9e4624</color>
+    <color name="themeBC">#ff464646</color>
+    <color name="themeGC">#fffafafa</color>
+    <color name="themeMC">#ffaf9483</color>
     <color name="themeWC">#ffffffff</color>
 
-    <color name="themeAC1">#066e51ff</color>
-    <color name="themeBC1">#464646ff</color>
-    <color name="themeGC1">#fafafaff</color>
-    <color name="themeMC1">#4e6a92ff</color>
+    <color name="themeAC1">#ff066e51</color>
+    <color name="themeBC1">#ff464646</color>
+    <color name="themeGC1">#fffafafa</color>
+    <color name="themeMC1">#ff4e6a92</color>
     <color name="themeWC1">#ffffffff</color>
 
 </resources>

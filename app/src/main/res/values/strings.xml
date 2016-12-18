@@ -1,9 +1,19 @@
 <resources>
     <string name="app_name">Nail-on-line</string>
 
+    <string name="tag_painted">painted</string>
+
     <!-- General menu -->
     <string name="menu_find_master">Найти мастера</string>
     <string name="menu_find_service">Найти по услуге</string>
     <string name="menu_gifts">Подарки</string>
     <string name="menu_profile">Мой профиль</string>
+
+    <!-- Resources for promo -->
+    <string name="submit_promo">Записаться по акции</string>
+
+    <!-- MasterTabActivity -->
+    <string name="tab_map">Карта</string>
+    <string name="tab_list">Список</string>
+    <string name="tab_gallery">Галерея</string>
 </resources>

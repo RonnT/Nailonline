@@ -12,10 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"
-            android:label="Nail-on-line">
+            android:label="Nail-on-line"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait"
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,7 +26,15 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".UserThemeActivity">
+        <activity android:name=".UserThemeActivity"
+            android:screenOrientation="portrait"
+            android:label="">
+        </activity>
+
+        <activity android:name=".MasterTabActivity"
+            android:screenOrientation="portrait"
+            android:label="Выбрать мастера">
+
         </activity>
 
     </application>

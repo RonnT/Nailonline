@@ -1,5 +1,7 @@
 package com.nailonline.client.entity;
 
+import android.graphics.Color;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -7,7 +9,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by Roman on 10.12.2016.
  */
 
-public class UserTheme extends RealmObject{
+public class UserTheme extends RealmObject {
 
     @PrimaryKey
     private Integer themeId;
@@ -31,12 +33,20 @@ public class UserTheme extends RealmObject{
         return themeAC;
     }
 
+    public int getParcedAC(){
+        return Color.parseColor(convertColor(themeAC));
+    }
+
     public void setThemeAC(String themeAC) {
         this.themeAC = themeAC;
     }
 
     public String getThemeBC() {
         return themeBC;
+    }
+
+    public int getParcedBC() {
+        return Color.parseColor(convertColor(themeBC));
     }
 
     public void setThemeBC(String themeBC) {
@@ -55,12 +65,20 @@ public class UserTheme extends RealmObject{
         return themeGC;
     }
 
+    public int getParsedGC() {
+        return Color.parseColor(convertColor(themeGC));
+    }
+
     public void setThemeGC(String themeGC) {
         this.themeGC = themeGC;
     }
 
     public String getThemeMC() {
         return themeMC;
+    }
+
+    public int getParsedMC() {
+        return Color.parseColor(convertColor(themeMC));
     }
 
     public void setThemeMC(String themeMC) {
@@ -79,8 +97,17 @@ public class UserTheme extends RealmObject{
         return themeWC;
     }
 
+    public int getParseWC() {
+        return Color.parseColor(convertColor(themeWC));
+    }
+
     public void setThemeWC(String themeWC) {
         this.themeWC = themeWC;
+    }
+
+    public static String convertColor(String color){
+        //Color came from API with RGBA format , need to convert to ARGB and add #
+        return "#" + color.substring(6) + color.substring(0,6);
     }
 
     @Override
