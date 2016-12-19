@@ -2,10 +2,16 @@ package com.nailonline.client;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+
+import com.nailonline.client.entity.Master;
+import com.nailonline.client.helper.RealmHelper;
+
+import java.util.List;
 
 /**
  * Created by Roman T. on 18.12.2016.
@@ -13,9 +19,21 @@ import android.support.v4.view.ViewPager;
 
 public class MasterTabActivity extends BaseActivity {
 
+    private List<Master> masterList;
+
+    public List<Master> getMasterList() {
+        return masterList;
+    }
+
     @Override
     protected int getLayoutId() {
         return R.layout.activity_master_tab;
+    }
+
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        isNeedDeepSetColor = false;
     }
 
     @Override
@@ -23,6 +41,7 @@ public class MasterTabActivity extends BaseActivity {
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTabLayout();
+        masterList = RealmHelper.getAllMasters();
     }
 
     private void setTabLayout() {
@@ -36,7 +55,7 @@ public class MasterTabActivity extends BaseActivity {
         tabLayout.setupWithViewPager(pager);
     }
 
-    private class MasterTabAdapter extends android.support.v4.app.FragmentStatePagerAdapter{
+    private class MasterTabAdapter extends android.support.v4.app.FragmentPagerAdapter{
 
         private Fragment[] fragments = {
                 new MasterGalleryFragment(),

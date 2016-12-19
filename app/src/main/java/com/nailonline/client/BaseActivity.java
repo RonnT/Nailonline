@@ -24,6 +24,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     protected UserTheme userTheme;
     protected Toolbar toolbar;
+    protected boolean isNeedDeepSetColor = true;
+
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,8 +54,10 @@ public abstract class BaseActivity extends AppCompatActivity {
             toolbar.setBackgroundColor(userTheme.getParsedMC());
             toolbar.setTitleTextColor(Color.WHITE);
         }
-        ViewGroup viewGroup = (ViewGroup) findViewById(R.id.activityContent);
-        changeColorsForTheme(viewGroup);
+        if (isNeedDeepSetColor){
+            ViewGroup viewGroup = (ViewGroup) findViewById(R.id.activityContent);
+            changeColorsForTheme(viewGroup);
+        }
     }
 
     private void changeColorsForTheme(ViewGroup parentLayout) {
