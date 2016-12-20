@@ -1,6 +1,7 @@
 package com.nailonline.client.helper;
 
 import com.nailonline.client.entity.Master;
+import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.entity.UserTheme;
 
@@ -64,6 +65,12 @@ public class RealmHelper {
     public static List<Master> getAllMasters(){
         Realm realm = Realm.getDefaultInstance();
         List<Master> result = realm.copyFromRealm(realm.where(Master.class).findAll());
+
+        for (Master master : result){
+            Integer masterLocationId = master.getMasterMainLocationId();
+            MasterLocation location = realm.where(MasterLocation.class).equalTo("masterLocationId", masterLocationId).findFirst();
+            if (location != null) master.setMasterLocation(realm.copyFromRealm(location));
+        }
         realm.close();
         return result;
     }

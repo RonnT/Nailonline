@@ -39,6 +39,8 @@ public class Master extends RealmObject {
     private String masterToken;
     private String masterVk;
 
+    private MasterLocation masterLocation;
+
     public int getMasterId() {
         return masterId;
     }
@@ -261,5 +263,13 @@ public class Master extends RealmObject {
 
     public void setMasterVk(String masterVk) {
         this.masterVk = masterVk;
+    }
+
+    public MasterLocation getMasterLocation() {
+        return masterLocation;
+    }
+
+    public void setMasterLocation(MasterLocation masterLocation) {
+        this.masterLocation = masterLocation;
     }
 }

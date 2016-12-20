@@ -52,7 +52,7 @@
                     android:textColor="@android:color/white"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="Москва, Красная площадь"/>
+                    tools:text="Москва, Красная площадь"/>
 
             </LinearLayout>
 

@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="windowGrayBackground">#EEEEEE</color>
 
+    <color name="splash_background">#D7569B</color>
+
     <color name="promo_text_background">#40000000</color>
 
     <!-- used in progressBar -->

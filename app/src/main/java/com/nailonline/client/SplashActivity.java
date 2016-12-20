@@ -8,6 +8,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.nailonline.client.api.ApiVolley;
 import com.nailonline.client.entity.Master;
+import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.entity.UserTheme;
 import com.nailonline.client.helper.ParserHelper;
@@ -30,6 +31,7 @@ public class SplashActivity extends BaseActivity {
     private boolean isThemesReady;
     private boolean isPromoReady;
     private boolean isMastersReady;
+    private boolean isLocationsReady;
 
     @Override
     protected int getLayoutId() {
@@ -76,6 +78,7 @@ public class SplashActivity extends BaseActivity {
         syncronizeThemes();
         syncronizePromo();
         syncronizeMasters();
+        syncronizeMasterLocations();
     }
 
     private void syncronizeThemes(){
@@ -159,8 +162,8 @@ public class SplashActivity extends BaseActivity {
                 if (responseHttp != null) {
                     if (responseHttp.getError() != null) {
 
-                        Log.d(TAG, "get_all_sliderPromo error " + responseHttp.getError().getType());
-                        Log.d(TAG, "get_all_sliderPromo content " + responseHttp.getError().getMessage());
+                        Log.d(TAG, "get_all_masters error " + responseHttp.getError().getType());
+                        Log.d(TAG, "get_all_masters content " + responseHttp.getError().getMessage());
 
                         if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) { //TODO уточнить с ошибкой
                             RealmHelper.clearAllForClass(Master.class);
@@ -186,8 +189,46 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
+    private void syncronizeMasterLocations(){
+        ApiVolley.getInstance().getAllMasterLocations(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                isLocationsReady = true;
+                ResponseHttp responseHttp = new ResponseHttp(response);
+                if (responseHttp != null) {
+                    if (responseHttp.getError() != null) {
+
+                        Log.d(TAG, "get_all_locations " + responseHttp.getError().getType());
+                        Log.d(TAG, "get_all_locations content " + responseHttp.getError().getMessage());
+
+                        if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) { //TODO уточнить с ошибкой
+                            RealmHelper.clearAllForClass(MasterLocation.class);
+                        }
+                        return;
+                    }
+                    try {
+                        ParserHelper.parseAndSaveMasterLocations(response);
+                        checkSyncronizeFinish();
+                    } catch (JSONException e) {
+                        //TODO make error
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isLocationsReady = true;
+                //TODO make error
+            }
+        });
+    }
+
     private void checkSyncronizeFinish(){
-        if (isPromoReady && isThemesReady && isMastersReady){
+        if (isPromoReady &&
+                isThemesReady &&
+                isMastersReady &&
+                isLocationsReady){
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         }

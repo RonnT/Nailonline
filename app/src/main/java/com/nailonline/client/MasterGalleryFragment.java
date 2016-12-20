@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nailonline.client.entity.Master;
+import com.nailonline.client.entity.MasterLocation;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -55,6 +56,10 @@ public class MasterGalleryFragment extends Fragment {
                     .load(BuildConfig.SERVER_IMAGE_MASTER_PHOTO + masterItem.getMasterPhoto())
                     .into(holder.photoView);
             holder.masterName.setText(masterItem.getMasterFirstName());
+            MasterLocation masterLocation = masterItem.getMasterLocation();
+            if (masterLocation != null && masterLocation.getAddress() != null){
+                holder.masterAddress.setText(masterLocation.getAddress());
+            }
             holder.submitView.setBackgroundColor(((BaseActivity)getActivity()).getUserTheme().getParcedAC());
         }
 
