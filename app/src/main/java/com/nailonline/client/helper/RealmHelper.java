@@ -67,8 +67,7 @@ public class RealmHelper {
         List<Master> result = realm.copyFromRealm(realm.where(Master.class).findAll());
 
         for (Master master : result){
-            Integer masterLocationId = master.getMasterMainLocationId();
-            MasterLocation location = realm.where(MasterLocation.class).equalTo("masterLocationId", masterLocationId).findFirst();
+            MasterLocation location = realm.where(MasterLocation.class).equalTo("masterId", master.getMasterId()).findFirst();
             if (location != null) master.setMasterLocation(realm.copyFromRealm(location));
         }
         realm.close();

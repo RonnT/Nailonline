@@ -1,4 +1,4 @@
-package com.nailonline.client;
+package com.nailonline.client.master;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nailonline.client.BaseActivity;
+import com.nailonline.client.BuildConfig;
+import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.squareup.picasso.Picasso;
@@ -36,7 +39,7 @@ public class MasterGalleryFragment extends Fragment {
     }
 
     private void initRecyclerView(View view){
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.gallery_recycler_view);
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.master_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new GalleryAdapter());
     }
@@ -60,7 +63,7 @@ public class MasterGalleryFragment extends Fragment {
             if (masterLocation != null && masterLocation.getAddress() != null){
                 holder.masterAddress.setText(masterLocation.getAddress());
             }
-            holder.submitView.setBackgroundColor(((BaseActivity)getActivity()).getUserTheme().getParcedAC());
+            holder.submitView.setBackgroundColor(((BaseActivity)getActivity()).getUserTheme().getParsedAC());
         }
 
         @Override

@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.helper.RealmHelper;
+import com.nailonline.client.master.MasterTabActivity;
 import com.nailonline.client.promo.PromoSlidePageAdapter;
 
 import java.util.ArrayList;

@@ -69,11 +69,11 @@ public abstract class BaseActivity extends AppCompatActivity {
             View view = parentLayout.getChildAt(count);
             if (view instanceof TextView && view.getTag() != null) {
                 if (view.getTag().equals(getString(R.string.tag_painted))) {
-                    ((TextView)view).setTextColor(userTheme.getParcedAC());
+                    ((TextView)view).setTextColor(userTheme.getParsedAC());
                 }
             } else if (view instanceof ImageView && view.getTag() != null) {
                 if (view.getTag().equals(getString(R.string.tag_painted))){
-                    ((ImageView)view).setColorFilter(userTheme.getParcedAC());
+                    ((ImageView)view).setColorFilter(userTheme.getParsedAC());
                 }
             } else if (view instanceof ViewGroup) {
                 changeColorsForTheme((ViewGroup) view);

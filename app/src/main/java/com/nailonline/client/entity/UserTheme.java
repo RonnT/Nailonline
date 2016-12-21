@@ -33,7 +33,7 @@ public class UserTheme extends RealmObject {
         return themeAC;
     }
 
-    public int getParcedAC(){
+    public int getParsedAC(){
         return Color.parseColor(convertColor(themeAC));
     }
 

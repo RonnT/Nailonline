@@ -1,4 +1,4 @@
-package com.nailonline.client;
+package com.nailonline.client.master;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
+import com.nailonline.client.BaseActivity;
+import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.helper.RealmHelper;
 
@@ -48,7 +50,7 @@ public class MasterTabActivity extends BaseActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.master_tablayout);
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
         tabLayout.setBackgroundColor(userTheme.getParsedMC());
-        tabLayout.setSelectedTabIndicatorColor(userTheme.getParcedAC());
+        tabLayout.setSelectedTabIndicatorColor(userTheme.getParsedAC());
         ViewPager pager = (ViewPager) findViewById(R.id.master_viewpager);
         MasterTabAdapter adapter = new MasterTabAdapter(getSupportFragmentManager());
         pager.setAdapter(adapter);
@@ -59,7 +61,7 @@ public class MasterTabActivity extends BaseActivity {
 
         private Fragment[] fragments = {
                 new MasterGalleryFragment(),
-                new MasterGalleryFragment(),
+                new MasterListFragment(),
                 new MasterGalleryFragment()};
 
         private int tabTitlesId[] = {R.string.tab_map, R.string.tab_list, R.string.tab_gallery};

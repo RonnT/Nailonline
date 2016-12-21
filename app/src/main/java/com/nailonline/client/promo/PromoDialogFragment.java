@@ -49,7 +49,7 @@ public class PromoDialogFragment extends DialogFragment {
         TextView bodyText = (TextView) view.findViewById(R.id.promoTextBody);
 
         ViewGroup submitLayout = (ViewGroup) view.findViewById(R.id.submitLayout);
-        submitLayout.setBackgroundColor(((BaseActivity) getActivity()).getUserTheme().getParcedAC());
+        submitLayout.setBackgroundColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
 
         textLabel.setText(promo.getLabel());
         bodyText.setText(promo.getBody());

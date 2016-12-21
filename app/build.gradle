@@ -56,8 +56,9 @@ dependencies {
     //download images
     compile 'com.squareup.picasso:picasso:2.5.2'
 
-    //Material dialogs library
+    //Custom views
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
 
     compile 'joda-time:joda-time:2.3'
     compile 'com.facebook.stetho:stetho:1.4.1'
