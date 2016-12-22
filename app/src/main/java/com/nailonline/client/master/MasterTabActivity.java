@@ -60,7 +60,7 @@ public class MasterTabActivity extends BaseActivity {
     private class MasterTabAdapter extends android.support.v4.app.FragmentPagerAdapter{
 
         private Fragment[] fragments = {
-                new MasterGalleryFragment(),
+                new MasterMapFragment(),
                 new MasterListFragment(),
                 new MasterGalleryFragment()};
 
