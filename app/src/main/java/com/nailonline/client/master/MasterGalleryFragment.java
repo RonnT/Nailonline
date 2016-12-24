@@ -34,21 +34,31 @@ public class MasterGalleryFragment extends Fragment {
         //LayoutInflater layoutInflater = getActivity().getLayoutInflater();
         View fragmentView = inflater.inflate(R.layout.fragment_master_gallery, container, false);
         initRecyclerView(fragmentView);
-        masterList = ((MasterTabActivity)getActivity()).getMasterList();
+        masterList = ((MasterTabActivity) getActivity()).getMasterList();
         return fragmentView;
     }
 
-    private void initRecyclerView(View view){
+    private void initRecyclerView(View view) {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.master_recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(new GalleryAdapter());
     }
 
-    private class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder>{
+    private class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
 
         @Override
-        public GalleryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_master_gallery_item, parent, false);
+        public GalleryViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_master_gallery_tbs_item, parent, false);
+            View submitView = view.findViewById(R.id.submit_layout);
+            submitView.setBackgroundColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
+            submitView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (view.getTag() != null) {
+                        ((MasterTabActivity) getActivity()).makeNewOrder((int) view.getTag());
+                    }
+                }
+            });
             return new GalleryViewHolder(view);
         }
 
@@ -60,10 +70,10 @@ public class MasterGalleryFragment extends Fragment {
                     .into(holder.photoView);
             holder.masterName.setText(masterItem.getMasterFirstName());
             MasterLocation masterLocation = masterItem.getMasterLocation();
-            if (masterLocation != null && masterLocation.getAddress() != null){
+            if (masterLocation != null && masterLocation.getAddress() != null) {
                 holder.masterAddress.setText(masterLocation.getAddress());
-            }
-            holder.submitView.setBackgroundColor(((BaseActivity)getActivity()).getUserTheme().getParsedAC());
+            } else holder.masterAddress.setText("");
+            holder.submitView.setTag(position);
         }
 
         @Override
@@ -72,7 +82,7 @@ public class MasterGalleryFragment extends Fragment {
         }
     }
 
-    private class GalleryViewHolder extends RecyclerView.ViewHolder{
+    private class GalleryViewHolder extends RecyclerView.ViewHolder {
 
         ImageView photoView;
         TextView masterName;

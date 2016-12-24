@@ -1,15 +1,16 @@
 package com.nailonline.client.master;
 
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
+import android.Manifest;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -22,18 +23,24 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
 
 /**
  * Created by Roman T. on 22.12.2016.
  */
 
-public class MasterMapFragment extends Fragment implements OnMapReadyCallback {
+@RuntimePermissions
+public class MasterMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap map;
     private MapView mapView;
@@ -54,7 +61,26 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+        map.setInfoWindowAdapter(new MasterInfoWindowAdpater());
+        map.setOnInfoWindowLongClickListener(null);
+        map.setOnInfoWindowClickListener(this);
+        map.getUiSettings().setMapToolbarEnabled(false);
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                if (marker.getTag() != null) {
+                    ((MasterTabActivity) getActivity()).makeNewOrder(((Master)marker.getTag()));
+                }
+            }
+        });
+        MasterMapFragmentPermissionsDispatcher.addMyLocationWithCheck(this);
         setupMap();
+    }
+
+    @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+    @SuppressWarnings("All")
+    void addMyLocation(){
+        map.setMyLocationEnabled(true);
     }
 
     protected void setupMap(){
@@ -66,13 +92,12 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback {
 
     protected void addMarker(Master masterItem) {
         MasterLocation location = masterItem.getMasterLocation();
-        Drawable iconDrawable = VectorDrawableCompat.create(getResources(), R.drawable.master_marker, null);
-        BitmapDescriptor markerIcon = getMarkerIconFromDrawable(iconDrawable);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.master_marker);
         Marker addedMarker = map.addMarker(
                 new MarkerOptions()
                         .position(new LatLng(location.getLat(), location.getLng()))
-                        .title(null)
-                        .icon(markerIcon)
+                        .title(masterItem.getMasterFirstName())
+                        .icon(icon)
                         .anchor(0.5F, 0.5F)
         );
         addedMarker.setTag(masterItem);
@@ -81,18 +106,14 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback {
 
     protected void setBounds() {
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
-
         for (Marker marker : markerList) {
             builder.include(marker.getPosition());
         }
         LatLngBounds bounds = builder.build();
-
         // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, (int) getActivity().getResources().getDimension(R.dimen.map_bounds_padding));
-
         map.animateCamera(cu);
     }
-
 
     @Override
     public void onResume() {
@@ -118,12 +139,46 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback {
         mapView.onLowMemory();
     }
 
-    private BitmapDescriptor getMarkerIconFromDrawable(Drawable drawable) {
-        Canvas canvas = new Canvas();
-        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
-        canvas.setBitmap(bitmap);
-        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-        drawable.draw(canvas);
-        return BitmapDescriptorFactory.fromBitmap(bitmap);
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(getActivity(),
+                "Info Window clicked@" + marker.getId(),
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        MasterMapFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    private class MasterInfoWindowAdpater implements GoogleMap.InfoWindowAdapter {
+        private final View mymarkerview;
+
+        MasterInfoWindowAdpater() {
+            mymarkerview = getActivity().getLayoutInflater()
+                    .inflate(R.layout.view_master_info_window, null);
+        }
+
+        public View getInfoWindow(Marker marker) {
+            return null;
+        }
+
+        public View getInfoContents(Marker marker) {
+            render(marker, mymarkerview);
+            return mymarkerview;
+        }
+
+        private void render(Marker marker, View view) {
+            Master masterItem = (Master) marker.getTag();
+            ImageView photo = (ImageView) view.findViewById(R.id.master_photo);
+            TextView masterName = (TextView) view.findViewById(R.id.master_name);
+            TextView masterAddress = (TextView) view.findViewById(R.id.master_address);
+            Picasso.with(getActivity())
+                    .load(BuildConfig.SERVER_IMAGE_MASTER_PHOTO + masterItem.getMasterPhoto())
+                    .into(photo);
+            masterName.setText(masterItem.getMasterFirstName());
+            masterAddress.setText(masterItem.getMasterLocation().getAddress());
+        }
     }
 }

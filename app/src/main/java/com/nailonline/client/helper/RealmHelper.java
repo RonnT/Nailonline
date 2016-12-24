@@ -5,6 +5,7 @@ import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.entity.UserTheme;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.Realm;
@@ -62,15 +63,26 @@ public class RealmHelper {
         return result;
     }
 
-    public static List<Master> getAllMasters(){
+    public static Master getMasterById(int id){
         Realm realm = Realm.getDefaultInstance();
-        List<Master> result = realm.copyFromRealm(realm.where(Master.class).findAll());
-
-        for (Master master : result){
-            MasterLocation location = realm.where(MasterLocation.class).equalTo("masterId", master.getMasterId()).findFirst();
-            if (location != null) master.setMasterLocation(realm.copyFromRealm(location));
-        }
+        Master result = realm.copyFromRealm(realm.where(Master.class).equalTo("masterId", id).findFirst());
         realm.close();
         return result;
+    }
+
+    public static List<Master> getAllMasters(){
+        Realm realm = Realm.getDefaultInstance();
+        List<Master> tempMasterList = realm.copyFromRealm(realm.where(Master.class).findAll());
+        List<Master> resultList = new ArrayList<>();
+        for (Master master : tempMasterList){
+            MasterLocation location = realm.where(MasterLocation.class).equalTo("masterId", master.getMasterId()).findFirst();
+            //if location == null, we cannot place master on the map, master skipped
+            if (location != null) {
+                master.setMasterLocation(realm.copyFromRealm(location));
+                resultList.add(master);
+            }
+        }
+        realm.close();
+        return resultList;
     }
 }

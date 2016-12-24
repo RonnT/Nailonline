@@ -1,5 +1,6 @@
 package com.nailonline.client.master;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
 import com.nailonline.client.BaseActivity;
+import com.nailonline.client.NewOrderActivity;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.helper.RealmHelper;
@@ -57,7 +59,19 @@ public class MasterTabActivity extends BaseActivity {
         tabLayout.setupWithViewPager(pager);
     }
 
-    private class MasterTabAdapter extends android.support.v4.app.FragmentPagerAdapter{
+    public void makeNewOrder(Master master) {
+        Intent intent = new Intent(this, NewOrderActivity.class);
+        intent.putExtra(NewOrderActivity.TAG_MASTER_ID, master.getMasterId());
+        startActivity(intent);
+    }
+
+    public void makeNewOrder(int masterPosition) {
+        Intent intent = new Intent(this, NewOrderActivity.class);
+        intent.putExtra(NewOrderActivity.TAG_MASTER_ID, masterList.get(masterPosition).getMasterId());
+        startActivity(intent);
+    }
+
+    private class MasterTabAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
         private Fragment[] fragments = {
                 new MasterMapFragment(),

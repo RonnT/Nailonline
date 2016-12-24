@@ -60,6 +60,10 @@ dependencies {
     //download images
     compile 'com.squareup.picasso:picasso:2.5.2'
 
+    //Permissions on demand library
+    compile 'com.github.hotchemi:permissionsdispatcher:2.3.0'
+
+
     //Custom views
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
@@ -74,4 +78,5 @@ dependencies {
     }
 
     testCompile 'junit:junit:4.12'
+    annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.3.0'
 }

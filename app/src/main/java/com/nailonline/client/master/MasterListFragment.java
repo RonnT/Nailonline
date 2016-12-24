@@ -30,11 +30,19 @@ public class MasterListFragment extends BaseMasterListFragment {
         return new MasterListAdapter();
     }
 
-    protected class MasterListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+    protected class MasterListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         @Override
-        public MasterListFragment.ListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public MasterListFragment.ListViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_master_list_item, parent, false);
+            view.findViewById(R.id.rootView).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (view.getTag() != null) {
+                        ((MasterTabActivity) getActivity()).makeNewOrder((int) view.getTag());
+                    }
+                }
+            });
             return new MasterListFragment.ListViewHolder(view);
         }
 
@@ -47,15 +55,17 @@ public class MasterListFragment extends BaseMasterListFragment {
                     .into(listViewHolder.photoView);
             listViewHolder.masterName.setText(masterItem.getMasterFirstName());
             MasterLocation masterLocation = masterItem.getMasterLocation();
-            if (masterLocation != null && masterLocation.getAddress() != null){
+            if (masterLocation != null && masterLocation.getAddress() != null) {
                 listViewHolder.masterAddress.setText(masterLocation.getAddress());
-                listViewHolder.masterAddress.setTextColor(((BaseActivity)getActivity()).getUserTheme().getParsedAC());
+                listViewHolder.masterAddress.setTextColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
             }
-            listViewHolder.infoButton.setColorFilter(((BaseActivity)getActivity()).getUserTheme().getParsedMC());
-            if (position %2 ==0) {
-                int color = ColorUtils.setAlphaComponent(((BaseActivity)getActivity()).getUserTheme().getParsedMC(),20);
+            listViewHolder.infoButton.setColorFilter(((BaseActivity) getActivity()).getUserTheme().getParsedMC());
+            //painting list items
+            if (position % 2 != 0) {
+                int color = ColorUtils.setAlphaComponent(((BaseActivity) getActivity()).getUserTheme().getParsedMC(), 20);
                 listViewHolder.rootView.setBackgroundColor(color);
             }
+            ((ListViewHolder) holder).rootView.setTag(position);
         }
 
         @Override
@@ -64,7 +74,7 @@ public class MasterListFragment extends BaseMasterListFragment {
         }
     }
 
-    protected class ListViewHolder extends RecyclerView.ViewHolder{
+    protected class ListViewHolder extends RecyclerView.ViewHolder {
 
         View rootView;
         ImageView photoView;
