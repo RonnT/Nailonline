@@ -3,6 +3,7 @@ package com.nailonline.client.helper;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
+import com.nailonline.client.entity.Skill;
 import com.nailonline.client.entity.UserTheme;
 
 import org.json.JSONArray;
@@ -60,6 +61,18 @@ public class ParserHelper {
             @Override
             public void execute(Realm realm) {
                 realm.createOrUpdateAllFromJson(MasterLocation.class, jsonArray);
+            }
+        });
+        realm.close();
+    }
+
+    public static void parseAndSaveSkills(final JSONObject jsonObject) throws JSONException {
+        final JSONArray jsonArray = jsonObject.getJSONArray("list");
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.createOrUpdateAllFromJson(Skill.class, jsonArray);
             }
         });
         realm.close();

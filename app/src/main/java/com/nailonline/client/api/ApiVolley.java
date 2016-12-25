@@ -128,4 +128,8 @@ public class ApiVolley {
     public void getAllMasterLocations(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
         sendRequest(POST, getDefaultParams("get_all_locations"), pRL, pEL);
     }
+
+    public void getAllSkills(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        sendRequest(POST, getDefaultParams("get_all_skills"), pRL, pEL);
+    }
 }

@@ -26,6 +26,9 @@ import java.util.List;
 
 public class MasterGalleryFragment extends Fragment {
 
+    private static final int WITHOUT_TBS = 1;
+    private static final int WITH_TBS = 2;
+
     private List<Master> masterList;
 
     @Nullable
@@ -47,19 +50,42 @@ public class MasterGalleryFragment extends Fragment {
     private class GalleryAdapter extends RecyclerView.Adapter<GalleryViewHolder> {
 
         @Override
+        public int getItemViewType(int position) {
+            Master master = masterList.get(position);
+            if (master.getMasterTbs1() != null || master.getMasterTbs2() != null ||
+                    master.getMasterTbs3() != null || master.getMasterTbs4() != null) return WITH_TBS;
+            else return WITHOUT_TBS;
+        }
+
+        @Override
         public GalleryViewHolder onCreateViewHolder(ViewGroup parent, final int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_master_gallery_tbs_item, parent, false);
-            View submitView = view.findViewById(R.id.submit_layout);
-            submitView.setBackgroundColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
-            submitView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (view.getTag() != null) {
-                        ((MasterTabActivity) getActivity()).makeNewOrder((int) view.getTag());
+            if (viewType == WITHOUT_TBS) {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_master_gallery_item, parent, false);
+                View submitView = view.findViewById(R.id.submit_layout);
+                submitView.setBackgroundColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
+                submitView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (view.getTag() != null) {
+                            ((MasterTabActivity) getActivity()).makeNewOrder((int) view.getTag());
+                        }
                     }
-                }
-            });
-            return new GalleryViewHolder(view);
+                });
+                return new GalleryViewHolder(view);
+            } else {
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_master_gallery_tbs_item, parent, false);
+                View submitView = view.findViewById(R.id.submit_layout);
+                submitView.setBackgroundColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
+                submitView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (view.getTag() != null) {
+                            ((MasterTabActivity) getActivity()).makeNewOrder((int) view.getTag());
+                        }
+                    }
+                });
+                return new GalleryViewHolder(view);
+            }
         }
 
         @Override
@@ -79,6 +105,22 @@ public class MasterGalleryFragment extends Fragment {
         @Override
         public int getItemCount() {
             return masterList.size();
+        }
+    }
+
+    private class GalleryTbsViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView photoView;
+        TextView masterName;
+        TextView masterAddress;
+        View submitView;
+
+        public GalleryTbsViewHolder(View itemView) {
+            super(itemView);
+            photoView = (ImageView) itemView.findViewById(R.id.master_image_view);
+            masterName = (TextView) itemView.findViewById(R.id.master_name);
+            masterAddress = (TextView) itemView.findViewById(R.id.master_address);
+            submitView = itemView.findViewById(R.id.submit_layout);
         }
     }
 

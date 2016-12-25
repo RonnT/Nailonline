@@ -10,6 +10,7 @@ import com.nailonline.client.api.ApiVolley;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
+import com.nailonline.client.entity.Skill;
 import com.nailonline.client.entity.UserTheme;
 import com.nailonline.client.helper.ParserHelper;
 import com.nailonline.client.helper.PrefsHelper;
@@ -32,6 +33,7 @@ public class SplashActivity extends BaseActivity {
     private boolean isPromoReady;
     private boolean isMastersReady;
     private boolean isLocationsReady;
+    private boolean isSkillsReady;
 
     @Override
     protected int getLayoutId() {
@@ -79,6 +81,7 @@ public class SplashActivity extends BaseActivity {
         syncronizePromo();
         syncronizeMasters();
         syncronizeMasterLocations();
+        syncronizeSkills();
     }
 
     private void syncronizeThemes(){
@@ -224,11 +227,47 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
+    private void syncronizeSkills(){
+        ApiVolley.getInstance().getAllSkills(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                isSkillsReady = true;
+                ResponseHttp responseHttp = new ResponseHttp(response);
+                if (responseHttp != null) {
+                    if (responseHttp.getError() != null) {
+
+                        Log.d(TAG, "get_all_skills " + responseHttp.getError().getType());
+                        Log.d(TAG, "get_all_skills content " + responseHttp.getError().getMessage());
+
+                        if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) { //TODO уточнить с ошибкой
+                            RealmHelper.clearAllForClass(Skill.class);
+                        }
+                        return;
+                    }
+                    try {
+                        ParserHelper.parseAndSaveSkills(response);
+                        checkSyncronizeFinish();
+                    } catch (JSONException e) {
+                        //TODO make error
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isSkillsReady = true;
+                //TODO make error
+            }
+        });
+    }
+
     private void checkSyncronizeFinish(){
         if (isPromoReady &&
                 isThemesReady &&
                 isMastersReady &&
-                isLocationsReady){
+                isLocationsReady &&
+                isSkillsReady){
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         }

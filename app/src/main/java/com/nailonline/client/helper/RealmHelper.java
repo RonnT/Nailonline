@@ -3,6 +3,7 @@ package com.nailonline.client.helper;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
+import com.nailonline.client.entity.Skill;
 import com.nailonline.client.entity.UserTheme;
 
 import java.util.ArrayList;
@@ -84,5 +85,12 @@ public class RealmHelper {
         }
         realm.close();
         return resultList;
+    }
+
+    public static Skill getSkillById(int id) {
+        Realm realm = Realm.getDefaultInstance();
+        Skill result = realm.copyFromRealm(realm.where(Skill.class).equalTo("skillId", id).findFirst());
+        realm.close();
+        return result;
     }
 }
