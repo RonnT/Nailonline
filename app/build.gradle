@@ -23,6 +23,7 @@ android {
             it.buildConfigField('String', 'SERVER_IMAGE_PRESENTS', "\"https://www.nail-on-line.pro:8443/images/\"");
             it.buildConfigField('String', 'SERVER_IMAGE_PROMO', "\"http://185.20.225.17/images/promo/\"");
             it.buildConfigField('String', 'SERVER_IMAGE_MASTER_PHOTO', "\"http://185.20.225.17/images/mastersPhoto/\"");
+            it.buildConfigField('String', 'SERVER_IMAGE_MASTER_TBS', "\"http://185.20.225.17/images/mastersTbs/\"");
         }
     }
     /*

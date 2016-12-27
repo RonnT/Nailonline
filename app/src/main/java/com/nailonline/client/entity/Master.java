@@ -272,4 +272,8 @@ public class Master extends RealmObject {
     public void setMasterLocation(MasterLocation masterLocation) {
         this.masterLocation = masterLocation;
     }
+
+    public boolean hasTbs(){
+        return masterTbs1 != null || masterTbs2 != null || masterTbs3 != null || masterTbs4 != null;
+    }
 }
