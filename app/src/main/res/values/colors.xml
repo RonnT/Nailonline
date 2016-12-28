@@ -9,6 +9,8 @@
 
     <color name="promo_text_background">#40000000</color>
 
+    <color name="just_grey">#BDBDBD</color>
+
     <!-- used in progressBar -->
     <color name="green">#0d8b42</color>
 
