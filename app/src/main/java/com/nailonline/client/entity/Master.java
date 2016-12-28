@@ -1,5 +1,7 @@
 package com.nailonline.client.entity;
 
+import java.util.LinkedHashSet;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -275,5 +277,14 @@ public class Master extends RealmObject {
 
     public boolean hasTbs(){
         return masterTbs1 != null || masterTbs2 != null || masterTbs3 != null || masterTbs4 != null;
+    }
+
+    public Integer[] getTbsArray(){
+        LinkedHashSet<Integer> tbsSet = new LinkedHashSet<>();
+        if (masterTbs1 != null) tbsSet.add(masterTbs1);
+        if (masterTbs2 != null) tbsSet.add(masterTbs2);
+        if (masterTbs3 != null) tbsSet.add(masterTbs3);
+        if (masterTbs4 != null) tbsSet.add(masterTbs4);
+        return tbsSet.toArray(new Integer[tbsSet.size()]);
     }
 }

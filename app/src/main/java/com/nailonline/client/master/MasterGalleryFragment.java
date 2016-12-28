@@ -94,24 +94,50 @@ public class MasterGalleryFragment extends Fragment {
             galleryHolder.submitView.setTag(position);
 
             if (holder.getItemViewType() == WITH_TBS) {
-                ImageView tbs1View = (ImageView) ((GalleryViewHolder) holder).rootView.findViewById(R.id.image_tbs1);
-                ImageView tbs2View = (ImageView) ((GalleryViewHolder) holder).rootView.findViewById(R.id.image_tbs2);
-                ImageView tbs3View = (ImageView) ((GalleryViewHolder) holder).rootView.findViewById(R.id.image_tbs3);
-                ImageView tbs4View = (ImageView) ((GalleryViewHolder) holder).rootView.findViewById(R.id.image_tbs4);
+                fillTbs((GalleryViewHolder) holder, masterItem);
+            }
+        }
+        //too hard logic to fill tbs image places, but it works
+        private void fillTbs(GalleryViewHolder holder, Master masterItem) {
+            ImageView tbs1View = (ImageView) holder.rootView.findViewById(R.id.image_tbs1);
+            ImageView tbs2View = (ImageView) holder.rootView.findViewById(R.id.image_tbs2);
+            ImageView tbs3View = (ImageView) holder.rootView.findViewById(R.id.image_tbs3);
+            ImageView tbs4View = (ImageView) holder.rootView.findViewById(R.id.image_tbs4);
+            tbs1View.setVisibility(View.GONE);
+            tbs2View.setVisibility(View.GONE);
+            tbs3View.setVisibility(View.GONE);
+            tbs4View.setVisibility(View.GONE);
 
-                if (masterItem.getMasterTbs1() != null) fillTbs(tbs1View, masterItem.getMasterTbs1());
-                if (masterItem.getMasterTbs2() != null) fillTbs(tbs2View, masterItem.getMasterTbs2());
-                if (masterItem.getMasterTbs3() != null) fillTbs(tbs3View, masterItem.getMasterTbs3());
-                if (masterItem.getMasterTbs4() != null) fillTbs(tbs4View, masterItem.getMasterTbs4());
+            Integer[] tbsList = masterItem.getTbsArray();
+            switch (tbsList.length) {
+                case 1:
+                    loadTbsImage(tbs3View, tbsList[0]);
+                    break;
+                case 2:
+                    loadTbsImage(tbs3View, tbsList[0]);
+                    loadTbsImage(tbs1View, tbsList[1]);
+                    break;
+                case 3:
+                    loadTbsImage(tbs3View, tbsList[0]);
+                    loadTbsImage(tbs2View, tbsList[1]);
+                    loadTbsImage(tbs1View, tbsList[2]);
+                    break;
+                case 4:
+                    loadTbsImage(tbs3View, tbsList[0]);
+                    loadTbsImage(tbs2View, tbsList[1]);
+                    loadTbsImage(tbs1View, tbsList[2]);
+                    loadTbsImage(tbs4View, tbsList[3]);
+                    break;
             }
         }
 
-        private void fillTbs(ImageView tbsImageView, int skillId){
+        private void loadTbsImage(ImageView tbsImageView, int skillId) {
             Skill skill = RealmHelper.getSkillById(skillId);
             if (skill == null) return;
             Picasso.with(getActivity())
                     .load(BuildConfig.SERVER_IMAGE_MASTER_TBS + skill.getPhotoName())
                     .into(tbsImageView);
+            tbsImageView.setVisibility(View.VISIBLE);
         }
 
         @Override
