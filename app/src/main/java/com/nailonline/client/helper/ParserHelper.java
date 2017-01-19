@@ -77,4 +77,34 @@ public class ParserHelper {
         });
         realm.close();
     }
+/*
+    public static void parseAndSaveRegions(JSONObject jsonObject){
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        try {
+            JSONArray jsonArray = jsonObject.getJSONArray("Data");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject object = jsonArray.getJSONObject(i);
+                Region realmRegion = realm.createObject(Region.class);
+                realmRegion.seteRegionId(object.getInt("eRegionId"));
+                realmRegion.seteRegionLabel(object.getString("eRegionLabel"));
+                realmRegion.seteRegionBelt(object.getInt("eRegionBelt"));
+
+               JSONArray boundsArray = object.getJSONArray("eRegionBounds");
+                List<Region.Coords> latLngList = new ArrayList<>();
+                for (int j = 0; j < boundsArray.length(); j++){
+                    JSONArray coordsArray = boundsArray.getJSONArray(j);
+                    double lat = coordsArray.getDouble(0);
+                    double lng = coordsArray.getDouble(1);
+
+                    latLngList.add(new Region.Coords(lat, lng));
+                }
+                realmRegion.seteRegionBounds(latLngList);
+            }
+        } catch (JSONException e){
+            e.printStackTrace();
+        } finally {
+            realm.cancelTransaction();
+        }
+    }*/
 }

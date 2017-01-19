@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Promo;
+import com.nailonline.client.extension.IOnPagerItemClick;
 import com.nailonline.client.helper.RealmHelper;
 import com.squareup.picasso.Picasso;
 
@@ -22,13 +23,15 @@ import com.squareup.picasso.Picasso;
 public class PromoSlidePageFragment extends Fragment {
 
     public static final String PROMO_ID_KEY = "PROMO_ID_KEY";
+    public static final String POSITION_KEY = "POSITION_KEY";
 
     public Promo promo;
 
-    static PromoSlidePageFragment newInstance(int promoId){
+    static PromoSlidePageFragment newInstance(int position, int promoId){
         PromoSlidePageFragment fragment = new PromoSlidePageFragment();
         Bundle args = new Bundle();
         args.putInt(PROMO_ID_KEY, promoId);
+        args.putInt(POSITION_KEY, position);
         fragment.setArguments(args);
         return fragment;
     }
@@ -38,16 +41,12 @@ public class PromoSlidePageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_promo_page, null);
         int promoId = getArguments().getInt(PROMO_ID_KEY);
+        final int position = getArguments().getInt(POSITION_KEY);
         promo = RealmHelper.getPromoById(promoId);
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Bundle args = new Bundle();
-                args.putInt(PROMO_ID_KEY, promo.getPromoId());
-                android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
-                PromoDialogFragment newFragment = new PromoDialogFragment();
-                newFragment.setArguments(args);
-                newFragment.show(fm, "abc");
+                ((IOnPagerItemClick)getActivity()).onPagerItemClick(view, position);
             }
         });
 

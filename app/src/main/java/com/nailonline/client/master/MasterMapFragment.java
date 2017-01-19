@@ -92,6 +92,9 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback, G
 
     protected void addMarker(Master masterItem) {
         MasterLocation location = masterItem.getMasterLocation();
+        //skip master if coords are 0
+        if (location.getLat() == 0 && location.getLng() == 0) return;
+
         BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.drawable.master_marker);
         Marker addedMarker = map.addMarker(
                 new MarkerOptions()

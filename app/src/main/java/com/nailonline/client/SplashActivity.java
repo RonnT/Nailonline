@@ -34,6 +34,7 @@ public class SplashActivity extends BaseActivity {
     private boolean isMastersReady;
     private boolean isLocationsReady;
     private boolean isSkillsReady;
+    private boolean isRegionsReady = true;
 
     @Override
     protected int getLayoutId() {
@@ -82,6 +83,7 @@ public class SplashActivity extends BaseActivity {
         syncronizeMasters();
         syncronizeMasterLocations();
         syncronizeSkills();
+        syncronizeRegions();
     }
 
     private void syncronizeThemes(){
@@ -262,12 +264,100 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
+    private void syncronizeRegions(){
+/*
+        AsyncTask<Void, String, JSONObject> asyncTask = new AsyncTask<Void, String, JSONObject>() {
+            @Override
+            protected JSONObject doInBackground(Void... voids) {
+                HttpURLConnection connection = null;
+                BufferedReader reader = null;
+
+                try {
+                    URL url = new URL(BuildConfig.SERVER_REGIONS_JSON);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+                    InputStream stream = connection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(stream));
+                    StringBuffer buffer = new StringBuffer();
+                    String line = "";
+
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line+"\n");
+                        Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
+                    }
+                    return new JSONObject(buffer.toString());
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (connection != null) {
+                        connection.disconnect();
+                    }
+                    try {
+                        if (reader != null) {
+                            reader.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(JSONObject jsonObject) {
+                super.onPostExecute(jsonObject);
+                ParserHelper.parseAndSaveRegions(jsonObject);
+            }
+        };
+        asyncTask.execute();
+
+        /*
+        ApiVolley.getInstance().getAllSkills(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                isSkillsReady = true;
+                ResponseHttp responseHttp = new ResponseHttp(response);
+                if (responseHttp != null) {
+                    if (responseHttp.getError() != null) {
+
+                        Log.d(TAG, "get_all_skills " + responseHttp.getError().getType());
+                        Log.d(TAG, "get_all_skills content " + responseHttp.getError().getMessage());
+
+                        if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) { //TODO уточнить с ошибкой
+                            RealmHelper.clearAllForClass(Skill.class);
+                        }
+                        return;
+                    }
+                    try {
+                        ParserHelper.parseAndSaveSkills(response);
+                        checkSyncronizeFinish();
+                    } catch (JSONException e) {
+                        //TODO make error
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isSkillsReady = true;
+                //TODO make error
+            }
+        });*/
+    }
+
     private void checkSyncronizeFinish(){
         if (isPromoReady &&
                 isThemesReady &&
                 isMastersReady &&
                 isLocationsReady &&
-                isSkillsReady){
+                isSkillsReady &&
+                isRegionsReady){
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         }

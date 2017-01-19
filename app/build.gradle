@@ -24,6 +24,8 @@ android {
             it.buildConfigField('String', 'SERVER_IMAGE_PROMO', "\"http://185.20.225.17/images/promo/\"");
             it.buildConfigField('String', 'SERVER_IMAGE_MASTER_PHOTO', "\"http://185.20.225.17/images/mastersPhoto/\"");
             it.buildConfigField('String', 'SERVER_IMAGE_MASTER_TBS', "\"http://185.20.225.17/images/mastersTbs/\"");
+            it.buildConfigField('String', 'SERVER_REGIONS_JSON', "\"https://www.nail-on-line.pro:8443/images/eRegions.json\"");
+
         }
     }
     /*

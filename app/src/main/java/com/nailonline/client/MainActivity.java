@@ -6,22 +6,26 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.nailonline.client.entity.Promo;
+import com.nailonline.client.extension.IOnPagerItemClick;
 import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.master.MasterTabActivity;
-import com.nailonline.client.promo.PromoSlidePageAdapter;
+import com.nailonline.client.promo.PromoDialogFragment;
+import com.nailonline.client.promo.PromoMainSlideAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.trinea.android.view.autoscrollviewpager.AutoScrollViewPager;
 
-public class MainActivity extends BaseActivity {
+import static com.nailonline.client.promo.PromoSlidePageFragment.POSITION_KEY;
+
+public class MainActivity extends BaseActivity implements IOnPagerItemClick {
 
     private static int AUTOSCROLL_INTERVAL = 5000;
 
-    private List<Promo> promoList = new ArrayList<>();
+    public List<Promo> promoList = new ArrayList<>();
     private AutoScrollViewPager pager;
-    private PromoSlidePageAdapter adapter;
+    private PromoMainSlideAdapter adapter;
 
     @Override
     protected int getLayoutId() {
@@ -34,32 +38,41 @@ public class MainActivity extends BaseActivity {
         initViewPager();
     }
 
-    private void initViewPager(){
+    private void initViewPager() {
         promoList.clear();
         promoList.addAll(RealmHelper.getAllPromo());
         pager = (AutoScrollViewPager) findViewById(R.id.promoPager);
         pager.setInterval(AUTOSCROLL_INTERVAL);
         pager.startAutoScroll();
-        adapter = new PromoSlidePageAdapter(getSupportFragmentManager(), promoList);
+        adapter = new PromoMainSlideAdapter(getSupportFragmentManager(), promoList);
         pager.setAdapter(adapter);
     }
 
-    public void onMasterClick(View v){
+    public void onMasterClick(View v) {
         Intent intent = new Intent(this, MasterTabActivity.class);
         startActivity(intent);
     }
 
-    public void onServiceClick(View v){
-        Toast.makeText(this,"onServiceClick", Toast.LENGTH_SHORT).show();
+    public void onServiceClick(View v) {
+        Toast.makeText(this, "onServiceClick", Toast.LENGTH_SHORT).show();
     }
 
-    public void onGiftClick(View v){
-        Toast.makeText(this,"onGiftClick", Toast.LENGTH_SHORT).show();
+    public void onGiftClick(View v) {
+        Toast.makeText(this, "onGiftClick", Toast.LENGTH_SHORT).show();
     }
 
-    public void onProfileClick(View v){
+    public void onProfileClick(View v) {
         Intent intent = new Intent(this, UserThemeActivity.class);
         startActivity(intent);
     }
 
+    @Override
+    public void onPagerItemClick(View view, int position) {
+        Bundle args = new Bundle();
+        args.putInt(POSITION_KEY, position);
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        PromoDialogFragment newFragment = new PromoDialogFragment();
+        newFragment.setArguments(args);
+        newFragment.show(fm, "abc");
+    }
 }

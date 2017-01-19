@@ -1,24 +1,25 @@
 package com.nailonline.client.promo;
 
-import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.view.Window;
 
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.nailonline.client.BaseActivity;
-import com.nailonline.client.BuildConfig;
+import com.nailonline.client.MainActivity;
+import com.nailonline.client.NewOrderActivity;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Promo;
-import com.nailonline.client.helper.RealmHelper;
-import com.squareup.picasso.Picasso;
 
-import static com.nailonline.client.promo.PromoSlidePageFragment.PROMO_ID_KEY;
+import java.util.List;
+
+import static com.nailonline.client.promo.PromoSlidePageFragment.POSITION_KEY;
 
 /**
  * Created by Roman T. on 18.12.2016.
@@ -26,41 +27,53 @@ import static com.nailonline.client.promo.PromoSlidePageFragment.PROMO_ID_KEY;
 
 public class PromoDialogFragment extends DialogFragment {
 
-    private Promo promo;
+    private List<Promo> promoList;
+    private PromoDialogPageAdapter adapter;
+    private ViewPager pager;
+    private int currentPosition;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int promoId = getArguments().getInt(PROMO_ID_KEY);
-        promo = RealmHelper.getPromoById(promoId);
+        currentPosition = getArguments().getInt(POSITION_KEY);
+        promoList = ((MainActivity)getActivity()).promoList;
     }
 
+    private void initViewPager(View view){
+        pager = (ViewPager) view.findViewById(R.id.promoViewPager);
+        adapter = new PromoDialogPageAdapter(getChildFragmentManager(), promoList);
+        pager.setAdapter(adapter);
+        pager.setCurrentItem(currentPosition);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabDots);
+        tabLayout.setupWithViewPager(pager);
+    }
+
+    @Nullable
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_promo, null);
+        try {
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        View submitView = view.findViewById(R.id.submitLayout);
+        submitView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int currentPos = pager.getCurrentItem();
+                int masterId = promoList.get(currentPos).getMasterId();
+                makeNewOrder(masterId);
+            }
+        });
+        submitView.setBackgroundColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
+        initViewPager(view);
+        return view;
+    }
 
-        ImageView imageView = (ImageView) view.findViewById(R.id.promoImage);
-        imageView.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        Log.d("Nail", String.valueOf(imageView.getMeasuredWidth()));
-
-        TextView textLabel = (TextView) view.findViewById(R.id.promoTextLabel);
-        TextView timeLeftText = (TextView) view.findViewById(R.id.promoTimeLeft);
-        TextView bodyText = (TextView) view.findViewById(R.id.promoTextBody);
-
-        ViewGroup submitLayout = (ViewGroup) view.findViewById(R.id.submitLayout);
-        submitLayout.setBackgroundColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
-
-        textLabel.setText(promo.getLabel());
-        bodyText.setText(promo.getBody());
-
-        Picasso.with(getActivity())
-                .load(BuildConfig.SERVER_IMAGE_PROMO + promo.getPhotoName())
-                .into(imageView);
-
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(getActivity());
-        builder.customView(view, false);
-
-        return builder.build();
+    public void makeNewOrder(int masterId) {
+        Intent intent = new Intent(getActivity(), NewOrderActivity.class);
+        intent.putExtra(NewOrderActivity.TAG_MASTER_ID, masterId);
+        startActivity(intent);
     }
 }

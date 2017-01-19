@@ -9,6 +9,9 @@
 
     <color name="promo_text_background">#40000000</color>
 
+    <color name="selected_dot">#FFFFFF</color>
+    <color name="default_dot">#60FFFFFF</color>
+
     <color name="just_grey">#BDBDBD</color>
 
     <!-- used in progressBar -->

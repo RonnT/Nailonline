@@ -9,21 +9,21 @@ import com.nailonline.client.entity.Promo;
 import java.util.List;
 
 /**
- * Created by Roman T. on 18.12.2016.
+ * Created by Roman T. on 06.01.2017.
  */
 
-public class PromoSlidePageAdapter extends FragmentPagerAdapter {
+public class PromoDialogPageAdapter extends FragmentPagerAdapter {
 
     private List<Promo> itemList;
 
-    public PromoSlidePageAdapter(FragmentManager fm, List<Promo> promoList){
+    public PromoDialogPageAdapter(FragmentManager fm, List<Promo> promoList){
         super(fm);
         itemList = promoList;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return PromoSlidePageFragment.newInstance(itemList.get(position).getPromoId());
+        return PromoDialogPageFragment.newInstance(itemList.get(position).getPromoId());
     }
 
     @Override
