@@ -4,6 +4,7 @@ import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.entity.Skill;
+import com.nailonline.client.entity.SkillsTemplate;
 import com.nailonline.client.entity.UserTheme;
 
 import org.json.JSONArray;
@@ -77,6 +78,19 @@ public class ParserHelper {
         });
         realm.close();
     }
+
+    public static void parseAndSaveSkillsTemplates(final JSONObject jsonObject) throws JSONException {
+        final JSONArray jsonArray = jsonObject.getJSONArray("list");
+        Realm realm = Realm.getDefaultInstance();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.createOrUpdateAllFromJson(SkillsTemplate.class, jsonArray);
+            }
+        });
+        realm.close();
+    }
+
 /*
     public static void parseAndSaveRegions(JSONObject jsonObject){
         Realm realm = Realm.getDefaultInstance();

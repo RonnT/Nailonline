@@ -11,6 +11,7 @@ import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.entity.Skill;
+import com.nailonline.client.entity.SkillsTemplate;
 import com.nailonline.client.entity.UserTheme;
 import com.nailonline.client.helper.ParserHelper;
 import com.nailonline.client.helper.PrefsHelper;
@@ -34,6 +35,7 @@ public class SplashActivity extends BaseActivity {
     private boolean isMastersReady;
     private boolean isLocationsReady;
     private boolean isSkillsReady;
+    private boolean isSkillsTemplatesReady;
     private boolean isRegionsReady = true;
 
     @Override
@@ -84,6 +86,7 @@ public class SplashActivity extends BaseActivity {
         syncronizeMasterLocations();
         syncronizeSkills();
         syncronizeRegions();
+        syncronizeSkillsTemplates();
     }
 
     private void syncronizeThemes(){
@@ -264,6 +267,41 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
+    private void syncronizeSkillsTemplates(){
+        ApiVolley.getInstance().getSkillsTemplates(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                isSkillsTemplatesReady = true;
+                ResponseHttp responseHttp = new ResponseHttp(response);
+                if (responseHttp != null) {
+                    if (responseHttp.getError() != null) {
+
+                        Log.d(TAG, "get_skills_templates " + responseHttp.getError().getType());
+                        Log.d(TAG, "get_skills_templates content " + responseHttp.getError().getMessage());
+
+                        if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) { //TODO уточнить с ошибкой
+                            RealmHelper.clearAllForClass(SkillsTemplate.class);
+                        }
+                        return;
+                    }
+                    try {
+                        ParserHelper.parseAndSaveSkillsTemplates(response);
+                        checkSyncronizeFinish();
+                    } catch (JSONException e) {
+                        //TODO make error
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isSkillsTemplatesReady = true;
+                //TODO make error
+            }
+        });
+    }
+
     private void syncronizeRegions(){
 /*
         AsyncTask<Void, String, JSONObject> asyncTask = new AsyncTask<Void, String, JSONObject>() {
@@ -357,7 +395,8 @@ public class SplashActivity extends BaseActivity {
                 isMastersReady &&
                 isLocationsReady &&
                 isSkillsReady &&
-                isRegionsReady){
+                isRegionsReady &&
+                isSkillsTemplatesReady){
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         }

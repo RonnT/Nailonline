@@ -13,7 +13,7 @@ import android.view.Window;
 
 import com.nailonline.client.BaseActivity;
 import com.nailonline.client.MainActivity;
-import com.nailonline.client.NewOrderActivity;
+import com.nailonline.client.order.NewOrderActivity;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Promo;
 

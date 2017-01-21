@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
 import com.nailonline.client.BaseActivity;
-import com.nailonline.client.NewOrderActivity;
+import com.nailonline.client.order.NewOrderActivity;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.helper.RealmHelper;
@@ -22,6 +22,8 @@ import java.util.List;
  */
 
 public class MasterTabActivity extends BaseActivity {
+
+    public static final String TEMPLATE_ID_KEY = "TEMPLATE_ID_KEY";
 
     private List<Master> masterList;
 
@@ -45,7 +47,10 @@ public class MasterTabActivity extends BaseActivity {
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTabLayout();
-        masterList = RealmHelper.getAllMasters();
+        int skillsTemplateId = getIntent().getIntExtra(TEMPLATE_ID_KEY, -1);
+        if (skillsTemplateId > -1){
+            masterList = RealmHelper.getMastersWithSkillsTemplate(skillsTemplateId);
+        } else masterList = RealmHelper.getAllMasters();
     }
 
     private void setTabLayout() {

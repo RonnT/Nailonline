@@ -1,25 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include android:id="@+id/toolbar"
-        layout="@layout/view_toolbar"/>
-
-    <RelativeLayout
-        android:id="@+id/activityContent"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            tools:text="Новый заказ"/>
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/view_toolbar" />
 
-    </RelativeLayout>
+        <LinearLayout
+            android:id="@+id/activityContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-</LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/standart_margin"
+                android:gravity="center"
+                android:minWidth="72dp"
+                android:paddingBottom="@dimen/small_margin"
+                android:paddingTop="@dimen/standart_margin"
+                android:text="@string/master"
+                android:textSize="18sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/standart_margin"
+                android:paddingLeft="@dimen/standart_margin">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/photoImageView"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_centerVertical="true" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/photoImageView"
+                    android:orientation="vertical"
+                    android:paddingLeft="@dimen/standart_margin">
+
+                    <TextView
+                        android:id="@+id/masterName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:tag="@string/tag_painted"
+                        android:textSize="18sp"
+                        tools:ignore="RtlHardcoded"
+                        tools:text="Василий Васильевич" />
+
+                    <TextView
+                        android:id="@+id/masterAddress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        tools:ignore="RtlHardcoded"
+                        tools:text="Москва, Красная площадь" />
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginLeft="@dimen/standart_margin"
+                android:layout_marginRight="@dimen/standart_margin"
+                android:background="@color/grayDivider" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/standart_margin"
+                android:gravity="center"
+                android:paddingBottom="@dimen/small_margin"
+                android:paddingTop="@dimen/standart_margin"
+                android:text="@string/service_and_time"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>

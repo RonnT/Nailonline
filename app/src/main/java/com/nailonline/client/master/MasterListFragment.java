@@ -1,5 +1,6 @@
 package com.nailonline.client.master;
 
+import android.os.Bundle;
 import android.support.v4.graphics.ColorUtils;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -28,6 +29,15 @@ public class MasterListFragment extends BaseMasterListFragment {
     @Override
     protected RecyclerView.Adapter<RecyclerView.ViewHolder> getAdapter() {
         return new MasterListAdapter();
+    }
+
+    private void onInfoButtonClick(View v){
+        int masterId = (int)v.getTag();
+        DialogMasterTbsInfoFragment fragment = new DialogMasterTbsInfoFragment();
+        Bundle args = new Bundle();
+        args.putInt(DialogMasterTbsInfoFragment.MASTER_ID_KEY, masterId);
+        fragment.setArguments(args);
+        fragment.show(getChildFragmentManager(), "");
     }
 
     protected class MasterListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -60,6 +70,7 @@ public class MasterListFragment extends BaseMasterListFragment {
                 listViewHolder.masterAddress.setTextColor(((BaseActivity) getActivity()).getUserTheme().getParsedAC());
             }
             listViewHolder.infoButton.setColorFilter(((BaseActivity) getActivity()).getUserTheme().getParsedMC());
+            listViewHolder.infoButton.setTag(masterItem.getMasterId());
             //painting list items
             if (position % 2 != 0) {
                 int color = ColorUtils.setAlphaComponent(((BaseActivity) getActivity()).getUserTheme().getParsedMC(), 20);
@@ -89,6 +100,12 @@ public class MasterListFragment extends BaseMasterListFragment {
             masterName = (TextView) itemView.findViewById(R.id.master_name);
             masterAddress = (TextView) itemView.findViewById(R.id.master_address);
             infoButton = (ImageView) itemView.findViewById(R.id.info_button);
+            infoButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onInfoButtonClick(view);
+                }
+            });
         }
     }
 }

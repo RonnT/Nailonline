@@ -4,9 +4,11 @@ import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.entity.Skill;
+import com.nailonline.client.entity.SkillsTemplate;
 import com.nailonline.client.entity.UserTheme;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import io.realm.Realm;
@@ -67,6 +69,10 @@ public class RealmHelper {
     public static Master getMasterById(int id){
         Realm realm = Realm.getDefaultInstance();
         Master result = realm.copyFromRealm(realm.where(Master.class).equalTo("masterId", id).findFirst());
+        MasterLocation location = realm.where(MasterLocation.class).equalTo("masterId", result.getMasterId()).findFirst();
+        if (location != null) {
+            result.setMasterLocation(realm.copyFromRealm(location));
+        }
         realm.close();
         return result;
     }
@@ -87,10 +93,47 @@ public class RealmHelper {
         return resultList;
     }
 
+    public static List<Master> getMastersWithSkillsTemplate(int templateId){
+        List<Skill> skillList = getSkillsByTemplate(templateId);
+        HashSet<Integer> masterIdSet = new HashSet<>();
+        for (Skill skill : skillList){
+            masterIdSet.add(skill.getMasterId());
+        }
+        Integer[] masterIdArray = masterIdSet.toArray(new Integer[masterIdSet.size()]);
+        Realm realm = Realm.getDefaultInstance();
+        List<Master> tempMasterList = realm.copyFromRealm(realm.where(Master.class).in("masterId", masterIdArray).findAll());
+        List<Master> resultList = new ArrayList<>();
+        for (Master master : tempMasterList){
+            MasterLocation location = realm.where(MasterLocation.class).equalTo("masterId", master.getMasterId()).findFirst();
+            //if location == null, we cannot place master on the map, master skipped
+            if (location != null) {
+                master.setMasterLocation(realm.copyFromRealm(location));
+                resultList.add(master);
+            }
+        }
+        realm.close();
+        return resultList;
+    }
+
     public static Skill getSkillById(int id) {
         Realm realm = Realm.getDefaultInstance();
         Skill result = realm.copyFromRealm(realm.where(Skill.class).equalTo("skillId", id).findFirst());
         realm.close();
         return result;
     }
+
+    public static List<Skill> getSkillsByTemplate(int templateId) {
+        Realm realm = Realm.getDefaultInstance();
+        List<Skill> result = realm.copyFromRealm(realm.where(Skill.class).equalTo("templateId", templateId).findAll());
+        realm.close();
+        return result;
+    }
+
+    public static List<SkillsTemplate> getAllSkillsTemplates() {
+        Realm realm = Realm.getDefaultInstance();
+        List<SkillsTemplate> result = realm.copyFromRealm(realm.where(SkillsTemplate.class).findAll());
+        realm.close();
+        return result;
+    }
+
 }

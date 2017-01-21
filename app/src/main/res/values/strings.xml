@@ -17,4 +17,9 @@
     <string name="tab_list">Список</string>
     <string name="tab_gallery">Галерея</string>
     <string name="appointment_to_master">Записаться к мастеру</string>
+
+    <string name="gifts">Подарки</string>
+    <string name="error_activity_not_found">Приложения не найдены</string>
+    <string name="master">Мастер</string>
+    <string name="service_and_time">Услуга и время</string>
 </resources>

@@ -54,7 +54,8 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
     }
 
     public void onServiceClick(View v) {
-        Toast.makeText(this, "onServiceClick", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, ServiceListActivity.class);
+        startActivity(intent);
     }
 
     public void onGiftClick(View v) {

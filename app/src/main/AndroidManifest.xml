@@ -38,7 +38,13 @@
             android:label="Выбрать мастера">
         </activity>
 
-        <activity android:name=".NewOrderActivity"
+        <activity android:name=".ServiceListActivity"
+            android:screenOrientation="portrait"
+            android:label="Типы услуг">
+
+        </activity>
+
+        <activity android:name=".order.NewOrderActivity"
             android:screenOrientation="portrait"
             android:label="Новый заказ">
 
