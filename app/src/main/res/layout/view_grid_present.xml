@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.nailonline.client.extension.SquareImageView
+        android:id="@+id/presentImage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/test"
+        android:scaleType="centerCrop" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/presentImage"
+        android:background="@color/promo_text_background"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/small_margin"
+        android:paddingRight="@dimen/small_margin">
+
+        <TextView
+            android:id="@+id/presentLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="2"
+            android:maxLines="2"
+            android:textAlignment="center"
+            android:gravity="center_vertical"
+            android:textColor="@android:color/white"
+            android:textSize="12dp"
+            tools:text="Label"
+            tools:ignore="SpUsage" />
+    </LinearLayout>
+
+</RelativeLayout>

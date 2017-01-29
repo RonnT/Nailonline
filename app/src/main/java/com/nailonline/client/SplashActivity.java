@@ -9,6 +9,7 @@ import com.android.volley.VolleyError;
 import com.nailonline.client.api.ApiVolley;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
+import com.nailonline.client.entity.Present;
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.entity.Skill;
 import com.nailonline.client.entity.SkillsTemplate;
@@ -36,6 +37,7 @@ public class SplashActivity extends BaseActivity {
     private boolean isLocationsReady;
     private boolean isSkillsReady;
     private boolean isSkillsTemplatesReady;
+    private boolean isPresentsReady;
     private boolean isRegionsReady = true;
 
     @Override
@@ -87,6 +89,7 @@ public class SplashActivity extends BaseActivity {
         syncronizeSkills();
         syncronizeRegions();
         syncronizeSkillsTemplates();
+        syncronizePresents();
     }
 
     private void syncronizeThemes(){
@@ -302,6 +305,41 @@ public class SplashActivity extends BaseActivity {
         });
     }
 
+    private void syncronizePresents(){
+        ApiVolley.getInstance().getAllPresents(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                isPresentsReady = true;
+                ResponseHttp responseHttp = new ResponseHttp(response);
+                if (responseHttp != null) {
+                    if (responseHttp.getError() != null) {
+
+                        Log.d(TAG, "get_all_presents " + responseHttp.getError().getType());
+                        Log.d(TAG, "get_all_presents content " + responseHttp.getError().getMessage());
+
+                        if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) { //TODO уточнить с ошибкой
+                            RealmHelper.clearAllForClass(Present.class);
+                        }
+                        return;
+                    }
+                    try {
+                        ParserHelper.parseAndSavePresents(response);
+                        checkSyncronizeFinish();
+                    } catch (JSONException e) {
+                        //TODO make error
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                isPresentsReady = true;
+                //TODO make error
+            }
+        });
+    }
+
     private void syncronizeRegions(){
 /*
         AsyncTask<Void, String, JSONObject> asyncTask = new AsyncTask<Void, String, JSONObject>() {
@@ -396,7 +434,8 @@ public class SplashActivity extends BaseActivity {
                 isLocationsReady &&
                 isSkillsReady &&
                 isRegionsReady &&
-                isSkillsTemplatesReady){
+                isSkillsTemplatesReady &&
+                isPresentsReady){
             Intent intent = new Intent(SplashActivity.this, MainActivity.class);
             startActivity(intent);
         }

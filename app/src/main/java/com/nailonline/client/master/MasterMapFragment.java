@@ -108,6 +108,7 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback, G
     }
 
     protected void setBounds() {
+        if (markerList.isEmpty()) return;
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
         for (Marker marker : markerList) {
             builder.include(marker.getPosition());

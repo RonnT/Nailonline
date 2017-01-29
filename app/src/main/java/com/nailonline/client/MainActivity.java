@@ -3,12 +3,12 @@ package com.nailonline.client;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.extension.IOnPagerItemClick;
 import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.master.MasterTabActivity;
+import com.nailonline.client.present.PresentDialogFragment;
 import com.nailonline.client.promo.PromoDialogFragment;
 import com.nailonline.client.promo.PromoMainSlideAdapter;
 
@@ -59,7 +59,9 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
     }
 
     public void onGiftClick(View v) {
-        Toast.makeText(this, "onGiftClick", Toast.LENGTH_SHORT).show();
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        PresentDialogFragment newFragment = new PresentDialogFragment();
+        newFragment.show(fm, "abc");
     }
 
     public void onProfileClick(View v) {

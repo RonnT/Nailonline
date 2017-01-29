@@ -2,6 +2,7 @@ package com.nailonline.client.helper;
 
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
+import com.nailonline.client.entity.Present;
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.entity.Skill;
 import com.nailonline.client.entity.SkillsTemplate;
@@ -99,10 +100,11 @@ public class RealmHelper {
         for (Skill skill : skillList){
             masterIdSet.add(skill.getMasterId());
         }
+        List<Master> resultList = new ArrayList<>();
+        if (masterIdSet.isEmpty()) return resultList;
         Integer[] masterIdArray = masterIdSet.toArray(new Integer[masterIdSet.size()]);
         Realm realm = Realm.getDefaultInstance();
         List<Master> tempMasterList = realm.copyFromRealm(realm.where(Master.class).in("masterId", masterIdArray).findAll());
-        List<Master> resultList = new ArrayList<>();
         for (Master master : tempMasterList){
             MasterLocation location = realm.where(MasterLocation.class).equalTo("masterId", master.getMasterId()).findFirst();
             //if location == null, we cannot place master on the map, master skipped
@@ -132,6 +134,13 @@ public class RealmHelper {
     public static List<SkillsTemplate> getAllSkillsTemplates() {
         Realm realm = Realm.getDefaultInstance();
         List<SkillsTemplate> result = realm.copyFromRealm(realm.where(SkillsTemplate.class).findAll());
+        realm.close();
+        return result;
+    }
+
+    public static List<Present> getAllPresents() {
+        Realm realm = Realm.getDefaultInstance();
+        List<Present> result = realm.copyFromRealm(realm.where(Present.class).findAll());
         realm.close();
         return result;
     }

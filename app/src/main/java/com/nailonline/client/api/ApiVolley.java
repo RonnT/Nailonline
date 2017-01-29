@@ -136,4 +136,8 @@ public class ApiVolley {
     public void getSkillsTemplates(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
         sendRequest(POST, getDefaultParams("get_skills_templates"), pRL, pEL);
     }
+
+    public void getAllPresents(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        sendRequest(POST, getDefaultParams("get_all_presents"), pRL, pEL);
+    }
 }
