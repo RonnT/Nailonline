@@ -138,9 +138,9 @@ public class RealmHelper {
         return result;
     }
 
-    public static List<Present> getAllPresents() {
+    public static List<Present> getEnabledPresents() {
         Realm realm = Realm.getDefaultInstance();
-        List<Present> result = realm.copyFromRealm(realm.where(Present.class).findAll());
+        List<Present> result = realm.copyFromRealm(realm.where(Present.class).equalTo("presentEnable", 1).findAll());
         realm.close();
         return result;
     }

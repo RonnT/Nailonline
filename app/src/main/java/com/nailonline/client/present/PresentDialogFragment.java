@@ -16,6 +16,8 @@ import com.nailonline.client.entity.Present;
 import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.order.NewOrderActivity;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -30,8 +32,13 @@ public class PresentDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        presentList = RealmHelper.getAllPresents();
-
+        presentList = RealmHelper.getEnabledPresents();
+        Collections.sort(presentList, new Comparator<Present>() {
+            @Override
+            public int compare(Present present, Present t1) {
+                return (int) (t1.getPresentCreated() - present.getPresentCreated());
+            }
+        });
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_dialog_presents, null);
         try {
             getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);

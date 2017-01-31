@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">Nail-on-line</string>
 
-    <string name="tag_painted">painted</string>
+    <string name="tag_painted_ac">painted_ac</string>
+    <string name="tag_painted_mc">painted_mc</string>
 
     <!-- General menu -->
     <string name="menu_find_master">Найти мастера</string>
@@ -22,4 +23,12 @@
     <string name="error_activity_not_found">Приложения не найдены</string>
     <string name="master">Мастер</string>
     <string name="service_and_time">Услуга и время</string>
+
+    <!-- NewOrderActivity -->
+    <string name="select_skill">Выберите услугу</string>
+    <string name="minutes">&#160;мин</string>
+    <string name="roubles">&#160;руб</string>
+    <string name="one_hand">1 рука</string>
+    <string name="two_hands">2 руки</string>
+
 </resources>

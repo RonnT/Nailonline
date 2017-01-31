@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -20,12 +21,14 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/standart_margin"
-                android:gravity="center"
+                android:background="@color/click_gray_background"
+                android:gravity="center_vertical"
                 android:minWidth="72dp"
                 android:paddingBottom="@dimen/small_margin"
+                android:paddingLeft="@dimen/standart_margin"
                 android:paddingTop="@dimen/standart_margin"
                 android:text="@string/master"
                 android:textSize="18sp" />
@@ -33,14 +36,15 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/standart_margin"
                 android:paddingLeft="@dimen/standart_margin">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/photoImageView"
                     android:layout_width="72dp"
                     android:layout_height="72dp"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/standart_margin"
+                    android:layout_marginTop="@dimen/standart_margin" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -54,7 +58,7 @@
                         android:id="@+id/masterName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:tag="@string/tag_painted"
+                        android:tag="@string/tag_painted_ac"
                         android:textSize="18sp"
                         tools:ignore="RtlHardcoded"
                         tools:text="Василий Васильевич" />
@@ -63,7 +67,6 @@
                         android:id="@+id/masterAddress"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
                         tools:ignore="RtlHardcoded"
                         tools:text="Москва, Красная площадь" />
 
@@ -72,24 +75,130 @@
 
             </RelativeLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginLeft="@dimen/standart_margin"
-                android:layout_marginRight="@dimen/standart_margin"
-                android:background="@color/grayDivider" />
-
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/standart_margin"
-                android:gravity="center"
+                android:background="@color/click_gray_background"
+                android:gravity="center_vertical"
                 android:paddingBottom="@dimen/small_margin"
+                android:paddingLeft="@dimen/standart_margin"
                 android:paddingTop="@dimen/standart_margin"
                 android:text="@string/service_and_time"
                 android:textSize="18sp" />
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/skillLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/new_order_element_height"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/skillLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:lines="1"
+                        android:paddingLeft="@dimen/standart_margin"
+                        android:paddingRight="@dimen/standart_margin"
+                        android:tag="@string/tag_painted_mc"
+                        android:textSize="18sp"
+                        tools:text="Выберите услугу" />
+
+                    <TextView
+                        android:id="@+id/price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/standart_margin"
+                        android:paddingRight="@dimen/standart_margin"
+                        android:textSize="14sp"
+                        tools:text="200 руб"
+                        tools:visibility="visible" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/click_gray_background" />
+
+            <RelativeLayout
+                android:id="@+id/handLayout"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/new_order_element_height">
+
+                <TextView
+                    android:id="@+id/handText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:paddingLeft="@dimen/standart_margin"
+                    android:paddingRight="@dimen/standart_margin"
+                    android:tag="@string/tag_painted_mc"
+                    android:textSize="18sp"
+                    android:text="1 рука" />
+
+                <LinearLayout
+                    android:id="@+id/buttonHandLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="@dimen/standart_margin"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/handMinusButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:scaleType="center"
+                        app:srcCompat="@drawable/ic_minus" />
+
+                    <ImageView
+                        android:id="@+id/handPlusButton"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:scaleType="center"
+                        app:srcCompat="@drawable/ic_plus" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/click_gray_background" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/dateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/standart_margin"
+                android:text="Выберите дату и время"
+                android:textSize="18sp" />
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@color/click_gray_background" />
 
     </LinearLayout>
 </ScrollView>

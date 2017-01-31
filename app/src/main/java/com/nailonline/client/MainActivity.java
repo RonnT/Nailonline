@@ -43,7 +43,6 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
         promoList.addAll(RealmHelper.getAllPromo());
         pager = (AutoScrollViewPager) findViewById(R.id.promoPager);
         pager.setInterval(AUTOSCROLL_INTERVAL);
-        pager.startAutoScroll();
         adapter = new PromoMainSlideAdapter(getSupportFragmentManager(), promoList);
         pager.setAdapter(adapter);
     }
@@ -77,5 +76,18 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
         PromoDialogFragment newFragment = new PromoDialogFragment();
         newFragment.setArguments(args);
         newFragment.show(fm, "abc");
+    }
+
+    @Override
+    protected void onResume() {
+        pager.startAutoScroll();
+        super.onResume();
+
+    }
+
+    @Override
+    protected void onPause() {
+        pager.stopAutoScroll();
+        super.onPause();
     }
 }

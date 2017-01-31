@@ -34,7 +34,7 @@
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:tag="@string/tag_painted"
+                android:tag="@string/tag_painted_ac"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:tag="@string/tag_painted"
+                android:tag="@string/tag_painted_ac"
                 android:text="Найти мастера"
                 android:textSize="16sp" />
 
@@ -64,7 +64,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical"
-                android:tag="@string/tag_painted"
+                android:tag="@string/tag_painted_ac"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
                 app:srcCompat="@drawable/ic_select_service" />
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:tag="@string/tag_painted"
+                android:tag="@string/tag_painted_ac"
                 android:text="Найти по услуге"
                 android:textSize="16sp" />
 
@@ -95,7 +95,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:tag="@string/tag_painted"
+                android:tag="@string/tag_painted_ac"
                 app:srcCompat="@drawable/ic_select_gift"
                 android:id="@+id/imageView" />
 
@@ -104,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Подарки"
-                android:tag="@string/tag_painted"
+                android:tag="@string/tag_painted_ac"
                 android:textSize="16sp" />
 
         </LinearLayout>
@@ -131,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="12dp"
-                android:tag="@string/tag_painted"
+                android:tag="@string/tag_painted_ac"
                 android:text="Мой профиль"
                 android:textSize="16sp" />
 

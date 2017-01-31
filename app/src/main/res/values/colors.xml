@@ -19,6 +19,8 @@
 
     <color name="grayDivider">#D8D8D8</color>
 
+    <color name="click_gray_background">#25D8D8D8</color>
+
     <color name="themeAC">#ff9e4624</color>
     <color name="themeBC">#ff464646</color>
     <color name="themeGC">#fffafafa</color>

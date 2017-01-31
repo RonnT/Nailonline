@@ -68,12 +68,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         for (int count = 0; count < parentLayout.getChildCount(); count++) {
             View view = parentLayout.getChildAt(count);
             if (view instanceof TextView && view.getTag() != null) {
-                if (view.getTag().equals(getString(R.string.tag_painted))) {
+                if (view.getTag().equals(getString(R.string.tag_painted_ac))) {
                     ((TextView)view).setTextColor(userTheme.getParsedAC());
+                } else  if (view.getTag().equals(getString(R.string.tag_painted_mc))){
+                    ((TextView)view).setTextColor(userTheme.getParsedMC());
                 }
             } else if (view instanceof ImageView && view.getTag() != null) {
-                if (view.getTag().equals(getString(R.string.tag_painted))){
+                if (view.getTag().equals(getString(R.string.tag_painted_ac))){
                     ((ImageView)view).setColorFilter(userTheme.getParsedAC());
+                } else if (view.getTag().equals(getString(R.string.tag_painted_mc))){
+                    ((ImageView)view).setColorFilter(userTheme.getParsedMC());
                 }
             } else if (view instanceof ViewGroup) {
                 changeColorsForTheme((ViewGroup) view);

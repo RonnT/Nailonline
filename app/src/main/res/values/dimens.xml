@@ -13,5 +13,7 @@
 
     <dimen name="toolbar_elevation">4dp</dimen>
 
+    <dimen name="new_order_element_height">60dp</dimen>
+
     <dimen name="map_bounds_padding">20dp</dimen>
 </resources>
