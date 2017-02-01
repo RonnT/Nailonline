@@ -131,6 +131,13 @@ public class RealmHelper {
         return result;
     }
 
+    public static List<Skill> getSkillsByMaster(int masterId) {
+        Realm realm = Realm.getDefaultInstance();
+        List<Skill> result = realm.copyFromRealm(realm.where(Skill.class).equalTo("masterId", masterId).findAll());
+        realm.close();
+        return result;
+    }
+
     public static List<SkillsTemplate> getAllSkillsTemplates() {
         Realm realm = Realm.getDefaultInstance();
         List<SkillsTemplate> result = realm.copyFromRealm(realm.where(SkillsTemplate.class).findAll());
@@ -138,9 +145,23 @@ public class RealmHelper {
         return result;
     }
 
+    public static SkillsTemplate getSkillsTemplateById(int id) {
+        Realm realm = Realm.getDefaultInstance();
+        SkillsTemplate result = realm.copyFromRealm(realm.where(SkillsTemplate.class).equalTo("templateId", id).findFirst());
+        realm.close();
+        return result;
+    }
+
     public static List<Present> getEnabledPresents() {
         Realm realm = Realm.getDefaultInstance();
         List<Present> result = realm.copyFromRealm(realm.where(Present.class).equalTo("presentEnable", 1).findAll());
+        realm.close();
+        return result;
+    }
+
+    public static Present getPresentById(int id) {
+        Realm realm = Realm.getDefaultInstance();
+        Present result = realm.copyFromRealm(realm.where(Present.class).equalTo("presentId", id).equalTo("presentEnable", 1).findFirst());
         realm.close();
         return result;
     }

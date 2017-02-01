@@ -67,7 +67,7 @@ dependencies {
     compile 'com.github.hotchemi:permissionsdispatcher:2.3.0'
 
     //Sticky headers
-    compile 'com.tonicartos:superslim:0.4.13'
+    compile 'se.emilsjolander:stickylistheaders:2.1.0'
 
     //Custom views
     compile 'com.afollestad.material-dialogs:core:0.9.1.0'

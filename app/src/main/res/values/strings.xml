@@ -26,9 +26,22 @@
 
     <!-- NewOrderActivity -->
     <string name="select_skill">Выберите услугу</string>
-    <string name="minutes">&#160;мин</string>
-    <string name="roubles">&#160;руб</string>
-    <string name="one_hand">1 рука</string>
-    <string name="two_hands">2 руки</string>
+    <string name="minutes">%1$d&#160;мин</string>
+    <string name="roubles">%1$d&#160;руб</string>
+    <string name="with_present">&#160;+ подарок</string>
+    <string name="for_person">за услугу</string>
+    <string name="for_nail">за палец</string>
+    <string name="for_hand">за руку</string>
+
+    <plurals name="numberOfHands">
+        <item quantity="one">%d рука</item>
+        <item quantity="other">%d руки</item>
+    </plurals>
+
+    <plurals name="numberOfNail">
+        <item quantity="one">%d палец</item>
+        <item quantity="few">%d пальца</item>
+        <item quantity="other">%d пальцев</item>
+    </plurals>
 
 </resources>

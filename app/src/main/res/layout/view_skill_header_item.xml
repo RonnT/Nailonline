@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:paddingLeft="@dimen/standart_margin"
+    android:paddingRight="@dimen/standart_margin"
+    android:background="@color/sticky_header_background"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/groupText"
+        android:layout_width="wrap_content"
+        android:textAllCaps="true"
+        android:paddingTop="@dimen/small_margin"
+        android:paddingBottom="@dimen/small_margin"
+        android:textSize="12sp"
+        android:layout_height="wrap_content"
+        tools:text="Группа френч"/>
+
+</LinearLayout>

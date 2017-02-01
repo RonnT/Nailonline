@@ -110,7 +110,7 @@
                         android:paddingLeft="@dimen/standart_margin"
                         android:paddingRight="@dimen/standart_margin"
                         android:tag="@string/tag_painted_mc"
-                        android:textSize="18sp"
+                        android:textSize="@dimen/skill_text_size"
                         tools:text="Выберите услугу" />
 
                     <TextView
@@ -119,7 +119,7 @@
                         android:layout_height="wrap_content"
                         android:paddingLeft="@dimen/standart_margin"
                         android:paddingRight="@dimen/standart_margin"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/skill_subtext_size"
                         tools:text="200 руб"
                         tools:visibility="visible" />
 
@@ -133,12 +133,14 @@
                 android:background="@color/click_gray_background" />
 
             <RelativeLayout
-                android:id="@+id/handLayout"
+                android:id="@+id/additionalLayout"
                 android:layout_width="match_parent"
+                android:visibility="gone"
+                tools:visibility="visible"
                 android:layout_height="@dimen/new_order_element_height">
 
                 <TextView
-                    android:id="@+id/handText"
+                    android:id="@+id/unitNumberText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -151,7 +153,7 @@
                     android:text="1 рука" />
 
                 <LinearLayout
-                    android:id="@+id/buttonHandLayout"
+                    android:id="@+id/buttonLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="@dimen/standart_margin"
@@ -160,7 +162,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/handMinusButton"
+                        android:id="@+id/minusButton"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"
@@ -168,7 +170,7 @@
                         app:srcCompat="@drawable/ic_minus" />
 
                     <ImageView
-                        android:id="@+id/handPlusButton"
+                        android:id="@+id/plusButton"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:background="?attr/selectableItemBackgroundBorderless"

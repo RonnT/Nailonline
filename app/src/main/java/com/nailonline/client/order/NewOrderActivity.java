@@ -1,5 +1,6 @@
 package com.nailonline.client.order;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
@@ -25,6 +26,9 @@ import butterknife.OnClick;
 public class NewOrderActivity extends BaseActivity {
 
     public static final String TAG_MASTER_ID = "TAG_MASTER_ID";
+    public static final String TAG_SKILL_ID = "TAG_SKILL_ID";
+
+    public static final int REQUEST_CODE_SKILL = 111;
 
     public static final int
             UNIT_PERSON = 1,
@@ -42,19 +46,21 @@ public class NewOrderActivity extends BaseActivity {
     @BindView(R.id.masterAddress)
     protected TextView masterAddress;
 
-    @BindView(R.id.skillLayout)
-    protected View skillLayout;
-
     @BindView(R.id.skillLabel)
     protected TextView skillLabelText;
 
     @BindView(R.id.price)
     protected TextView skillPriceText;
 
-    @BindView(R.id.handLayout)
-    protected View handLayout;
-    @BindView(R.id.handText)
-    protected TextView handText;
+    @BindView(R.id.additionalLayout)
+    protected View additionalLayout;
+    @BindView(R.id.unitNumberText)
+    protected TextView unitNumberText;
+
+    @BindView(R.id.minusButton)
+    protected ImageView minusButton;
+    @BindView(R.id.plusButton)
+    protected ImageView plusButton;
 
     @Override
     protected int getLayoutId() {
@@ -65,13 +71,16 @@ public class NewOrderActivity extends BaseActivity {
     protected void setData(Bundle savedInstanceState) {
         super.setData(savedInstanceState);
         ButterKnife.bind(this);
-        int masterId = getIntent().getIntExtra(TAG_MASTER_ID, -1);
-        if (masterId >= 0) master = RealmHelper.getMasterById(masterId);
-
-        skill = RealmHelper.getSkillById(27);
-
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        int masterId = getIntent().getIntExtra(TAG_MASTER_ID, -1);
+        if (masterId >= 0) master = RealmHelper.getMasterById(masterId);
+        else {
+            //TODO exit with error
+        }
+        int skillId = getIntent().getIntExtra(TAG_SKILL_ID, -1);
+        if (skillId > -1) skill = RealmHelper.getSkillById(skillId);
 
         Picasso.with(this)
                 .load(BuildConfig.SERVER_IMAGE_MASTER_PHOTO + master.getMasterPhoto())
@@ -82,75 +91,108 @@ public class NewOrderActivity extends BaseActivity {
         skillLabelText.setTextColor(getUserTheme().getParsedMC());
         if (skill == null) {
             skillLabelText.setText(getString(R.string.select_skill));
-            skillPriceText.setText("");
+            skillPriceText.setVisibility(View.GONE);
         } else {
-            fillSkillInfo();
+            updateSkillInfo();
         }
     }
 
-    private void fillSkillInfo() {
+    private void updateSkillInfo() {
         skillLabelText.setText(skill.getLabel());
+        skillPriceText.setVisibility(View.VISIBLE);
         switch (skill.getUnitId()) {
             case UNIT_PERSON:
-                skillPriceText.setText(getPriceText(1));
-                handLayout.setVisibility(View.GONE);
+                if (currentUnit == UNIT_PERSON) break;
+                numberOfUnits = 1;
+                additionalLayout.setVisibility(View.GONE);
                 currentUnit = UNIT_PERSON;
                 break;
             case UNIT_NAIL:
+                initAdditionalLayout(UNIT_NAIL);
                 break;
             case UNIT_HAND:
-                initHandLayout();
-                skillPriceText.setText(getPriceText(numberOfUnits));
+                initAdditionalLayout(UNIT_HAND);
                 break;
+        }
+        skillPriceText.setText(getPriceText(numberOfUnits));
+    }
+
+    private void initAdditionalLayout(int unit){
+        if (currentUnit != unit) {
+            numberOfUnits = 1;
+            currentUnit = unit;
+        }
+        additionalLayout.setVisibility(View.VISIBLE);
+        String unitNumberString = "";
+        switch (unit){
+            case UNIT_HAND:
+                unitNumberString = getResources().getQuantityString(R.plurals.numberOfHands, numberOfUnits, numberOfUnits);
+                break;
+            case UNIT_NAIL:
+                unitNumberString = getResources().getQuantityString(R.plurals.numberOfNail, numberOfUnits, numberOfUnits);
+        }
+        unitNumberText.setText(unitNumberString);
+        updateButtons();
+    }
+
+    private void updateButtons(){
+        int minNumber = 1;
+        int maxNumber = currentUnit == UNIT_HAND ? 2 : 10;
+
+        if (numberOfUnits == minNumber){
+            minusButton.setEnabled(false);
+            plusButton.setEnabled(true);
+            minusButton.setColorFilter(ContextCompat.getColor(this, R.color.just_grey));
+            plusButton.setColorFilter(getUserTheme().getParsedMC());
+        } else if (numberOfUnits == maxNumber){
+            plusButton.setEnabled(false);
+            minusButton.setEnabled(true);
+            plusButton.setColorFilter(ContextCompat.getColor(this, R.color.just_grey));
+            minusButton.setColorFilter(getUserTheme().getParsedMC());
+        } else {
+            plusButton.setEnabled(true);
+            minusButton.setEnabled(true);
+            plusButton.setColorFilter(getUserTheme().getParsedMC());
+            minusButton.setColorFilter(getUserTheme().getParsedMC());
         }
     }
 
     private String getPriceText(int ratio){
         StringBuilder builder = new StringBuilder();
-        builder.append(skill.getDuration() * ratio);
-        builder.append(getString(R.string.minutes));
+        builder.append(getString(R.string.minutes, skill.getDuration() * ratio));
         builder.append(" / ");
-        builder.append(skill.getPrice() * ratio);
-        builder.append(getString(R.string.roubles));
+        builder.append(getString(R.string.roubles, skill.getPrice() * ratio));
         return builder.toString();
     }
 
-    private void initHandLayout(){
-        if (currentUnit == UNIT_HAND) return;
-        handLayout.setVisibility(View.VISIBLE);
-        numberOfUnits = 1;
-        handText.setText(getString(R.string.one_hand));
-        findViewById(R.id.handMinusButton).setEnabled(false);
-        ((ImageView)findViewById(R.id.handMinusButton)).setColorFilter(ContextCompat.getColor(this, R.color.just_grey));
-        ((ImageView)findViewById(R.id.handPlusButton)).setColorFilter(getUserTheme().getParsedMC());
+    @OnClick(R.id.minusButton)
+    public void onMinusClick(){
+        numberOfUnits--;
+        updateSkillInfo();
     }
 
-    @OnClick(R.id.handMinusButton)
-    public void onHandMinusClick(){
-        numberOfUnits = 1;
-        skillPriceText.setText(getPriceText(numberOfUnits));
-        handText.setText(getString(R.string.one_hand));
-        disableButton((ImageView)findViewById(R.id.handMinusButton));
-        ((ImageView)findViewById(R.id.handPlusButton)).setColorFilter(getUserTheme().getParsedMC());
-        findViewById(R.id.handPlusButton).setEnabled(true);
+    @OnClick(R.id.plusButton)
+    public void onPlusClick(){
+        numberOfUnits++;
+        updateSkillInfo();
     }
 
-    @OnClick(R.id.handPlusButton)
-    public void onHandPlusClick(){
-        numberOfUnits = 2;
-        skillPriceText.setText(getPriceText(numberOfUnits));
-        handText.setText(getString(R.string.two_hands));
-        enableButton((ImageView)findViewById(R.id.handMinusButton));
-        disableButton((ImageView)findViewById(R.id.handPlusButton));
+    @OnClick(R.id.skillLayout)
+    public void onSelectSkillClick(){
+        Intent intent = new Intent(this, SelectSkillActivity.class);
+        intent.putExtra(TAG_MASTER_ID, master.getMasterId());
+        startActivityForResult(intent, REQUEST_CODE_SKILL);
     }
 
-    private void enableButton(ImageView button){
-        button.setEnabled(true);
-        button.setColorFilter(getUserTheme().getParsedMC());
-    }
-
-    private void disableButton(ImageView button){
-        button.setEnabled(false);
-        button.setColorFilter(ContextCompat.getColor(this, R.color.just_grey));
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK){
+            switch (requestCode){
+                case REQUEST_CODE_SKILL:
+                    int newSkillId = data.getIntExtra(TAG_SKILL_ID, -1);
+                    if (newSkillId > -1) skill = RealmHelper.getSkillById(newSkillId);
+                    updateSkillInfo();
+            }
+        }
     }
 }
