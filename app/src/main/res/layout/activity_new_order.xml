@@ -31,12 +31,14 @@
                 android:paddingLeft="@dimen/standart_margin"
                 android:paddingTop="@dimen/standart_margin"
                 android:text="@string/master"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/standart_margin">
+                android:paddingLeft="@dimen/standart_margin"
+                tools:ignore="RtlHardcoded,RtlSymmetry">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/photoImageView"
@@ -85,46 +87,42 @@
                 android:paddingLeft="@dimen/standart_margin"
                 android:paddingTop="@dimen/standart_margin"
                 android:text="@string/service_and_time"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
 
             <LinearLayout
+                android:id="@+id/skillLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:minHeight="@dimen/new_order_element_height"
+                android:orientation="vertical">
 
-                <LinearLayout
-                    android:id="@+id/skillLayout"
+
+                <TextView
+                    android:id="@+id/skillLabel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackground"
-                    android:gravity="center_vertical"
-                    android:minHeight="@dimen/new_order_element_height"
-                    android:orientation="vertical">
+                    android:ellipsize="end"
+                    android:lines="1"
+                    android:paddingLeft="@dimen/standart_margin"
+                    android:paddingRight="@dimen/standart_margin"
+                    android:tag="@string/tag_painted_mc"
+                    android:textSize="@dimen/skill_text_size"
+                    tools:text="Выберите услугу" />
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/standart_margin"
+                    android:paddingRight="@dimen/standart_margin"
+                    android:textSize="@dimen/skill_subtext_size"
+                    tools:text="200 руб"
+                    tools:visibility="visible" />
 
 
-                    <TextView
-                        android:id="@+id/skillLabel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ellipsize="end"
-                        android:lines="1"
-                        android:paddingLeft="@dimen/standart_margin"
-                        android:paddingRight="@dimen/standart_margin"
-                        android:tag="@string/tag_painted_mc"
-                        android:textSize="@dimen/skill_text_size"
-                        tools:text="Выберите услугу" />
-
-                    <TextView
-                        android:id="@+id/price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/standart_margin"
-                        android:paddingRight="@dimen/standart_margin"
-                        android:textSize="@dimen/skill_subtext_size"
-                        tools:text="200 руб"
-                        tools:visibility="visible" />
-
-
-                </LinearLayout>
             </LinearLayout>
 
             <View
@@ -135,9 +133,9 @@
             <RelativeLayout
                 android:id="@+id/additionalLayout"
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/new_order_element_height"
                 android:visibility="gone"
-                tools:visibility="visible"
-                android:layout_height="@dimen/new_order_element_height">
+                tools:visibility="visible">
 
                 <TextView
                     android:id="@+id/unitNumberText"
@@ -150,16 +148,16 @@
                     android:paddingRight="@dimen/standart_margin"
                     android:tag="@string/tag_painted_mc"
                     android:textSize="18sp"
-                    android:text="1 рука" />
+                    tools:text="1 рука" />
 
                 <LinearLayout
-                    android:id="@+id/buttonLayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingRight="@dimen/standart_margin"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/standart_margin"
+                    tools:ignore="RtlHardcoded,RtlSymmetry">
 
                     <ImageView
                         android:id="@+id/minusButton"
@@ -191,8 +189,9 @@
                 android:id="@+id/dateTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
                 android:padding="@dimen/standart_margin"
-                android:text="Выберите дату и время"
+                android:text="@string/select_date_time"
                 android:textSize="18sp" />
 
         </LinearLayout>

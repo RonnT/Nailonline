@@ -4,6 +4,10 @@
     <string name="tag_painted_ac">painted_ac</string>
     <string name="tag_painted_mc">painted_mc</string>
 
+    <!-- Errors -->
+    <string name="unexpected_error">Произошла ошибка, попробуйте позже</string>
+    <string name="error_select_skill">Сначала выберите услугу</string>
+
     <!-- General menu -->
     <string name="menu_find_master">Найти мастера</string>
     <string name="menu_find_service">Найти по услуге</string>
@@ -32,6 +36,10 @@
     <string name="for_person">за услугу</string>
     <string name="for_nail">за палец</string>
     <string name="for_hand">за руку</string>
+    <string name="select_date_time">Выберите дату и время</string>
+    <string name="register_dialog_title">Для подтверждения заказа укажите данные по которым мастер сможет с Вами связаться</string>
+    <string name="name">Имя</string>
+    <string name="name_explain">Имя, которое отобразится в заказе</string>
 
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>

@@ -6,12 +6,14 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nailonline.client.BaseActivity;
 import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.Skill;
+import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;
 import com.squareup.picasso.Picasso;
 
@@ -52,6 +54,9 @@ public class NewOrderActivity extends BaseActivity {
     @BindView(R.id.price)
     protected TextView skillPriceText;
 
+    @BindView(R.id.dateTime)
+    protected TextView dateTimeText;
+
     @BindView(R.id.additionalLayout)
     protected View additionalLayout;
     @BindView(R.id.unitNumberText)
@@ -77,9 +82,12 @@ public class NewOrderActivity extends BaseActivity {
         int masterId = getIntent().getIntExtra(TAG_MASTER_ID, -1);
         if (masterId >= 0) master = RealmHelper.getMasterById(masterId);
         else {
-            //TODO exit with error
+            Toast.makeText(this, R.string.unexpected_error, Toast.LENGTH_LONG).show();
+            finish();
+            return;
         }
         int skillId = getIntent().getIntExtra(TAG_SKILL_ID, -1);
+
         if (skillId > -1) skill = RealmHelper.getSkillById(skillId);
 
         Picasso.with(this)
@@ -87,6 +95,8 @@ public class NewOrderActivity extends BaseActivity {
                 .into((ImageView) findViewById(R.id.photoImageView));
         masterName.setText(master.getMasterFirstName());
         masterAddress.setText(master.getMasterLocation().getAddress());
+
+        dateTimeText.setTextColor(getUserTheme().getParsedMC());
 
         skillLabelText.setTextColor(getUserTheme().getParsedMC());
         if (skill == null) {
@@ -182,6 +192,20 @@ public class NewOrderActivity extends BaseActivity {
         Intent intent = new Intent(this, SelectSkillActivity.class);
         intent.putExtra(TAG_MASTER_ID, master.getMasterId());
         startActivityForResult(intent, REQUEST_CODE_SKILL);
+    }
+
+    @OnClick(R.id.dateTime)
+    public void onDateTimeClick(){
+        if (skill == null){
+            Toast.makeText(this, R.string.error_select_skill, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        //TODO need moving
+
+        if (PrefsHelper.getInstance().getUserToken().isEmpty()){
+            new RegisterDialogFragment().show(getSupportFragmentManager(),"REGISTER_DIALOG");
+        }
     }
 
     @Override

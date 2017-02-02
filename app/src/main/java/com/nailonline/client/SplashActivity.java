@@ -53,7 +53,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void setData(Bundle savedInstanceState) {
         super.setData(savedInstanceState);
-        if (PrefsHelper.getInstance().getFreeToken().isEmpty()) getTokenFromApi();
+        if (PrefsHelper.getInstance().getToken().isEmpty()) getTokenFromApi();
         else syncronizeData();
     }
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:padding="@dimen/standart_margin"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:gravity="center_horizontal"
+        android:text="@string/register_dialog_title"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/name"
+        android:layout_gravity="center_horizontal">
+
+        <com.nailonline.client.extension.CloseKeyboardEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="25"/>
+
+    </android.support.design.widget.TextInputLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="-8dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="12sp"
+        android:text="@string/name_explain"/>
+
+</LinearLayout>

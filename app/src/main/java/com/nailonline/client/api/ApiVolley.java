@@ -82,7 +82,7 @@ public class ApiVolley {
         Map<String, String> params = new HashMap<>();
         params.put(ACTION, action);
         //TODO if token is empty ?
-        params.put(TOKEN, PrefsHelper.getInstance().getFreeToken());
+        params.put(TOKEN, PrefsHelper.getInstance().getToken());
         return params;
     }
 
