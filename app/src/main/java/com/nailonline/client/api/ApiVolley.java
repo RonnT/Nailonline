@@ -140,4 +140,8 @@ public class ApiVolley {
     public void getAllPresents(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
         sendRequest(POST, getDefaultParams("get_all_presents"), pRL, pEL);
     }
+
+    public void getAllDuties(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        sendRequest(POST, getDefaultParams("get_all_duties"), pRL, pEL);
+    }
 }

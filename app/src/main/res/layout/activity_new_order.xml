@@ -108,7 +108,7 @@
                     android:lines="1"
                     android:paddingLeft="@dimen/standart_margin"
                     android:paddingRight="@dimen/standart_margin"
-                    android:tag="@string/tag_painted_mc"
+                    android:tag="@string/tag_painted_ac"
                     android:textSize="@dimen/skill_text_size"
                     tools:text="Выберите услугу" />
 
@@ -146,7 +146,7 @@
                     android:lines="1"
                     android:paddingLeft="@dimen/standart_margin"
                     android:paddingRight="@dimen/standart_margin"
-                    android:tag="@string/tag_painted_mc"
+                    android:tag="@string/tag_painted_ac"
                     android:textSize="18sp"
                     tools:text="1 рука" />
 

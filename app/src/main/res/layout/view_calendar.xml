@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+        android:id="@+id/fragment_app_calendarview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:padding="@dimen/standart_margin"
+        android:scrollbarStyle="outsideOverlay"
+        app:mcv_dateTextAppearance="@style/CalendarDateStyle"
+        app:mcv_headerTextAppearance="@style/CalendarHeaderStyle"
+        app:mcv_weekDayTextAppearance="@style/CalendarWeekDayStyle">
+    </com.prolificinteractive.materialcalendarview.MaterialCalendarView>
+
+</LinearLayout>

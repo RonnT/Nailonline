@@ -7,6 +7,7 @@
     <!-- Errors -->
     <string name="unexpected_error">Произошла ошибка, попробуйте позже</string>
     <string name="error_select_skill">Сначала выберите услугу</string>
+    <string name="error_select_date">Выберите дату</string>
 
     <!-- General menu -->
     <string name="menu_find_master">Найти мастера</string>
@@ -40,6 +41,7 @@
     <string name="register_dialog_title">Для подтверждения заказа укажите данные по которым мастер сможет с Вами связаться</string>
     <string name="name">Имя</string>
     <string name="name_explain">Имя, которое отобразится в заказе</string>
+    <string name="select_date_title">Дата заказа</string>
 
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>

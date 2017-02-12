@@ -1,5 +1,6 @@
 package com.nailonline.client.helper;
 
+import com.nailonline.client.entity.DutyChart;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Present;
@@ -23,6 +24,7 @@ public class ParserHelper {
     public static void parseAndSaveThemes(final JSONObject jsonObject) throws JSONException {
         final JSONArray jsonArray = jsonObject.getJSONArray("list");
         Realm realm = Realm.getDefaultInstance();
+        RealmHelper.clearAllForClass(realm, UserTheme.class);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -35,6 +37,7 @@ public class ParserHelper {
     public static void parseAndSavePromo(final JSONObject jsonObject) throws JSONException {
         final JSONArray jsonArray = jsonObject.getJSONArray("list");
         Realm realm = Realm.getDefaultInstance();
+        RealmHelper.clearAllForClass(realm, Promo.class);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -47,6 +50,7 @@ public class ParserHelper {
     public static void parseAndSaveMasters(final JSONObject jsonObject) throws JSONException {
         final JSONArray jsonArray = jsonObject.getJSONArray("list");
         Realm realm = Realm.getDefaultInstance();
+        RealmHelper.clearAllForClass(realm, Master.class);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -59,6 +63,7 @@ public class ParserHelper {
     public static void parseAndSaveMasterLocations(final JSONObject jsonObject) throws JSONException {
         final JSONArray jsonArray = jsonObject.getJSONArray("list");
         Realm realm = Realm.getDefaultInstance();
+        RealmHelper.clearAllForClass(realm, MasterLocation.class);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -71,6 +76,7 @@ public class ParserHelper {
     public static void parseAndSaveSkills(final JSONObject jsonObject) throws JSONException {
         final JSONArray jsonArray = jsonObject.getJSONArray("list");
         Realm realm = Realm.getDefaultInstance();
+        RealmHelper.clearAllForClass(realm, Skill.class);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -83,6 +89,7 @@ public class ParserHelper {
     public static void parseAndSaveSkillsTemplates(final JSONObject jsonObject) throws JSONException {
         final JSONArray jsonArray = jsonObject.getJSONArray("list");
         Realm realm = Realm.getDefaultInstance();
+        RealmHelper.clearAllForClass(realm, SkillsTemplate.class);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
@@ -95,10 +102,24 @@ public class ParserHelper {
     public static void parseAndSavePresents(final JSONObject jsonObject) throws JSONException {
         final JSONArray jsonArray = jsonObject.getJSONArray("list");
         Realm realm = Realm.getDefaultInstance();
+        RealmHelper.clearAllForClass(realm, Present.class);
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.createOrUpdateAllFromJson(Present.class, jsonArray);
+            }
+        });
+        realm.close();
+    }
+
+    public static void parseAndSaveDuties(final JSONObject jsonObject) throws JSONException {
+        final JSONArray jsonArray = jsonObject.getJSONArray("list");
+        Realm realm = Realm.getDefaultInstance();
+        RealmHelper.clearAllForClass(realm, DutyChart.class);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.createOrUpdateAllFromJson(DutyChart.class, jsonArray);
             }
         });
         realm.close();

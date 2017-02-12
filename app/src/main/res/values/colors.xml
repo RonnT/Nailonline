@@ -8,11 +8,13 @@
     <color name="splash_background">#D7569B</color>
 
     <color name="promo_text_background">#40000000</color>
+    <color name="black_20_opacity">#20000000</color>
 
     <color name="selected_dot">#FFFFFF</color>
     <color name="default_dot">#60FFFFFF</color>
 
     <color name="just_grey">#BDBDBD</color>
+    <color name="calendar_grey">#80000000</color>
 
     <!-- used in progressBar -->
     <color name="green">#0d8b42</color>

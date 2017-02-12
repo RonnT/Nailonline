@@ -1,5 +1,6 @@
 package com.nailonline.client.helper;
 
+import com.nailonline.client.entity.DutyChart;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Present;
@@ -21,14 +22,18 @@ import io.realm.RealmModel;
 
 public class RealmHelper {
 
-    public static void clearAllForClass(final Class<? extends RealmModel> cls) {
-        Realm realm = Realm.getDefaultInstance();
+    public static void clearAllForClass(Realm realm, final Class<? extends RealmModel> cls){
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
                 realm.delete(cls);
             }
         });
+    }
+
+    public static void clearAllForClass(final Class<? extends RealmModel> cls) {
+        Realm realm = Realm.getDefaultInstance();
+        clearAllForClass(realm, cls);
         realm.close();
     }
 
@@ -162,6 +167,13 @@ public class RealmHelper {
     public static Present getPresentById(int id) {
         Realm realm = Realm.getDefaultInstance();
         Present result = realm.copyFromRealm(realm.where(Present.class).equalTo("presentId", id).equalTo("presentEnable", 1).findFirst());
+        realm.close();
+        return result;
+    }
+
+    public static List<DutyChart> getDutyChartForMaster(int masterId) {
+        Realm realm = Realm.getDefaultInstance();
+        List<DutyChart> result = realm.copyFromRealm(realm.where(DutyChart.class).equalTo("masterId", masterId).findAllSorted("order"));
         realm.close();
         return result;
     }
