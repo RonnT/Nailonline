@@ -1,10 +1,13 @@
 package com.nailonline.client.helper;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nailonline.client.entity.DutyChart;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Present;
 import com.nailonline.client.entity.Promo;
+import com.nailonline.client.entity.ShortJob;
 import com.nailonline.client.entity.Skill;
 import com.nailonline.client.entity.SkillsTemplate;
 import com.nailonline.client.entity.UserTheme;
@@ -12,6 +15,9 @@ import com.nailonline.client.entity.UserTheme;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 import io.realm.Realm;
 
@@ -123,6 +129,13 @@ public class ParserHelper {
             }
         });
         realm.close();
+    }
+
+    public static List<ShortJob> parseShortJobs(JSONObject jsonObject) throws JSONException{
+        JSONArray jsonArray = jsonObject.getJSONArray("list");
+        Type listType = new TypeToken<List<ShortJob>>() {}.getType();
+        List<ShortJob> result = new Gson().fromJson(jsonArray.toString(), listType);
+        return result;
     }
 
 /*

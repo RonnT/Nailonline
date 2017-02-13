@@ -28,6 +28,9 @@ public class ApiVolley {
     private static final String
             ACTION = "action",
             TOKEN = "token",
+            MASTER_ID = "masterId",
+            START_DATE = "startDate",
+            END_DATE = "endDate",
 
     REQUEST_TAG = "REQUEST_TAG";
 
@@ -143,5 +146,13 @@ public class ApiVolley {
 
     public void getAllDuties(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
         sendRequest(POST, getDefaultParams("get_all_duties"), pRL, pEL);
+    }
+
+    public void getMasterShortJobs(int masterId, long startDate, long endDate, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        Map<String, String> params = getDefaultParams("get_master_shortJobs");
+        params.put(MASTER_ID, String.valueOf(masterId));
+        params.put(START_DATE, String.valueOf(startDate));
+        params.put(END_DATE, String.valueOf(endDate));
+        sendRequest(POST, params, pRL, pEL);
     }
 }

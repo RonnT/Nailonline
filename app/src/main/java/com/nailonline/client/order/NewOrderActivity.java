@@ -1,27 +1,43 @@
 package com.nailonline.client.order;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.nailonline.client.BaseActivity;
 import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
+import com.nailonline.client.api.ApiVolley;
 import com.nailonline.client.entity.DutyChart;
 import com.nailonline.client.entity.Master;
+import com.nailonline.client.entity.ShortJob;
 import com.nailonline.client.entity.Skill;
+import com.nailonline.client.extension.CustomTimePickerDialog;
+import com.nailonline.client.helper.ParserHelper;
 import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;
+import com.nailonline.client.server.ResponseHttp;
 import com.squareup.picasso.Picasso;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -34,7 +50,7 @@ import butterknife.OnClick;
  * Created by Roman T. on 24.12.2016.
  */
 
-public class NewOrderActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
+public class NewOrderActivity extends BaseActivity {
 
     public static final String TAG_MASTER_ID = "TAG_MASTER_ID";
     public static final String TAG_SKILL_ID = "TAG_SKILL_ID";
@@ -57,6 +73,8 @@ public class NewOrderActivity extends BaseActivity implements TimePickerDialog.O
     private List<Calendar> disableDays = new ArrayList<>();
     private List<DutyChart> dutyList;
 
+    private Calendar selectedDate;
+    private List<ShortJob> jobList;
 
     @BindView(R.id.masterName)
     protected TextView masterName;
@@ -82,6 +100,9 @@ public class NewOrderActivity extends BaseActivity implements TimePickerDialog.O
     protected ImageView minusButton;
     @BindView(R.id.plusButton)
     protected ImageView plusButton;
+
+    @BindView(R.id.commentEditText)
+    protected EditText commentEditText;
 
     @Override
     protected int getLayoutId() {
@@ -121,6 +142,7 @@ public class NewOrderActivity extends BaseActivity implements TimePickerDialog.O
         } else {
             updateSkillInfo();
         }
+        setCursorColor(commentEditText, getUserTheme().getParsedAC());
         fillWorkingDays();
     }
 
@@ -262,7 +284,8 @@ public class NewOrderActivity extends BaseActivity implements TimePickerDialog.O
         return result;
     }
 
-    private List<Timepoint> getStartEndTimepoints(Calendar date){
+    // returns list of two Timepoints (start and end working day of master) for selected date
+    private List<Timepoint> getStartEndTimepoints(Calendar date) {
         Calendar startDate = null;
         Calendar endDate = null;
         for (DutyChart dutyChart : dutyList) {
@@ -297,15 +320,17 @@ public class NewOrderActivity extends BaseActivity implements TimePickerDialog.O
                 }
                 if (isWorkingDay) {
                     Calendar currentStart = Calendar.getInstance();
-                    currentStart.setTimeInMillis(dutyChart.getStartDate()*1000);
+                    currentStart.setTimeInMillis(dutyChart.getStartDate() * 1000);
                     Calendar currentFinish = Calendar.getInstance();
-                    currentFinish.setTimeInMillis(dutyChart.getFinishDate()*1000);
-                    if (startDate == null || startDate.compareTo(currentStart) < 0) startDate = currentStart;
-                    if (endDate == null || endDate.compareTo(currentFinish) < 0) endDate = currentFinish;
+                    currentFinish.setTimeInMillis(dutyChart.getFinishDate() * 1000);
+                    if (startDate == null || startDate.compareTo(currentStart) < 0)
+                        startDate = currentStart;
+                    if (endDate == null || endDate.compareTo(currentFinish) < 0)
+                        endDate = currentFinish;
                 }
             }
         }
-        if (startDate == null || endDate == null )return null;
+        if (startDate == null || endDate == null) return null;
         else {
             List<Timepoint> result = new ArrayList<>();
             result.add(new Timepoint(startDate.get(Calendar.HOUR_OF_DAY), startDate.get(Calendar.MINUTE)));
@@ -314,17 +339,18 @@ public class NewOrderActivity extends BaseActivity implements TimePickerDialog.O
         }
     }
 
-
     @OnClick(R.id.minusButton)
     public void onMinusClick() {
         numberOfUnits--;
         updateSkillInfo();
+        clearDateTime();
     }
 
     @OnClick(R.id.plusButton)
     public void onPlusClick() {
         numberOfUnits++;
         updateSkillInfo();
+        clearDateTime();
     }
 
     @OnClick(R.id.skillLayout)
@@ -345,27 +371,76 @@ public class NewOrderActivity extends BaseActivity implements TimePickerDialog.O
     }
 
     private void showDateDialog() {
-        Calendar now = Calendar.getInstance();
+        Calendar entryDate;
+        if (selectedDate == null){
+            entryDate = Calendar.getInstance();
+        } else entryDate = selectedDate;
         DatePickerDialog pickerDialog = DatePickerDialog.newInstance(
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-                        Calendar selectedDate = Calendar.getInstance();
-                        selectedDate.set(year, monthOfYear, dayOfMonth);
-                        showTimePickerDialog(selectedDate);
+                        Calendar date = Calendar.getInstance();
+                        date.set(year, monthOfYear, dayOfMonth);
+                        selectedDate = date;
+                        getShortJobs();
                     }
 
                 },
-                now.get(Calendar.YEAR),
-                now.get(Calendar.MONTH),
-                now.get(Calendar.DAY_OF_MONTH)
+                entryDate.get(Calendar.YEAR),
+                entryDate.get(Calendar.MONTH),
+                entryDate.get(Calendar.DAY_OF_MONTH)
         );
+        pickerDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                selectedDate = null;
+            }
+        });
         Calendar[] disableArray = disableDays.toArray(new Calendar[disableDays.size()]);
         pickerDialog.setDisabledDays(disableArray);
         pickerDialog.setAccentColor(getUserTheme().getParsedAC());
         pickerDialog.setMinDate(Calendar.getInstance());
         pickerDialog.show(getFragmentManager(), "Datepickerdialog");
         return;
+    }
+
+    private void getShortJobs() {
+        Calendar startDay = Calendar.getInstance();
+        startDay.setTimeInMillis(selectedDate.getTimeInMillis());
+        startDay.set(Calendar.HOUR_OF_DAY, 0);
+        startDay.set(Calendar.MINUTE, 0);
+        startDay.set(Calendar.SECOND, 0);
+        Calendar endDay = Calendar.getInstance();
+        endDay.setTimeInMillis(selectedDate.getTimeInMillis());
+        endDay.set(Calendar.HOUR_OF_DAY, 23);
+        endDay.set(Calendar.MINUTE, 59);
+        endDay.set(Calendar.SECOND, 59);
+        ApiVolley.getInstance().getMasterShortJobs(
+                master.getMasterId(),
+                startDay.getTimeInMillis() / 1000,
+                endDay.getTimeInMillis() / 1000,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        ResponseHttp responseHttp = new ResponseHttp(response);
+                        if (responseHttp != null) {
+                            if (responseHttp.getError() != null) return;
+                            try {
+                                jobList = ParserHelper.parseShortJobs(response);
+                                Log.d("Debugg", jobList.toString());
+                                showTimePickerDialog();
+                            } catch (JSONException e) {
+                                //TODO make error
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //TODO make error
+                    }
+                });
     }
 
     private boolean checkRegistration() {
@@ -383,31 +458,103 @@ public class NewOrderActivity extends BaseActivity implements TimePickerDialog.O
                     int newSkillId = data.getIntExtra(TAG_SKILL_ID, -1);
                     if (newSkillId > -1) skill = RealmHelper.getSkillById(newSkillId);
                     updateSkillInfo();
+                    clearDateTime();
             }
         }
     }
 
-    private void showTimePickerDialog(Calendar selectedDate) {
-
+    private void showTimePickerDialog() {
         List<Timepoint> startEndTimepoints = getStartEndTimepoints(selectedDate);
         Timepoint startTimepoint = startEndTimepoints.get(0);
         Timepoint endTimepoint = startEndTimepoints.get(1);
 
-        TimePickerDialog dpd = TimePickerDialog.newInstance(
-                NewOrderActivity.this,
+        CustomTimePickerDialog dpd = CustomTimePickerDialog.newInstance(
+                new CustomTimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(CustomTimePickerDialog view, int hourOfDay, int minute, int second) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTimeInMillis(selectedDate.getTimeInMillis());
+                        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+                        calendar.set(Calendar.MINUTE, minute);
+                        calendar.set(Calendar.SECOND, second);
+                        if (isTimeAvailable(calendar)) {
+                            selectedDate.setTimeInMillis(calendar.getTimeInMillis());
+                            fillDateTime();
+                            view.dismiss();
+                        }
+                        else Toast.makeText(NewOrderActivity.this, "Время занято", Toast.LENGTH_SHORT).show();
+                    }
+                },
                 0,
                 0,
                 true);
+        dpd.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                showDateDialog();
+            }
+        });
+        dpd.setAutoDismissOnOk(false);
+        dpd.setCancelText("Назад");
         dpd.setTimeInterval(1, 5);
-        dpd.setMinTime(startTimepoint.getHour(),startTimepoint.getMinute(),0);
-        dpd.setMaxTime(endTimepoint.getHour(),endTimepoint.getMinute(),0);
+        dpd.setMinTime(startTimepoint.getHour(), startTimepoint.getMinute(), 0);
+        dpd.setMaxTime(endTimepoint.getHour(), endTimepoint.getMinute(), 0);
         dpd.setTitle("Выберите время");
         dpd.setAccentColor(getUserTheme().getParsedAC());
         dpd.show(getFragmentManager(), "Datepickerdialog");
     }
 
-    @Override
-    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+    private void fillDateTime(){
+        Calendar startTime = Calendar.getInstance();
+        startTime.setTimeInMillis(selectedDate.getTimeInMillis());
+        Calendar endTime = Calendar.getInstance();
+        endTime.setTimeInMillis(startTime.getTimeInMillis());
+        endTime.add(Calendar.MINUTE, skill.getDuration()*numberOfUnits);
+        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        String string = format.format(selectedDate.getTime()) + " c " + formatTime.format(startTime.getTime())
+                + " до " + formatTime.format(endTime.getTime());
+        dateTimeText.setText(string);
+    }
 
+    private void clearDateTime(){
+        dateTimeText.setText(R.string.select_date_time);
+        selectedDate = null;
+    }
+
+    private boolean isTimeAvailable(Calendar calendar){
+        boolean timeBusy = false;
+        long timestamp = calendar.getTimeInMillis()/1000;
+        for (ShortJob shortJob : jobList){
+            if (shortJob.getStartDate().compareTo(timestamp) <= 0 && shortJob.getEndDate().compareTo(timestamp) > 0){
+                timeBusy = true;
+            }
+        }
+        return !timeBusy;
+    }
+
+    public static void setCursorColor(EditText view, @ColorInt int color) {
+        try {
+            // Get the cursor resource id
+            Field field = TextView.class.getDeclaredField("mCursorDrawableRes");
+            field.setAccessible(true);
+            int drawableResId = field.getInt(view);
+
+            // Get the editor
+            field = TextView.class.getDeclaredField("mEditor");
+            field.setAccessible(true);
+            Object editor = field.get(view);
+
+            // Get the drawable and set a color filter
+            Drawable drawable = ContextCompat.getDrawable(view.getContext(), drawableResId);
+            drawable.setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            Drawable[] drawables = {drawable, drawable};
+
+            // Set the drawables
+            field = editor.getClass().getDeclaredField("mCursorDrawable");
+            field.setAccessible(true);
+            field.set(editor, drawables);
+        } catch (Exception ignored) {
+        }
     }
 }
