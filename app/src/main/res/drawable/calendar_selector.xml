@@ -5,5 +5,5 @@
     <item android:state_enabled="false"
         android:color="@color/black_20_opacity" />
     <item android:state_checked="false"
-        android:color="@color/calendar_grey" />
+        android:color="@color/default_secondary_text_color" />
 </selector>

@@ -31,6 +31,8 @@ public class ApiVolley {
             MASTER_ID = "masterId",
             START_DATE = "startDate",
             END_DATE = "endDate",
+            PHONE = "phone",
+            CODE = "code",
 
     REQUEST_TAG = "REQUEST_TAG";
 
@@ -153,6 +155,19 @@ public class ApiVolley {
         params.put(MASTER_ID, String.valueOf(masterId));
         params.put(START_DATE, String.valueOf(startDate));
         params.put(END_DATE, String.valueOf(endDate));
+        sendRequest(POST, params, pRL, pEL);
+    }
+
+    public void getUserCode(String phone, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        Map<String, String> params = getDefaultParams("get_user_code");
+        params.put(PHONE, phone);
+        sendRequest(POST, params, pRL, pEL);
+    }
+
+    public void getUserToken(String phone, String code, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        Map<String, String> params = getDefaultParams("get_user_token");
+        params.put(PHONE, phone);
+        params.put(CODE, code);
         sendRequest(POST, params, pRL, pEL);
     }
 }

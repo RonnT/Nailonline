@@ -1,5 +1,6 @@
 package com.nailonline.client.order;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -7,8 +8,14 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,8 +29,10 @@ import com.nailonline.client.R;
 import com.nailonline.client.api.ApiVolley;
 import com.nailonline.client.entity.DutyChart;
 import com.nailonline.client.entity.Master;
+import com.nailonline.client.entity.Present;
 import com.nailonline.client.entity.ShortJob;
 import com.nailonline.client.entity.Skill;
+import com.nailonline.client.extension.CloseKeyboardEditText;
 import com.nailonline.client.extension.CustomTimePickerDialog;
 import com.nailonline.client.helper.ParserHelper;
 import com.nailonline.client.helper.PrefsHelper;
@@ -50,7 +59,7 @@ import butterknife.OnClick;
  * Created by Roman T. on 24.12.2016.
  */
 
-public class NewOrderActivity extends BaseActivity {
+public class NewOrderActivity extends BaseActivity implements TextView.OnEditorActionListener{
 
     public static final String TAG_MASTER_ID = "TAG_MASTER_ID";
     public static final String TAG_SKILL_ID = "TAG_SKILL_ID";
@@ -70,11 +79,15 @@ public class NewOrderActivity extends BaseActivity {
     private int numberOfUnits;
     private int currentUnit;
 
+    protected View mFocusLayout;
+
     private List<Calendar> disableDays = new ArrayList<>();
     private List<DutyChart> dutyList;
 
     private Calendar selectedDate;
     private List<ShortJob> jobList;
+
+    private String userPhone;
 
     @BindView(R.id.masterName)
     protected TextView masterName;
@@ -103,6 +116,15 @@ public class NewOrderActivity extends BaseActivity {
 
     @BindView(R.id.commentEditText)
     protected EditText commentEditText;
+
+    @BindView(R.id.presentLayout)
+    protected ViewGroup presentLayout;
+    @BindView(R.id.presentImage)
+    protected ImageView presentImage;
+    @BindView(R.id.presentText)
+    protected TextView presentText;
+    @BindView(R.id.submitButton)
+    protected Button submitButton;
 
     @Override
     protected int getLayoutId() {
@@ -143,7 +165,45 @@ public class NewOrderActivity extends BaseActivity {
             updateSkillInfo();
         }
         setCursorColor(commentEditText, getUserTheme().getParsedAC());
+        setFocusLayoutOnEdits((ViewGroup)findViewById(R.id.activityContent));
+        submitButton.getBackground().setColorFilter(getUserTheme().getParsedMC(), PorterDuff.Mode.MULTIPLY);
+        submitButton.getBackground().setAlpha(100);
+        submitButton.setTextColor(getUserTheme().getParseWC());
         fillWorkingDays();
+    }
+    // next three methods using for disable focus on edittext after finish editing
+    protected void setFocusLayoutOnEdits(ViewGroup root){
+        if (mFocusLayout == null) mFocusLayout = findViewById(R.id.activityContent);
+        for(int i = 0; i < root.getChildCount(); i++){
+            View v = root.getChildAt(i);
+
+            if(v instanceof ViewGroup &&((ViewGroup)v).getChildCount() != 0){
+                setFocusLayoutOnEdits((ViewGroup) v);
+            } else if(v instanceof CloseKeyboardEditText){
+                ((CloseKeyboardEditText)v).setFocusLayout(mFocusLayout);
+                ((CloseKeyboardEditText)v).setOnEditorActionListener(this);
+            }
+        }
+    }
+
+    protected void removeFocus() {
+        try {
+            View textView = getCurrentFocus();
+            InputMethodManager imm = (InputMethodManager) textView.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(textView.getWindowToken(), 0);
+            if (mFocusLayout != null) mFocusLayout.requestFocus();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
+        if (i == EditorInfo.IME_ACTION_DONE) {
+            removeFocus();
+            return true;
+        }
+        return false;
     }
 
     private void updateSkillInfo() {
@@ -164,6 +224,8 @@ public class NewOrderActivity extends BaseActivity {
                 break;
         }
         skillPriceText.setText(getPriceText(numberOfUnits));
+        checkAndFillPresent();
+        checkSubmitButton();
     }
 
     private void initAdditionalLayout(int unit) {
@@ -203,6 +265,22 @@ public class NewOrderActivity extends BaseActivity {
             plusButton.setColorFilter(getUserTheme().getParsedMC());
             minusButton.setColorFilter(getUserTheme().getParsedMC());
         }
+    }
+
+    private void checkAndFillPresent(){
+        if (skill == null ||
+                skill.getPresentId() == null ||
+                RealmHelper.getPresentById(skill.getPresentId()) == null){
+            presentLayout.setVisibility(View.GONE);
+            return;
+        }
+        presentLayout.setVisibility(View.VISIBLE);
+        Present present = RealmHelper.getPresentById(skill.getPresentId());
+        presentText.setText(present.getLabel());
+        presentText.setTextColor(getUserTheme().getParsedAC());
+        Picasso.with(this)
+                .load(BuildConfig.SERVER_IMAGE_PRESENTS + present.getPhotoName())
+                .into(presentImage);
     }
 
     private String getPriceText(int ratio) {
@@ -443,12 +521,7 @@ public class NewOrderActivity extends BaseActivity {
                 });
     }
 
-    private boolean checkRegistration() {
-        if (PrefsHelper.getInstance().getUserToken().isEmpty()) {
-            new RegisterDialogFragment().show(getSupportFragmentManager(), "REGISTER_DIALOG");
-            return false;
-        } else return true;
-    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -480,6 +553,7 @@ public class NewOrderActivity extends BaseActivity {
                         if (isTimeAvailable(calendar)) {
                             selectedDate.setTimeInMillis(calendar.getTimeInMillis());
                             fillDateTime();
+                            checkSubmitButton();
                             view.dismiss();
                         }
                         else Toast.makeText(NewOrderActivity.this, "Время занято", Toast.LENGTH_SHORT).show();
@@ -517,9 +591,20 @@ public class NewOrderActivity extends BaseActivity {
         dateTimeText.setText(string);
     }
 
+    private void checkSubmitButton(){
+        if (skill != null && selectedDate != null) {
+            submitButton.setEnabled(true);
+            submitButton.getBackground().setAlpha(255);
+        } else {
+            submitButton.setEnabled(false);
+            submitButton.getBackground().setAlpha(100);
+        }
+    }
+
     private void clearDateTime(){
         dateTimeText.setText(R.string.select_date_time);
         selectedDate = null;
+        checkSubmitButton();
     }
 
     private boolean isTimeAvailable(Calendar calendar){
@@ -556,5 +641,62 @@ public class NewOrderActivity extends BaseActivity {
             field.set(editor, drawables);
         } catch (Exception ignored) {
         }
+    }
+
+    @OnClick(R.id.submitButton)
+    public void onSubmitClick(){
+        if (PrefsHelper.getInstance().getUserToken().isEmpty()){
+            new RegisterDialogFragment().show(getSupportFragmentManager(), "REGISTER_DIALOG");
+        } else {
+            //TODO send new order
+        }
+    }
+
+    public void sendPhone(String phone){
+        phone = phone.substring(1, phone.length());
+        userPhone = phone;
+        ApiVolley.getInstance().getUserCode(phone, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("success")) {
+                        showRegisterCodeDialog();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    userPhone = null;
+                    //TODO error processing
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //TODO error processing
+                userPhone = null;
+            }
+        });
+    }
+
+    private void showRegisterCodeDialog(){
+        new CodeDialogFragment().show(getSupportFragmentManager(), "REGISTER_CODE_DIALOG");
+    }
+
+    public void sendCode(String code){
+        ApiVolley.getInstance().getUserToken(userPhone, code, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("success") && !TextUtils.isEmpty(response.getString("token"))){
+                        PrefsHelper.getInstance().setUserToken(response.getString("token"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
     }
 }

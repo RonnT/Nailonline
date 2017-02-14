@@ -8,8 +8,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:descendantFocusability="beforeDescendants"
-        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <include
@@ -20,6 +18,8 @@
             android:id="@+id/activityContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <TextView
@@ -196,24 +196,88 @@
                 android:text="@string/select_date_time"
                 android:textSize="18sp" />
 
+            <com.nailonline.client.extension.CloseKeyboardEditText
+                android:id="@+id/commentEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:background="@android:color/transparent"
+                android:padding="@dimen/standart_margin"
+                android:inputType="textNoSuggestions"
+                android:imeOptions="actionDone"
+                android:hint="@string/comment"
+                android:gravity="top|left"
+                android:textSize="14sp"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/submitButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:enabled="false"
+                    android:padding="@dimen/standart_margin"
+                    android:layout_centerInParent="true"
+                    android:text="Подтвердить"/>
+
+            </RelativeLayout>
+
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/commentEditText"
+        <LinearLayout
+            android:id="@+id/presentLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:lines="3"
-            android:background="@android:color/transparent"
-            android:padding="@dimen/standart_margin"
-            android:hint="Комментарии к заказу"
-            android:gravity="top|left"
-            android:textSize="14sp"
-            android:isScrollContainer="true"/>
+            android:visibility="gone"
+            tools:visibility="visible"
+            android:orientation="vertical">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/click_gray_background" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/click_gray_background"
+                android:gravity="center_vertical"
+                android:paddingBottom="@dimen/small_margin"
+                android:paddingLeft="@dimen/standart_margin"
+                android:paddingTop="@dimen/standart_margin"
+                android:text="@string/present_title"
+                android:textSize="18sp"
+                tools:ignore="RtlHardcoded,RtlSymmetry" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@android:color/white">
+
+                <com.nailonline.client.extension.SquareImageView
+                    android:id="@+id/presentImage"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/standart_margin"/>
+
+                <TextView
+                    android:id="@+id/presentText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/presentImage"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/standart_margin"
+                    android:layout_marginLeft="@dimen/standart_margin"
+                    android:textSize="16sp"
+                    tools:text="Маска для лица"/>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/click_gray_background" />
+
+        </LinearLayout>
 
     </LinearLayout>
 </ScrollView>

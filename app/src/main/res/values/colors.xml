@@ -14,7 +14,7 @@
     <color name="default_dot">#60FFFFFF</color>
 
     <color name="just_grey">#BDBDBD</color>
-    <color name="calendar_grey">#80000000</color>
+    <color name="default_secondary_text_color">#86000000</color>
 
     <!-- used in progressBar -->
     <color name="green">#0d8b42</color>

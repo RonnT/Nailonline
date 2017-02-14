@@ -14,7 +14,7 @@
 
     <style name="CalendarWeekDayStyle" parent="TextAppearance.MaterialCalendarWidget.WeekDay">
         <item name="android:textAllCaps">true</item>
-        <item name="android:textColor">@color/calendar_grey</item>
+        <item name="android:textColor">@color/default_secondary_text_color</item>
         <item name="android:textSize">16sp</item>
     </style>
 
@@ -26,7 +26,16 @@
 
     <style name="CalendarHeaderStyle" parent="TextAppearance.MaterialCalendarWidget.Header">
         <item name="android:textSize">16sp</item>
-        <item name="android:textColor">@color/calendar_grey</item>
+        <item name="android:textColor">@color/default_secondary_text_color</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
+    <style name="GrayUnderlineEditText" parent="AppTheme">
+        <item name="colorAccent">@color/default_secondary_text_color</item>
+    </style>
+
+    <style name="grayUnderlineEditText" parent="AppTheme">
+        <item name="colorAccent">@color/default_secondary_text_color</item>
+    </style>
+
 </resources>

@@ -38,10 +38,19 @@
     <string name="for_nail">за палец</string>
     <string name="for_hand">за руку</string>
     <string name="select_date_time">Выберите дату и время</string>
+    <string name="select_date_title">Дата заказа</string>
+    <string name="comment">Комментарии к заказу</string>
+    <string name="present_title">Подарок для выбранной услуги</string>
+
+    <!-- Register dialog -->
     <string name="register_dialog_title">Для подтверждения заказа укажите данные по которым мастер сможет с Вами связаться</string>
     <string name="name">Имя</string>
     <string name="name_explain">Имя, которое отобразится в заказе</string>
-    <string name="select_date_title">Дата заказа</string>
+    <string name="phone_hint">Номер телефона</string>
+    <string name="phone_explain">Номер для связи с мастером</string>
+    <string name="code_dialog_title">На Ваш номер было отправлено сообщение с кодом</string>
+    <string name="code_hint">Код из смс</string>
+    <string name="code_explain">Введите код из сообщения</string>
 
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>
