@@ -8,6 +8,7 @@ import com.nailonline.client.entity.Promo;
 import com.nailonline.client.extension.IOnPagerItemClick;
 import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.master.MasterTabActivity;
+import com.nailonline.client.order.OrderTabActivity;
 import com.nailonline.client.present.PresentDialogFragment;
 import com.nailonline.client.promo.PromoDialogFragment;
 import com.nailonline.client.promo.PromoMainSlideAdapter;
@@ -35,6 +36,10 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
     @Override
     protected void setData(Bundle savedInstanceState) {
         super.setData(savedInstanceState);
+        //if (TextUtils.isEmpty(PrefsHelper.getInstance().getUserToken())){
+        if (false){
+            findViewById(R.id.orderLayout).setVisibility(View.GONE);
+        } else findViewById(R.id.orderLayout).setVisibility(View.VISIBLE);
         initViewPager();
     }
 
@@ -76,6 +81,11 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
         PromoDialogFragment newFragment = new PromoDialogFragment();
         newFragment.setArguments(args);
         newFragment.show(fm, "abc");
+    }
+
+    public void onOrderClick(View v){
+        Intent intent = new Intent(this, OrderTabActivity.class);
+        startActivity(intent);
     }
 
     @Override

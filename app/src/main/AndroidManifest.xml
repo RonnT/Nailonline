@@ -44,17 +44,23 @@
 
         </activity>
 
-        <activity android:name=".order.NewOrderActivity"
+        <activity android:name=".order.makenew.NewOrderActivity"
             android:screenOrientation="portrait"
             android:label="Новый заказ">
 
         </activity>
 
-        <activity android:name=".order.SelectSkillActivity"
+        <activity android:name=".order.makenew.SelectSkillActivity"
             android:screenOrientation="portrait"
             android:label="Выберите услугу">
 
         </activity>
+
+        <activity android:name=".order.OrderTabActivity"
+            android:screenOrientation="portrait"
+            android:label="Мои записи">
+        </activity>
+
 
 
         <meta-data

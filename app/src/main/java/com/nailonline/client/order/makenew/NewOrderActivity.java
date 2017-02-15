@@ -1,4 +1,4 @@
-package com.nailonline.client.order;
+package com.nailonline.client.order.makenew;
 
 import android.content.Context;
 import android.content.DialogInterface;

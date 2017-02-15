@@ -52,6 +52,10 @@
     <string name="code_hint">Код из смс</string>
     <string name="code_explain">Введите код из сообщения</string>
 
+    <!-- Order activity -->
+    <string name="tab_by_master">По мастеру</string>
+    <string name="tab_by_date">По дате</string>
+
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>
         <item quantity="other">%d руки</item>

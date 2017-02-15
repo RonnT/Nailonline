@@ -14,7 +14,7 @@ import android.widget.GridView;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Present;
 import com.nailonline.client.helper.RealmHelper;
-import com.nailonline.client.order.NewOrderActivity;
+import com.nailonline.client.order.makenew.NewOrderActivity;
 
 import java.util.Collections;
 import java.util.Comparator;

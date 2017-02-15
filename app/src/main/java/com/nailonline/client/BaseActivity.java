@@ -26,8 +26,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected Toolbar toolbar;
     protected boolean isNeedDeepSetColor = true;
 
-
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
 import com.nailonline.client.BaseActivity;
-import com.nailonline.client.order.NewOrderActivity;
+import com.nailonline.client.order.makenew.NewOrderActivity;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.helper.RealmHelper;

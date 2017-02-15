@@ -24,6 +24,36 @@
             android:layout_height="180dp"/>
 
         <LinearLayout
+            android:id="@+id/orderLayout"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:onClick="onOrderClick"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:tag="@string/tag_painted_ac"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                app:srcCompat="@drawable/ic_orders"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:tag="@string/tag_painted_ac"
+                android:text="Мои записи"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <include layout="@layout/gray_divider" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackground"
