@@ -7,11 +7,23 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.nailonline.client.BaseActivity;
 import com.nailonline.client.R;
-import com.nailonline.client.entity.Master;
+import com.nailonline.client.api.ApiVolley;
+import com.nailonline.client.entity.Job;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,12 +33,9 @@ import java.util.List;
 public class OrderTabActivity extends BaseActivity {
 
     public static final String TEMPLATE_ID_KEY = "TEMPLATE_ID_KEY";
+    public static final String JOB_LIST_KEY = "JOB_LIST_KEY";
 
-    private List<Master> orderList;
-
-    public List<Master> getOrderList() {
-        return orderList;
-    }
+    private ArrayList<Job> jobList;
 
     @Override
     protected int getLayoutId() {
@@ -43,8 +52,31 @@ public class OrderTabActivity extends BaseActivity {
     protected void setData(Bundle savedInstanceState) {
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTabLayout();
-        //orderList = RealmHelper.getAllMasters();
+
+        ApiVolley.getInstance().getUserJobs(0, 0, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    jobList = parseJobs(response);
+                    Log.d("Debug", jobList.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                setTabLayout();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+    }
+
+    public static ArrayList<Job> parseJobs(JSONObject jsonObject) throws JSONException {
+        JSONArray jsonArray = jsonObject.getJSONArray("list");
+        Type listType = new TypeToken<List<Job>>() {}.getType();
+        ArrayList<Job> result = new Gson().fromJson(jsonArray.toString(), listType);
+        return result;
     }
 
     private void setTabLayout() {
@@ -61,10 +93,27 @@ public class OrderTabActivity extends BaseActivity {
     private class OrderTabAdapter extends android.support.v4.app.FragmentPagerAdapter {
 
         private Fragment[] fragments = {
-                new OrderByMasterFragment(),
-                new OrderByDateFragment()};
+                getOrderByMasterFragment(),
+                getOrderByDateFragment()};
 
         private int tabTitlesId[] = {R.string.tab_by_master, R.string.tab_by_date};
+
+        private OrderByMasterFragment getOrderByMasterFragment(){
+            OrderByMasterFragment fragment = new OrderByMasterFragment();
+            Bundle args = new Bundle();
+            args.putParcelableArrayList(JOB_LIST_KEY, jobList);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
+        private OrderByDateFragment getOrderByDateFragment(){
+            OrderByDateFragment fragment = new OrderByDateFragment();
+            Bundle args = new Bundle();
+            args.putParcelableArrayList(JOB_LIST_KEY, jobList);
+            fragment.setArguments(args);
+            return fragment;
+        }
+
 
         OrderTabAdapter(FragmentManager fm) {
             super(fm);

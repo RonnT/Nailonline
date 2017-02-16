@@ -655,7 +655,7 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
                     numberOfUnits,
                     master.getMasterMainLocationId(),
                     selectedDate.getTimeInMillis() / 1000,
-                    commentEditText.toString(),
+                    commentEditText.getText().toString(),
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {

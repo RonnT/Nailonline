@@ -39,6 +39,10 @@ public class ApiVolley {
             AMOUNT = "amount",
             LOCATION_ID = "locationId",
             COMMENTS = "comments",
+            STATE_ID = "stateId",
+            LIMIT = "limit",
+            FROM_DATE = "fromDate",
+            TO_DATE = "toDate",
 
     REQUEST_TAG = "REQUEST_TAG";
 
@@ -187,6 +191,15 @@ public class ApiVolley {
         params.put(LOCATION_ID, String.valueOf(locationId));
         params.put(START_DATE, String.valueOf(startDate));
         params.put(COMMENTS, comments);
+        sendRequest(POST, params, pRL, pEL);
+    }
+
+    public void getUserJobs(int stateId, int limit, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
+        Map<String, String> params = getDefaultParams("get_user_jobs");
+        params.put(STATE_ID, String.valueOf(stateId));
+        params.put(LIMIT, String.valueOf(limit));
+        params.put(FROM_DATE, "0");
+        params.put(TO_DATE, "1700000000");
         sendRequest(POST, params, pRL, pEL);
     }
 }
