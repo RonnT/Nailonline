@@ -1,5 +1,7 @@
 package com.nailonline.client.api;
 
+import android.util.Log;
+
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -33,6 +35,10 @@ public class ApiVolley {
             END_DATE = "endDate",
             PHONE = "phone",
             CODE = "code",
+            SKILL_ID = "skillId",
+            AMOUNT = "amount",
+            LOCATION_ID = "locationId",
+            COMMENTS = "comments",
 
     REQUEST_TAG = "REQUEST_TAG";
 
@@ -100,6 +106,7 @@ public class ApiVolley {
         //if (!Utility.checkConnection(pEL)) return;
 
         String url = buildUrl(pParams);
+        Log.d("APIRequest", pParams.toString());
 
         JsonObjectRequest request = new JsonObjectRequest(pMethod, url, null, pRL, pEL);
 
@@ -168,6 +175,18 @@ public class ApiVolley {
         Map<String, String> params = getDefaultParams("get_user_token");
         params.put(PHONE, phone);
         params.put(CODE, code);
+        sendRequest(POST, params, pRL, pEL);
+    }
+
+    public void addJob(int masterId, int skillId, int amount, int locationId, long startDate,
+                       String comments, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
+        Map<String, String> params = getDefaultParams("add_job");
+        params.put(MASTER_ID, String.valueOf(masterId));
+        params.put(SKILL_ID, String.valueOf(skillId));
+        params.put(AMOUNT, String.valueOf(amount));
+        params.put(LOCATION_ID, String.valueOf(locationId));
+        params.put(START_DATE, String.valueOf(startDate));
+        params.put(COMMENTS, comments);
         sendRequest(POST, params, pRL, pEL);
     }
 }

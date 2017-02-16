@@ -59,7 +59,7 @@ import butterknife.OnClick;
  * Created by Roman T. on 24.12.2016.
  */
 
-public class NewOrderActivity extends BaseActivity implements TextView.OnEditorActionListener{
+public class NewOrderActivity extends BaseActivity implements TextView.OnEditorActionListener {
 
     public static final String TAG_MASTER_ID = "TAG_MASTER_ID";
     public static final String TAG_SKILL_ID = "TAG_SKILL_ID";
@@ -158,30 +158,26 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
         dateTimeText.setTextColor(getUserTheme().getParsedAC());
 
         skillLabelText.setTextColor(getUserTheme().getParsedAC());
-        if (skill == null) {
-            skillLabelText.setText(getString(R.string.select_skill));
-            skillPriceText.setVisibility(View.GONE);
-        } else {
-            updateSkillInfo();
-        }
+        updateSkillInfo();
         setCursorColor(commentEditText, getUserTheme().getParsedAC());
-        setFocusLayoutOnEdits((ViewGroup)findViewById(R.id.activityContent));
+        setFocusLayoutOnEdits((ViewGroup) findViewById(R.id.activityContent));
         submitButton.getBackground().setColorFilter(getUserTheme().getParsedMC(), PorterDuff.Mode.MULTIPLY);
         submitButton.getBackground().setAlpha(100);
         submitButton.setTextColor(getUserTheme().getParseWC());
         fillWorkingDays();
     }
+
     // next three methods using for disable focus on edittext after finish editing
-    protected void setFocusLayoutOnEdits(ViewGroup root){
+    protected void setFocusLayoutOnEdits(ViewGroup root) {
         if (mFocusLayout == null) mFocusLayout = findViewById(R.id.activityContent);
-        for(int i = 0; i < root.getChildCount(); i++){
+        for (int i = 0; i < root.getChildCount(); i++) {
             View v = root.getChildAt(i);
 
-            if(v instanceof ViewGroup &&((ViewGroup)v).getChildCount() != 0){
+            if (v instanceof ViewGroup && ((ViewGroup) v).getChildCount() != 0) {
                 setFocusLayoutOnEdits((ViewGroup) v);
-            } else if(v instanceof CloseKeyboardEditText){
-                ((CloseKeyboardEditText)v).setFocusLayout(mFocusLayout);
-                ((CloseKeyboardEditText)v).setOnEditorActionListener(this);
+            } else if (v instanceof CloseKeyboardEditText) {
+                ((CloseKeyboardEditText) v).setFocusLayout(mFocusLayout);
+                ((CloseKeyboardEditText) v).setOnEditorActionListener(this);
             }
         }
     }
@@ -207,25 +203,31 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
     }
 
     private void updateSkillInfo() {
-        skillLabelText.setText(skill.getLabel());
-        skillPriceText.setVisibility(View.VISIBLE);
-        switch (skill.getUnitId()) {
-            case UNIT_PERSON:
-                if (currentUnit == UNIT_PERSON) break;
-                numberOfUnits = 1;
-                additionalLayout.setVisibility(View.GONE);
-                currentUnit = UNIT_PERSON;
-                break;
-            case UNIT_NAIL:
-                initAdditionalLayout(UNIT_NAIL);
-                break;
-            case UNIT_HAND:
-                initAdditionalLayout(UNIT_HAND);
-                break;
+        if (skill == null) {
+            skillLabelText.setText(getString(R.string.select_skill));
+            skillPriceText.setVisibility(View.GONE);
+            additionalLayout.setVisibility(View.GONE);
+        } else {
+            skillLabelText.setText(skill.getLabel());
+            skillPriceText.setVisibility(View.VISIBLE);
+            switch (skill.getUnitId()) {
+                case UNIT_PERSON:
+                    if (currentUnit == UNIT_PERSON) break;
+                    numberOfUnits = 1;
+                    additionalLayout.setVisibility(View.GONE);
+                    currentUnit = UNIT_PERSON;
+                    break;
+                case UNIT_NAIL:
+                    initAdditionalLayout(UNIT_NAIL);
+                    break;
+                case UNIT_HAND:
+                    initAdditionalLayout(UNIT_HAND);
+                    break;
+            }
+            skillPriceText.setText(getPriceText(numberOfUnits));
         }
-        skillPriceText.setText(getPriceText(numberOfUnits));
-        checkAndFillPresent();
         checkSubmitButton();
+        checkAndFillPresent();
     }
 
     private void initAdditionalLayout(int unit) {
@@ -267,10 +269,10 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
         }
     }
 
-    private void checkAndFillPresent(){
+    private void checkAndFillPresent() {
         if (skill == null ||
                 skill.getPresentId() == null ||
-                RealmHelper.getPresentById(skill.getPresentId()) == null){
+                RealmHelper.getPresentById(skill.getPresentId()) == null) {
             presentLayout.setVisibility(View.GONE);
             return;
         }
@@ -450,7 +452,7 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
 
     private void showDateDialog() {
         Calendar entryDate;
-        if (selectedDate == null){
+        if (selectedDate == null) {
             entryDate = Calendar.getInstance();
         } else entryDate = selectedDate;
         DatePickerDialog pickerDialog = DatePickerDialog.newInstance(
@@ -522,7 +524,6 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
@@ -555,8 +556,8 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
                             fillDateTime();
                             checkSubmitButton();
                             view.dismiss();
-                        }
-                        else Toast.makeText(NewOrderActivity.this, "Время занято", Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(NewOrderActivity.this, "Время занято", Toast.LENGTH_SHORT).show();
                     }
                 },
                 0,
@@ -578,12 +579,12 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
         dpd.show(getFragmentManager(), "Datepickerdialog");
     }
 
-    private void fillDateTime(){
+    private void fillDateTime() {
         Calendar startTime = Calendar.getInstance();
         startTime.setTimeInMillis(selectedDate.getTimeInMillis());
         Calendar endTime = Calendar.getInstance();
         endTime.setTimeInMillis(startTime.getTimeInMillis());
-        endTime.add(Calendar.MINUTE, skill.getDuration()*numberOfUnits);
+        endTime.add(Calendar.MINUTE, skill.getDuration() * numberOfUnits);
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm");
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         String string = format.format(selectedDate.getTime()) + " c " + formatTime.format(startTime.getTime())
@@ -591,7 +592,7 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
         dateTimeText.setText(string);
     }
 
-    private void checkSubmitButton(){
+    private void checkSubmitButton() {
         if (skill != null && selectedDate != null) {
             submitButton.setEnabled(true);
             submitButton.getBackground().setAlpha(255);
@@ -601,17 +602,17 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
         }
     }
 
-    private void clearDateTime(){
+    private void clearDateTime() {
         dateTimeText.setText(R.string.select_date_time);
         selectedDate = null;
         checkSubmitButton();
     }
 
-    private boolean isTimeAvailable(Calendar calendar){
+    private boolean isTimeAvailable(Calendar calendar) {
         boolean timeBusy = false;
-        long timestamp = calendar.getTimeInMillis()/1000;
-        for (ShortJob shortJob : jobList){
-            if (shortJob.getStartDate().compareTo(timestamp) <= 0 && shortJob.getEndDate().compareTo(timestamp) > 0){
+        long timestamp = calendar.getTimeInMillis() / 1000;
+        for (ShortJob shortJob : jobList) {
+            if (shortJob.getStartDate().compareTo(timestamp) <= 0 && shortJob.getEndDate().compareTo(timestamp) > 0) {
                 timeBusy = true;
             }
         }
@@ -644,15 +645,51 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
     }
 
     @OnClick(R.id.submitButton)
-    public void onSubmitClick(){
-        if (PrefsHelper.getInstance().getUserToken().isEmpty()){
+    public void onSubmitClick() {
+        if (PrefsHelper.getInstance().getUserToken().isEmpty()) {
             new RegisterDialogFragment().show(getSupportFragmentManager(), "REGISTER_DIALOG");
         } else {
+            ApiVolley.getInstance().addJob(
+                    master.getMasterId(),
+                    skill.getSkillId(),
+                    numberOfUnits,
+                    master.getMasterMainLocationId(),
+                    selectedDate.getTimeInMillis() / 1000,
+                    commentEditText.toString(),
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getBoolean("success")) {
+                                    Toast.makeText(NewOrderActivity.this, R.string.order_created_successfully, Toast.LENGTH_LONG).show();
+                                    clearAllFields();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            //TODO error processing
+                        }
+                    }
+            );
             //TODO send new order
         }
     }
 
-    public void sendPhone(String phone){
+    private void clearAllFields() {
+        skill = null;
+        selectedDate = null;
+        currentUnit = 0;
+        updateSkillInfo();
+        clearDateTime();
+        commentEditText.setText("");
+    }
+
+    public void sendPhone(String phone) {
         phone = phone.substring(1, phone.length());
         userPhone = phone;
         ApiVolley.getInstance().getUserCode(phone, new Response.Listener<JSONObject>() {
@@ -677,16 +714,16 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
         });
     }
 
-    private void showRegisterCodeDialog(){
+    private void showRegisterCodeDialog() {
         new CodeDialogFragment().show(getSupportFragmentManager(), "REGISTER_CODE_DIALOG");
     }
 
-    public void sendCode(String code){
+    public void sendCode(String code) {
         ApiVolley.getInstance().getUserToken(userPhone, code, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    if (response.getBoolean("success") && !TextUtils.isEmpty(response.getString("token"))){
+                    if (response.getBoolean("success") && !TextUtils.isEmpty(response.getString("token"))) {
                         PrefsHelper.getInstance().setUserToken(response.getString("token"));
                     }
                 } catch (JSONException e) {

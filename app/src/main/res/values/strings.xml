@@ -41,6 +41,7 @@
     <string name="select_date_title">Дата заказа</string>
     <string name="comment">Комментарии к заказу</string>
     <string name="present_title">Подарок для выбранной услуги</string>
+    <string name="order_created_successfully">Заказ успешно создан</string>
 
     <!-- Register dialog -->
     <string name="register_dialog_title">Для подтверждения заказа укажите данные по которым мастер сможет с Вами связаться</string>
