@@ -97,7 +97,7 @@ public class UserTheme extends RealmObject {
         return themeWC;
     }
 
-    public int getParseWC() {
+    public int getParsedWC() {
         return Color.parseColor(convertColor(themeWC));
     }
 

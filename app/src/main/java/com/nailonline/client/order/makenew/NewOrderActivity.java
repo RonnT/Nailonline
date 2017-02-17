@@ -163,7 +163,7 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
         setFocusLayoutOnEdits((ViewGroup) findViewById(R.id.activityContent));
         submitButton.getBackground().setColorFilter(getUserTheme().getParsedMC(), PorterDuff.Mode.MULTIPLY);
         submitButton.getBackground().setAlpha(100);
-        submitButton.setTextColor(getUserTheme().getParseWC());
+        submitButton.setTextColor(getUserTheme().getParsedWC());
         fillWorkingDays();
     }
 

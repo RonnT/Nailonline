@@ -61,6 +61,11 @@
             android:label="Мои записи">
         </activity>
 
+        <activity android:name=".order.JobListActivity"
+            android:screenOrientation="portrait"
+            android:label="Мои записи">
+        </activity>
+
 
 
         <meta-data

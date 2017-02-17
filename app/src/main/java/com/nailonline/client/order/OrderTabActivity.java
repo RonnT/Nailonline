@@ -53,6 +53,9 @@ public class OrderTabActivity extends BaseActivity {
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.order_tablayout);
+        tabLayout.setBackgroundColor(userTheme.getParsedMC());
+
         ApiVolley.getInstance().getUserJobs(0, 0, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -82,7 +85,6 @@ public class OrderTabActivity extends BaseActivity {
     private void setTabLayout() {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.order_tablayout);
         tabLayout.setTabTextColors(Color.WHITE, Color.WHITE);
-        tabLayout.setBackgroundColor(userTheme.getParsedMC());
         tabLayout.setSelectedTabIndicatorColor(userTheme.getParsedAC());
         ViewPager pager = (ViewPager) findViewById(R.id.order_viewpager);
         OrderTabActivity.OrderTabAdapter adapter = new OrderTabActivity.OrderTabAdapter(getSupportFragmentManager());

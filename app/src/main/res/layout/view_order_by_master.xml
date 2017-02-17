@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rootView"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/list_two_line_height"
+    android:clickable="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:background="?attr/selectableItemBackground"
+        android:layout_height="@dimen/list_two_line_height">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/master_photo"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="16dp"
+            android:src="@drawable/test" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/list_two_line_height"
+            android:layout_toLeftOf="@+id/info_button"
+            android:layout_toRightOf="@+id/master_photo"
+            tools:ignore="RtlHardcoded">
+
+            <TextView
+                android:id="@+id/amount_of_orders"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/master_name"
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textSize="@dimen/list_secondary_text_size"
+                tools:text="3 записи" />
+
+            <TextView
+                android:id="@+id/master_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="16dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:textColor="?android:attr/textColorPrimary"
+                android:textSize="@dimen/list_primary_text_size"
+                tools:text="Василий Васильев" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/info_button"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/standart_margin"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:clickable="true"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_info"
+            tools:ignore="RtlHardcoded" />
+    </RelativeLayout>
+
+</RelativeLayout>

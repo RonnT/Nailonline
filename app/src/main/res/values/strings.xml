@@ -57,6 +57,9 @@
     <string name="tab_by_master">По мастеру</string>
     <string name="tab_by_date">По дате</string>
 
+    <string name="cancel_order">Отменить запись?</string>
+    <string name="back">Назад</string>
+
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>
         <item quantity="other">%d руки</item>
@@ -66,6 +69,24 @@
         <item quantity="one">%d палец</item>
         <item quantity="few">%d пальца</item>
         <item quantity="other">%d пальцев</item>
+    </plurals>
+
+    <plurals name="numberOfOrders">
+        <item quantity="one">%d запись</item>
+        <item quantity="few">%d записи</item>
+        <item quantity="other">%d записей</item>
+    </plurals>
+
+    <plurals name="forNumberOfHands">
+        <item quantity="one">за %d руку</item>
+        <item quantity="other">за %d руки</item>
+
+    </plurals>
+
+    <plurals name="forNumberOfNail">
+        <item quantity="one">за %d палец</item>
+        <item quantity="few">за %d пальца</item>
+        <item quantity="other">за %d пальцев</item>
     </plurals>
 
 </resources>
