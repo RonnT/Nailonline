@@ -57,8 +57,15 @@
     <string name="tab_by_master">По мастеру</string>
     <string name="tab_by_date">По дате</string>
 
+    <!-- Profile activity -->
+    <string name="refill">Пополнить</string>
+    <string name="bonus_programm">Бонусная программа</string>
+    <string name="change_theme">Сменить цветовую тему</string>
+
     <string name="cancel_order">Отменить запись?</string>
     <string name="back">Назад</string>
+
+
 
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>
@@ -77,6 +84,12 @@
         <item quantity="other">%d записей</item>
     </plurals>
 
+    <plurals name="numberOfOrdersWithoutDigit">
+        <item quantity="one">запись</item>
+        <item quantity="few">записи</item>
+        <item quantity="other">записей</item>
+    </plurals>
+
     <plurals name="forNumberOfHands">
         <item quantity="one">за %d руку</item>
         <item quantity="other">за %d руки</item>
@@ -87,6 +100,12 @@
         <item quantity="one">за %d палец</item>
         <item quantity="few">за %d пальца</item>
         <item quantity="other">за %d пальцев</item>
+    </plurals>
+
+    <plurals name="bonus">
+        <item quantity="one">%d бонус</item>
+        <item quantity="few">%d бонуса</item>
+        <item quantity="other">%d бонусов</item>
     </plurals>
 
 </resources>

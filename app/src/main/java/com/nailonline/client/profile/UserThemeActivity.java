@@ -1,4 +1,4 @@
-package com.nailonline.client;
+package com.nailonline.client.profile;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.nailonline.client.BaseActivity;
+import com.nailonline.client.MainActivity;
+import com.nailonline.client.R;
 import com.nailonline.client.entity.UserTheme;
 import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;

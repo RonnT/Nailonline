@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".UserThemeActivity"
+        <activity android:name=".profile.UserThemeActivity"
             android:screenOrientation="portrait"
             android:label="">
         </activity>
@@ -66,6 +66,10 @@
             android:label="Мои записи">
         </activity>
 
+        <activity android:name=".profile.ProfileActivity"
+            android:screenOrientation="portrait"
+            android:label="Мой профиль">
+        </activity>
 
 
         <meta-data

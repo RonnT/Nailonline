@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activityContent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/view_toolbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/click_gray_background" />
+
+    <include layout="@layout/gray_divider" />
+
+    <TextView
+        android:id="@+id/bonus_textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/click_gray_background"
+        android:gravity="center"
+        android:minHeight="48dp"
+        android:tag="@string/tag_painted_ac"
+        android:textSize="24sp"
+        tools:text="0 бонусов" />
+
+    <include layout="@layout/gray_divider" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/click_gray_background" />
+
+    <include layout="@layout/gray_divider" />
+
+    <TextView
+        android:id="@+id/profile_refill"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingLeft="@dimen/standart_margin"
+        android:paddingRight="@dimen/standart_margin"
+        android:text="@string/refill"
+        android:textSize="18sp" />
+
+    <include layout="@layout/gray_divider" />
+
+    <TextView
+        android:id="@+id/profile_bonus_programm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingLeft="@dimen/standart_margin"
+        android:paddingRight="@dimen/standart_margin"
+        android:text="@string/bonus_programm"
+        android:textSize="18sp" />
+
+    <include layout="@layout/gray_divider" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/click_gray_background" />
+
+    <include layout="@layout/gray_divider" />
+
+    <TextView
+        android:id="@+id/profile_change_theme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:paddingLeft="@dimen/standart_margin"
+        android:paddingRight="@dimen/standart_margin"
+        android:text="@string/change_theme"
+        android:textSize="18sp" />
+
+    <include layout="@layout/gray_divider" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/click_gray_background" />
+
+</LinearLayout>

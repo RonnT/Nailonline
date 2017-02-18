@@ -10,6 +10,7 @@ import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.master.MasterTabActivity;
 import com.nailonline.client.order.OrderTabActivity;
 import com.nailonline.client.present.PresentDialogFragment;
+import com.nailonline.client.profile.ProfileActivity;
 import com.nailonline.client.promo.PromoDialogFragment;
 import com.nailonline.client.promo.PromoMainSlideAdapter;
 
@@ -69,7 +70,7 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
     }
 
     public void onProfileClick(View v) {
-        Intent intent = new Intent(this, UserThemeActivity.class);
+        Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
 

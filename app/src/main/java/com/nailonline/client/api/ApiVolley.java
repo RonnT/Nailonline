@@ -43,6 +43,8 @@ public class ApiVolley {
             LIMIT = "limit",
             FROM_DATE = "fromDate",
             TO_DATE = "toDate",
+            JOB_ID = "jobId",
+
 
     REQUEST_TAG = "REQUEST_TAG";
 
@@ -200,6 +202,16 @@ public class ApiVolley {
         params.put(LIMIT, String.valueOf(limit));
         params.put(FROM_DATE, "0");
         params.put(TO_DATE, "1700000000");
+        sendRequest(POST, params, pRL, pEL);
+    }
+
+    public void setJobState(int jobId, int stateId, String comments, long startDate, long endDate, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
+        Map<String, String> params = getDefaultParams("set_job_state");
+        params.put(JOB_ID, String.valueOf(jobId));
+        params.put(STATE_ID, String.valueOf(stateId));
+        params.put(COMMENTS, comments);
+        params.put(START_DATE, String.valueOf(startDate));
+        params.put(END_DATE, String.valueOf(endDate));
         sendRequest(POST, params, pRL, pEL);
     }
 }

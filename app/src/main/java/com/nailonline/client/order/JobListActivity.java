@@ -17,15 +17,21 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.nailonline.client.BaseActivity;
 import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
+import com.nailonline.client.api.ApiVolley;
 import com.nailonline.client.entity.Job;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.Skill;
 import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.order.makenew.NewOrderActivity;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -62,19 +68,41 @@ public class JobListActivity extends BaseActivity {
 
     List<Job> itemList;
 
+    private RecyclerView.Adapter<JobViewHolder> adapter;
+
     @BindView(R.id.orderRecyclerView)
     RecyclerView recyclerView;
 
     private View.OnClickListener onCancelClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            int position = (int) view.getTag();
+            final int position = (int) view.getTag();
+            final Job job = itemList.get(position);
             AlertDialog.Builder builder = new AlertDialog.Builder(JobListActivity.this);
             builder.setMessage(R.string.cancel_order);
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    Toast.makeText(JobListActivity.this, "Запрос на отмену", Toast.LENGTH_LONG).show();
+                    ApiVolley.getInstance().setJobState(job.getJobId(), 6, job.getJobComments(), job.getStartDate(), job.getEndDate(), new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            try {
+                                if (response.getBoolean("success")) {
+                                    Toast.makeText(JobListActivity.this,"Запись успешно отменена", Toast.LENGTH_LONG).show();
+                                    itemList.remove(position);
+                                    adapter.notifyDataSetChanged();
+                                }
+                            } catch (JSONException e) {
+                                Toast.makeText(JobListActivity.this,"При отмене записи произошла ошибка", Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
+                            }
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(JobListActivity.this,"При отмене записи произошла ошибка", Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             });
             builder.setNegativeButton(R.string.back, new DialogInterface.OnClickListener() {
@@ -114,7 +142,9 @@ public class JobListActivity extends BaseActivity {
 
     @Override
     protected void setData(Bundle savedInstanceState) {
-        super.setData(savedInstanceState);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         ButterKnife.bind(this);
         itemList = getIntent().getParcelableArrayListExtra(JOB_LIST_KEY);
         initRecyclerView();
@@ -126,7 +156,8 @@ public class JobListActivity extends BaseActivity {
     }
 
     private RecyclerView.Adapter<JobViewHolder> getAdapter() {
-        return new JobListAdapter();
+        if (adapter == null) adapter = new JobListAdapter();
+        return adapter;
     }
 
     private class JobListAdapter extends RecyclerView.Adapter<JobViewHolder> {
@@ -149,7 +180,7 @@ public class JobListActivity extends BaseActivity {
             holder.masterName.setText(master.getMasterFirstName());
             @SuppressLint("SimpleDateFormat")
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
-            String date = format.format(job.getStartDate());
+            String date = format.format(job.getStartDate()*1000);
             holder.jobDate.setText(date);
             holder.jobStatus.setText(statusArray.get(job.getJobStateId()));
             holder.jobLabel.setText(skill.getLabel());
