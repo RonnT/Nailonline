@@ -5,8 +5,16 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 import com.nailonline.client.BaseActivity;
 import com.nailonline.client.R;
+import com.nailonline.client.api.ApiVolley;
+import com.nailonline.client.entity.User;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,8 +55,30 @@ public class ProfileActivity extends BaseActivity {
     }
 
     private void setBonusText(){
-        String bonusString = getResources().getQuantityString(R.plurals.bonus, 0, 0);
-        bonusTextView.setText(bonusString);
+
+        ApiVolley.getInstance().getUser(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                JSONObject userJson = null;
+                try {
+                    userJson = response.getJSONObject("user");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (userJson != null){
+                    User user = new Gson().fromJson(userJson.toString(), User.class);
+                    int bonus = user.getUserBalance();
+                    String bonusString = getResources().getQuantityString(R.plurals.bonus, bonus, bonus);
+                    bonusTextView.setText(bonusString);
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
     }
 
     private void setClickListeners(){

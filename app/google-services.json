@@ -1,0 +1,73 @@
+{
+  "project_info": {
+    "project_number": "664069952272",
+    "firebase_url": "https://api-project-664069952272.firebaseio.com",
+    "project_id": "api-project-664069952272",
+    "storage_bucket": "api-project-664069952272.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664069952272:android:d4098721ebe1c91f",
+        "android_client_info": {
+          "package_name": "com.oliabric.nailonline.master"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664069952272-1on2igluaq4fe6ps4dvnovb9v24ahq5m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUBMfdB5_rZ52odlFhCc7hHol1XJHA94o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:664069952272:android:0c87fa53faf85332",
+        "android_client_info": {
+          "package_name": "com.nailonline.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "664069952272-1on2igluaq4fe6ps4dvnovb9v24ahq5m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUBMfdB5_rZ52odlFhCc7hHol1XJHA94o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

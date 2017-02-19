@@ -27,6 +27,7 @@ public class PrefsHelper {
 
             PREF_FREE_TOKEN = "PREF_FREE_TOKEN",
             PREF_USER_TOKEN = "PREF_USER_TOKEN",
+            PREF_PUSH_TOKEN = "PREF_PUSH_TOKEN",
             PREF_USER_THEME = "PREF_USER_THEME";
 
     private SharedPreferences mPrefs;
@@ -83,6 +84,14 @@ public class PrefsHelper {
 
     public String getUserToken(){
         return getString(PREF_USER_TOKEN, "");
+    }
+
+    public void setPushToken(String token){
+        putString(PREF_PUSH_TOKEN, token);
+    }
+
+    public String getPushToken(){
+        return mPrefs.getString(PREF_PUSH_TOKEN,"");
     }
 
     public void setUserToken(String token){

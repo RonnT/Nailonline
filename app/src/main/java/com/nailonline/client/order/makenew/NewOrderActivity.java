@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.nailonline.client.BaseActivity;
 import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
@@ -725,6 +726,8 @@ public class NewOrderActivity extends BaseActivity implements TextView.OnEditorA
                 try {
                     if (response.getBoolean("success") && !TextUtils.isEmpty(response.getString("token"))) {
                         PrefsHelper.getInstance().setUserToken(response.getString("token"));
+                        final String pushToken = FirebaseInstanceId.getInstance().getToken();
+                        ApiVolley.getInstance().bindPushToken(pushToken);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

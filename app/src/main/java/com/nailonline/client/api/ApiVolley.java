@@ -6,11 +6,13 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.nailonline.client.App;
 import com.nailonline.client.helper.PrefsHelper;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -44,6 +46,8 @@ public class ApiVolley {
             FROM_DATE = "fromDate",
             TO_DATE = "toDate",
             JOB_ID = "jobId",
+            JOB_STATE_ID = "jobStateId",
+            PUSH_TOKEN = "push_token",
 
 
     REQUEST_TAG = "REQUEST_TAG";
@@ -72,6 +76,8 @@ public class ApiVolley {
     private void setupRequestQueueIfNeed() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(App.getAppContext());
+
+            //mRequestQueue = Volley.newRequestQueue(App.getAppContext());
         }
     }
 
@@ -208,10 +214,37 @@ public class ApiVolley {
     public void setJobState(int jobId, int stateId, String comments, long startDate, long endDate, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
         Map<String, String> params = getDefaultParams("set_job_state");
         params.put(JOB_ID, String.valueOf(jobId));
-        params.put(STATE_ID, String.valueOf(stateId));
+        params.put(JOB_STATE_ID, String.valueOf(stateId));
         params.put(COMMENTS, comments);
         params.put(START_DATE, String.valueOf(startDate));
         params.put(END_DATE, String.valueOf(endDate));
+        sendRequest(POST, params, pRL, pEL);
+    }
+
+    public void bindPushToken(final String pushToken){
+        Map<String, String> params = getDefaultParams("bind_push_token");
+        params.put(PUSH_TOKEN, pushToken);
+        Response.Listener<JSONObject> rL = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response.getBoolean("success"))
+                        PrefsHelper.getInstance().setPushToken(pushToken);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        Response.ErrorListener eL = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        };
+        sendRequest(POST, params, rL, eL);
+    }
+
+    public void getUser(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
+        Map<String, String> params = getDefaultParams("get_user");
         sendRequest(POST, params, pRL, pEL);
     }
 }

@@ -13,6 +13,7 @@ import android.widget.GridView;
 
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Present;
+import com.nailonline.client.entity.Skill;
 import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.order.makenew.NewOrderActivity;
 
@@ -56,14 +57,18 @@ public class PresentDialogFragment extends DialogFragment {
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                makeNewOrder(presentList.get(i).getMasterId());
+                makeNewOrder(presentList.get(i).getMasterId(), presentList.get(i).getPresentId());
             }
         });
     }
 
-    private void makeNewOrder(int masterId){
+    private void makeNewOrder(int masterId, int presentId){
         Intent intent = new Intent(getActivity(), NewOrderActivity.class);
         intent.putExtra(NewOrderActivity.TAG_MASTER_ID, masterId);
+        List<Skill> skillList = RealmHelper.getSkillsByPresent(presentId);
+        if (skillList != null && skillList.size() == 1){
+            intent.putExtra(NewOrderActivity.TAG_SKILL_ID, skillList.get(0).getSkillId());
+        };
         startActivity(intent);
     }
 }

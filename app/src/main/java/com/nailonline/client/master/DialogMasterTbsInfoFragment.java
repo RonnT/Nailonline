@@ -22,6 +22,7 @@ import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.Skill;
+import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;
 import com.squareup.picasso.Picasso;
 
@@ -160,7 +161,7 @@ public class DialogMasterTbsInfoFragment extends DialogFragment {
         imageOk.setImageDrawable(VectorDrawableCompat.create(getResources(), iconResId, null));
         imageOk.setColorFilter(iconColor);
 
-        if (!TextUtils.isEmpty(master.getMasterPhone())) {
+        if (!PrefsHelper.getInstance().getUserToken().isEmpty() && !TextUtils.isEmpty(master.getMasterPhone())) {
             iconResId = R.drawable.ic_phone_fill;
             imagePhone.setOnClickListener(new View.OnClickListener() {
                 @Override

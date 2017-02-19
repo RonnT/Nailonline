@@ -7,7 +7,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -61,7 +60,6 @@ public class OrderTabActivity extends BaseActivity {
             public void onResponse(JSONObject response) {
                 try {
                     jobList = parseJobs(response);
-                    Log.d("Debug", jobList.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

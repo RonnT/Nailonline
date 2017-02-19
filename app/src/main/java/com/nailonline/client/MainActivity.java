@@ -2,10 +2,12 @@ package com.nailonline.client;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.nailonline.client.entity.Promo;
 import com.nailonline.client.extension.IOnPagerItemClick;
+import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.master.MasterTabActivity;
 import com.nailonline.client.order.OrderTabActivity;
@@ -37,11 +39,13 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
     @Override
     protected void setData(Bundle savedInstanceState) {
         super.setData(savedInstanceState);
-        //if (TextUtils.isEmpty(PrefsHelper.getInstance().getUserToken())){
-        if (false){
+        initViewPager();
+    }
+
+    private void checkUserRegistration(){
+        if (TextUtils.isEmpty(PrefsHelper.getInstance().getUserToken())){
             findViewById(R.id.orderLayout).setVisibility(View.GONE);
         } else findViewById(R.id.orderLayout).setVisibility(View.VISIBLE);
-        initViewPager();
     }
 
     private void initViewPager() {
@@ -92,6 +96,7 @@ public class MainActivity extends BaseActivity implements IOnPagerItemClick {
     @Override
     protected void onResume() {
         pager.startAutoScroll();
+        checkUserRegistration();
         super.onResume();
 
     }

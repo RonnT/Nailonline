@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +23,7 @@ import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
 import com.nailonline.client.api.ApiVolley;
 import com.nailonline.client.entity.Job;
+import com.nailonline.client.entity.JobState;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.Skill;
 import com.nailonline.client.helper.RealmHelper;
@@ -34,11 +34,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.nailonline.client.order.OrderTabActivity.parseJobs;
 import static com.nailonline.client.order.makenew.NewOrderActivity.UNIT_HAND;
 import static com.nailonline.client.order.makenew.NewOrderActivity.UNIT_NAIL;
 import static com.nailonline.client.order.makenew.NewOrderActivity.UNIT_PERSON;
@@ -49,22 +51,8 @@ import static com.nailonline.client.order.makenew.NewOrderActivity.UNIT_PERSON;
 
 public class JobListActivity extends BaseActivity {
 
-    private static final SparseArray<String> statusArray;
-
-    static {
-        statusArray = new SparseArray<>(9);
-        statusArray.put(1, "Забронирована");
-        statusArray.put(2, "Подтверждена");
-        statusArray.put(3, "Перенесена");
-        statusArray.put(4, "Отклонена");
-        statusArray.put(5, "Выполнена");
-        statusArray.put(6, "Отменена");
-        statusArray.put(7, "Оплачена");
-        statusArray.put(8, "Не оплачена");
-        statusArray.put(9, "Просрочена");
-    }
-
     public static final String JOB_LIST_KEY = "JOB_LIST_KEY";
+    public static final String JOB_KEY = "JOB_KEY";
 
     List<Job> itemList;
 
@@ -83,7 +71,7 @@ public class JobListActivity extends BaseActivity {
             builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
-                    ApiVolley.getInstance().setJobState(job.getJobId(), 6, job.getJobComments(), job.getStartDate(), job.getEndDate(), new Response.Listener<JSONObject>() {
+                    ApiVolley.getInstance().setJobState(job.getJobId(), 6, "testing", job.getStartDate(), job.getEndDate(), new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
@@ -147,7 +135,34 @@ public class JobListActivity extends BaseActivity {
 
         ButterKnife.bind(this);
         itemList = getIntent().getParcelableArrayListExtra(JOB_LIST_KEY);
-        initRecyclerView();
+        //it use from push
+        final int jobId = getIntent().getIntExtra(JOB_KEY, -1);
+
+        if ((itemList == null || itemList.isEmpty()) && jobId > 0){
+            ApiVolley.getInstance().getUserJobs(0, 0, new Response.Listener<JSONObject>() {
+                @Override
+                public void onResponse(JSONObject response) {
+                    try {
+                        List<Job> jobList = parseJobs(response);
+                        itemList = new ArrayList<>();
+                        for(Job job : jobList){
+                            if (job.getJobId() == jobId) {
+                                itemList.add(job);
+                                initRecyclerView();
+                                return;
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+
+                }
+            });
+        } else initRecyclerView();
     }
 
     private void initRecyclerView() {
@@ -182,7 +197,12 @@ public class JobListActivity extends BaseActivity {
             SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy HH:mm");
             String date = format.format(job.getStartDate()*1000);
             holder.jobDate.setText(date);
-            holder.jobStatus.setText(statusArray.get(job.getJobStateId()));
+            JobState state = JobState.getById(job.getJobStateId());
+            if (state != null){
+                holder.jobStatus.setVisibility(View.VISIBLE);
+                holder.jobStatus.setText(state.getText());
+                holder.jobStatus.setTextColor(state.getColor());
+            } else holder.jobStatus.setVisibility(View.GONE);
             holder.jobLabel.setText(skill.getLabel());
             String description = (job.getEndDate() - job.getStartDate()) / 60 + " мин, " + job.getPrice() + " руб. ";
             switch (skill.getUnitId()) {
@@ -233,19 +253,20 @@ public class JobListActivity extends BaseActivity {
         switch (statusId) {
             case 1:
                 return "Отменить";
-            case 4:
-                return null;
+            case 2:
+                return "Отменить";
+            case 3:
+                return "Отменить";
             case 5:
                 return "Повторить";
-            case 6:
-                return null;
             default:
                 return null;
         }
     }
 
     private View.OnClickListener getBlankButtonClick(int statusId) {
-        if (statusId == 1) return onCancelClickListener;
+        if (statusId == 1 || statusId == 2 || statusId == 3) return onCancelClickListener;
+        if (statusId == 5) return onRepeatClickListener;
         else return null;
     }
 

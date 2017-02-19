@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.nailonline.client.api.ApiVolley;
 import com.nailonline.client.entity.DutyChart;
 import com.nailonline.client.entity.Master;
@@ -31,6 +32,7 @@ import org.json.JSONObject;
 public class SplashActivity extends BaseActivity {
 
     private static final String TAG = "SplashActivity";
+    public static final String FROM_PUSH = "FROM_PUSH";
 
     private boolean isThemesReady;
     private boolean isPromoReady;
@@ -41,6 +43,8 @@ public class SplashActivity extends BaseActivity {
     private boolean isPresentsReady;
     private boolean isDutiesReady;
     private boolean isRegionsReady = true;
+
+    private boolean fromPush = false;
 
     @Override
     protected int getLayoutId() {
@@ -55,8 +59,17 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void setData(Bundle savedInstanceState) {
         super.setData(savedInstanceState);
+        fromPush = getIntent().getBooleanExtra(FROM_PUSH, false);
         if (PrefsHelper.getInstance().getToken().isEmpty()) getTokenFromApi();
-        else syncronizeData();
+        else {
+            syncronizeData();
+        }
+        String pushToken = FirebaseInstanceId.getInstance().getToken();
+        if (!PrefsHelper.getInstance().getUserToken().isEmpty() &&
+                pushToken != null &&
+                !pushToken.equals(PrefsHelper.getInstance().getPushToken())){
+            ApiVolley.getInstance().bindPushToken(pushToken);
+        }
     }
 
     private void getTokenFromApi() {
@@ -475,7 +488,14 @@ public class SplashActivity extends BaseActivity {
                 isSkillsTemplatesReady &&
                 isPresentsReady &&
                 isDutiesReady){
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+            finishActivity();
+        }
+    }
+
+    private void finishActivity(){
+        if (fromPush) finish();
+        else {
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
         }
     }

@@ -143,6 +143,13 @@ public class RealmHelper {
         return result;
     }
 
+    public static List<Skill> getSkillsByPresent(int presentId) {
+        Realm realm = Realm.getDefaultInstance();
+        List<Skill> result = realm.copyFromRealm(realm.where(Skill.class).equalTo("presentId", presentId).findAll());
+        realm.close();
+        return result;
+    }
+
     public static List<SkillsTemplate> getAllSkillsTemplates() {
         Realm realm = Realm.getDefaultInstance();
         List<SkillsTemplate> result = realm.copyFromRealm(realm.where(SkillsTemplate.class).findAll());
