@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.nailonline.client.App;
+import com.nailonline.client.BuildConfig;
 import com.nailonline.client.helper.PrefsHelper;
 
 import org.json.JSONException;
@@ -53,6 +54,7 @@ public class ApiVolley {
     REQUEST_TAG = "REQUEST_TAG";
 
     private static final int POST = Request.Method.POST;
+    private static final int GET = Request.Method.GET;
 
     private RequestQueue mRequestQueue;
 
@@ -119,6 +121,21 @@ public class ApiVolley {
 
         String url = buildUrl(pParams);
         Log.d("APIRequest", pParams.toString());
+
+        JsonObjectRequest request = new JsonObjectRequest(pMethod, url, null, pRL, pEL);
+
+        request.setRetryPolicy(new DefaultRetryPolicy(
+                DefaultRetryPolicy.DEFAULT_TIMEOUT_MS * 8, // 10sec
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        request.setTag(REQUEST_TAG);
+
+        getRequestQueue().add(request);
+    }
+
+    public void sendRequest(int pMethod, String url,
+                            Response.Listener<JSONObject> pRL,
+                            Response.ErrorListener pEL) {
 
         JsonObjectRequest request = new JsonObjectRequest(pMethod, url, null, pRL, pEL);
 
@@ -246,5 +263,10 @@ public class ApiVolley {
     public void getUser(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
         Map<String, String> params = getDefaultParams("get_user");
         sendRequest(POST, params, pRL, pEL);
+    }
+
+    public void getRegions(Response.Listener<JSONObject> pRL, Response.ErrorListener pEL) {
+        String url = BuildConfig.SERVER_REGIONS_JSON;
+        sendRequest(GET, url, pRL, pEL);
     }
 }

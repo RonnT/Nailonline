@@ -7,6 +7,7 @@ import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Present;
 import com.nailonline.client.entity.Promo;
+import com.nailonline.client.entity.Region;
 import com.nailonline.client.entity.ShortJob;
 import com.nailonline.client.entity.Skill;
 import com.nailonline.client.entity.SkillsTemplate;
@@ -138,34 +139,16 @@ public class ParserHelper {
         return result;
     }
 
-/*
-    public static void parseAndSaveRegions(JSONObject jsonObject){
+    public static void parseAndSaveRegions(JSONObject jsonObject) throws JSONException {
+        final JSONArray jsonArray = jsonObject.getJSONArray("Data");
         Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        try {
-            JSONArray jsonArray = jsonObject.getJSONArray("Data");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject object = jsonArray.getJSONObject(i);
-                Region realmRegion = realm.createObject(Region.class);
-                realmRegion.seteRegionId(object.getInt("eRegionId"));
-                realmRegion.seteRegionLabel(object.getString("eRegionLabel"));
-                realmRegion.seteRegionBelt(object.getInt("eRegionBelt"));
-
-               JSONArray boundsArray = object.getJSONArray("eRegionBounds");
-                List<Region.Coords> latLngList = new ArrayList<>();
-                for (int j = 0; j < boundsArray.length(); j++){
-                    JSONArray coordsArray = boundsArray.getJSONArray(j);
-                    double lat = coordsArray.getDouble(0);
-                    double lng = coordsArray.getDouble(1);
-
-                    latLngList.add(new Region.Coords(lat, lng));
-                }
-                realmRegion.seteRegionBounds(latLngList);
+        RealmHelper.clearAllForClass(realm, Region.class);
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.createOrUpdateAllFromJson(Region.class, jsonArray);
             }
-        } catch (JSONException e){
-            e.printStackTrace();
-        } finally {
-            realm.cancelTransaction();
-        }
-    }*/
+        });
+        realm.close();
+    }
 }

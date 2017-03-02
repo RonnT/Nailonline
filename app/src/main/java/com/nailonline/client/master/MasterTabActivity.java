@@ -8,12 +8,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.nailonline.client.BaseActivity;
-import com.nailonline.client.order.makenew.NewOrderActivity;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.helper.RealmHelper;
+import com.nailonline.client.order.makenew.NewOrderActivity;
+import com.nailonline.client.region.SelectDistrictActivity;
 
 import java.util.List;
 
@@ -48,7 +51,7 @@ public class MasterTabActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTabLayout();
         int skillsTemplateId = getIntent().getIntExtra(TEMPLATE_ID_KEY, -1);
-        if (skillsTemplateId > -1){
+        if (skillsTemplateId > -1) {
             masterList = RealmHelper.getMastersWithSkillsTemplate(skillsTemplateId);
         } else masterList = RealmHelper.getAllMasters();
     }
@@ -74,6 +77,22 @@ public class MasterTabActivity extends BaseActivity {
         Intent intent = new Intent(this, NewOrderActivity.class);
         intent.putExtra(NewOrderActivity.TAG_MASTER_ID, masterList.get(masterPosition).getMasterId());
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.master_tab_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.filter) {
+            Intent intent = new Intent(this, SelectDistrictActivity.class);
+            startActivity(intent);
+            return true;
+
+        } else return super.onOptionsItemSelected(item);
     }
 
     private class MasterTabAdapter extends android.support.v4.app.FragmentPagerAdapter {

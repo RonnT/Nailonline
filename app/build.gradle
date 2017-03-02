@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "com.nailonline.client"
         minSdkVersion 16
@@ -24,7 +24,7 @@ android {
             it.buildConfigField('String', 'SERVER_IMAGE_PROMO', "\"http://185.20.225.17/images/promo/\"");
             it.buildConfigField('String', 'SERVER_IMAGE_MASTER_PHOTO', "\"http://185.20.225.17/images/mastersPhoto/\"");
             it.buildConfigField('String', 'SERVER_IMAGE_MASTER_TBS', "\"http://185.20.225.17/images/mastersTbs/\"");
-            it.buildConfigField('String', 'SERVER_REGIONS_JSON', "\"https://www.nail-on-line.pro:8443/images/eRegions.json\"");
+            it.buildConfigField('String', 'SERVER_REGIONS_JSON', "\"http://185.20.225.17:8080/images/eRegions.json\"");
 
         }
     }
@@ -46,11 +46,11 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //noinspection GradleDependency
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.2.0'
     //noinspection GradleDependency
-    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:design:25.2.0'
     //noinspection GradleDependency
-    compile 'com.android.support:cardview-v7:23.4.0'
+    compile 'com.android.support:cardview-v7:25.2.0'
 
     //Google maps
     compile 'com.google.android.gms:play-services-location:10.2.0'

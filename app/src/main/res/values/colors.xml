@@ -15,6 +15,7 @@
 
     <color name="just_grey">#BDBDBD</color>
     <color name="default_secondary_text_color">#86000000</color>
+    <color name="map_region_stroke">#7C4DFF</color>
 
     <!-- used in progressBar -->
     <color name="green">#0d8b42</color>

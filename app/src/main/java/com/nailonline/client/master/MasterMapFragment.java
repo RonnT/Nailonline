@@ -1,6 +1,7 @@
 package com.nailonline.client.master;
 
 import android.Manifest;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,10 +24,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polygon;
+import com.google.android.gms.maps.model.PolygonOptions;
 import com.nailonline.client.BuildConfig;
 import com.nailonline.client.R;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
+import com.nailonline.client.entity.Region;
+import com.nailonline.client.helper.RealmHelper;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -46,12 +51,13 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback, G
     private MapView mapView;
     private List<Master> masterList;
     private List<Marker> markerList = new ArrayList<>();
+    private List<Region> regionList = RealmHelper.getRegionList();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_master_map, container, false);
-        masterList = ((MasterTabActivity)getActivity()).getMasterList();
+        masterList = ((MasterTabActivity) getActivity()).getMasterList();
         mapView = (MapView) view.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -69,22 +75,36 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback, G
             @Override
             public void onInfoWindowClick(Marker marker) {
                 if (marker.getTag() != null) {
-                    ((MasterTabActivity) getActivity()).makeNewOrder(((Master)marker.getTag()));
+                    ((MasterTabActivity) getActivity()).makeNewOrder(((Master) marker.getTag()));
                 }
             }
         });
         MasterMapFragmentPermissionsDispatcher.addMyLocationWithCheck(this);
         setupMap();
+
+        int colorFill = Color.argb(90, 138, 119, 156);
+        for (Region region : regionList) {
+            PolygonOptions options = new PolygonOptions();
+            for (LatLng latLng : region.getCoordsList()) {
+                options.add(latLng);
+            }
+            options.fillColor(colorFill);
+            options.strokeColor(R.color.map_region_stroke);
+            options.strokeWidth(2);
+            options.zIndex(90f);
+            options.clickable(true);
+            Polygon polygon = map.addPolygon(options);
+        }
     }
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     @SuppressWarnings("All")
-    void addMyLocation(){
+    void addMyLocation() {
         map.setMyLocationEnabled(true);
     }
 
-    protected void setupMap(){
-        for (Master master : masterList){
+    protected void setupMap() {
+        for (Master master : masterList) {
             if (master.getMasterLocation() != null) addMarker(master);
         }
         setBounds();
@@ -116,7 +136,7 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback, G
         LatLngBounds bounds = builder.build();
         // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, (int) getActivity().getResources().getDimension(R.dimen.map_bounds_padding));
-        map.animateCamera(cu);
+        map.moveCamera(cu);
     }
 
     @Override

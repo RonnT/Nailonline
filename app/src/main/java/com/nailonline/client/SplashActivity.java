@@ -42,7 +42,7 @@ public class SplashActivity extends BaseActivity {
     private boolean isSkillsTemplatesReady;
     private boolean isPresentsReady;
     private boolean isDutiesReady;
-    private boolean isRegionsReady = true;
+    private boolean isRegionsReady = false;
 
     private boolean fromPush = false;
 
@@ -392,6 +392,26 @@ public class SplashActivity extends BaseActivity {
     }
 
     private void syncronizeRegions(){
+        ApiVolley.getInstance().getRegions(new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    ParserHelper.parseAndSaveRegions(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                isRegionsReady = true;
+                checkSyncronizeFinish();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+                isRegionsReady = true;
+                checkSyncronizeFinish();
+            }
+        });
+
 /*
         AsyncTask<Void, String, JSONObject> asyncTask = new AsyncTask<Void, String, JSONObject>() {
             @Override
@@ -414,11 +434,7 @@ public class SplashActivity extends BaseActivity {
                     }
                     return new JSONObject(buffer.toString());
 
-                } catch (MalformedURLException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                } catch (JSONException e) {
+                } catch (JSONException | IOException e) {
                     e.printStackTrace();
                 } finally {
                     if (connection != null) {
@@ -439,43 +455,10 @@ public class SplashActivity extends BaseActivity {
             protected void onPostExecute(JSONObject jsonObject) {
                 super.onPostExecute(jsonObject);
                 ParserHelper.parseAndSaveRegions(jsonObject);
+                isRegionsReady = true;
             }
         };
-        asyncTask.execute();
-
-        /*
-        ApiVolley.getInstance().getAllSkills(new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-                isSkillsReady = true;
-                ResponseHttp responseHttp = new ResponseHttp(response);
-                if (responseHttp != null) {
-                    if (responseHttp.getError() != null) {
-
-                        Log.d(TAG, "get_all_skills " + responseHttp.getError().getType());
-                        Log.d(TAG, "get_all_skills content " + responseHttp.getError().getMessage());
-
-                        if (responseHttp.getError().getType().equals(ErrorHttp.ErrorType.ENTITY_NOT_FOUND)) { //TODO уточнить с ошибкой
-                            RealmHelper.clearAllForClass(Skill.class);
-                        }
-                        return;
-                    }
-                    try {
-                        ParserHelper.parseAndSaveSkills(response);
-                        checkSyncronizeFinish();
-                    } catch (JSONException e) {
-                        //TODO make error
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                isSkillsReady = true;
-                //TODO make error
-            }
-        });*/
+        asyncTask.execute();*/
     }
 
     private void checkSyncronizeFinish(){

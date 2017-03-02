@@ -5,6 +5,7 @@ import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
 import com.nailonline.client.entity.Present;
 import com.nailonline.client.entity.Promo;
+import com.nailonline.client.entity.Region;
 import com.nailonline.client.entity.Skill;
 import com.nailonline.client.entity.SkillsTemplate;
 import com.nailonline.client.entity.UserTheme;
@@ -181,6 +182,13 @@ public class RealmHelper {
     public static List<DutyChart> getDutyChartForMaster(int masterId) {
         Realm realm = Realm.getDefaultInstance();
         List<DutyChart> result = realm.copyFromRealm(realm.where(DutyChart.class).equalTo("masterId", masterId).findAllSorted("order"));
+        realm.close();
+        return result;
+    }
+
+    public static List<Region> getRegionList(){
+        Realm realm = Realm.getDefaultInstance();
+        List<Region> result = realm.copyFromRealm(realm.where(Region.class).findAll());
         realm.close();
         return result;
     }
