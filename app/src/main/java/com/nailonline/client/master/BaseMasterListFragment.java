@@ -18,9 +18,10 @@ import java.util.List;
  * Created by Roman T. on 21.12.2016.
  */
 
-public abstract class BaseMasterListFragment extends Fragment {
+public abstract class BaseMasterListFragment extends Fragment implements IUpdatable{
 
     protected List<Master> masterList;
+    protected RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
 
     @Nullable
     @Override
@@ -36,7 +37,13 @@ public abstract class BaseMasterListFragment extends Fragment {
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.master_recycler_view);
         if (recyclerView == null) return;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(getAdapter());
+        adapter = getAdapter();
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onUpdate() {
+        adapter.notifyDataSetChanged();
     }
 
     protected abstract int getLayoutId();

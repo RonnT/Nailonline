@@ -100,6 +100,22 @@ public class RealmHelper {
         return resultList;
     }
 
+    public static List<Master> getMastersForRegion(List<Integer> regionIdList){
+        Realm realm = Realm.getDefaultInstance();
+        List<Master> tempMasterList = realm.copyFromRealm(realm.where(Master.class).findAll());
+        List<Master> resultList = new ArrayList<>();
+        for (Master master : tempMasterList){
+            MasterLocation location = realm.where(MasterLocation.class).equalTo("masterId", master.getMasterId()).findFirst();
+            //if location == null, we cannot place master on the map, master skipped
+            if (location != null && regionIdList.contains(location.geteRegionId())) {
+                master.setMasterLocation(realm.copyFromRealm(location));
+                resultList.add(master);
+            }
+        }
+        realm.close();
+        return resultList;
+    }
+
     public static List<Master> getMastersWithSkillsTemplate(int templateId){
         List<Skill> skillList = getSkillsByTemplate(templateId);
         HashSet<Integer> masterIdSet = new HashSet<>();
@@ -189,6 +205,17 @@ public class RealmHelper {
     public static List<Region> getRegionList(){
         Realm realm = Realm.getDefaultInstance();
         List<Region> result = realm.copyFromRealm(realm.where(Region.class).findAll());
+        realm.close();
+        return result;
+    }
+
+    public static List<Region> getRegionListForIds(List<Integer> regionIdList){
+        Realm realm = Realm.getDefaultInstance();
+        List<Region> tempRegions = realm.copyFromRealm(realm.where(Region.class).findAll());
+        List<Region> result = new ArrayList<>();
+        for (Region region : tempRegions){
+            if (regionIdList.contains(region.geteRegionId())) result.add(region);
+        }
         realm.close();
         return result;
     }

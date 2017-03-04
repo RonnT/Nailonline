@@ -2,8 +2,6 @@ package com.nailonline.client.master;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +24,7 @@ import java.util.List;
  * Created by Roman T. on 18.12.2016.
  */
 
-public class MasterGalleryFragment extends Fragment {
+public class MasterGalleryFragment extends BaseMasterListFragment{
 
     private static final int WITHOUT_TBS = 1;
     private static final int WITH_TBS = 2;
@@ -43,10 +41,14 @@ public class MasterGalleryFragment extends Fragment {
         return fragmentView;
     }
 
-    private void initRecyclerView(View view) {
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.master_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(new GalleryAdapter());
+    @Override
+    protected int getLayoutId() {
+        return R.layout.fragment_master_gallery;
+    }
+
+    @Override
+    protected RecyclerView.Adapter<RecyclerView.ViewHolder> getAdapter() {
+        return new GalleryAdapter();
     }
 
     private class GalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

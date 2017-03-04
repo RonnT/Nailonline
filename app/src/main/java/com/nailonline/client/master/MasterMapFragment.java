@@ -45,23 +45,28 @@ import permissions.dispatcher.RuntimePermissions;
  */
 
 @RuntimePermissions
-public class MasterMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
+public class MasterMapFragment extends Fragment implements IUpdatable, OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap map;
     private MapView mapView;
-    private List<Master> masterList;
+    private List<Master> masterList = new ArrayList<>();
     private List<Marker> markerList = new ArrayList<>();
-    private List<Region> regionList = RealmHelper.getRegionList();
+    private List<Polygon> polygonList = new ArrayList<>();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_master_map, container, false);
-        masterList = ((MasterTabActivity) getActivity()).getMasterList();
+        updateMasterList();
         mapView = (MapView) view.findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         return view;
+    }
+
+    private void updateMasterList() {
+        masterList.clear();
+        masterList.addAll(((MasterTabActivity) getActivity()).getMasterList());
     }
 
     @Override
@@ -81,8 +86,26 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback, G
         });
         MasterMapFragmentPermissionsDispatcher.addMyLocationWithCheck(this);
         setupMap();
+    }
 
+    protected void setupMap() {
+        map.clear();
+        for (Master master : masterList) {
+            if (master.getMasterLocation() != null) addMarker(master);
+        }
+        setBounds();
+        updateRegionPolygons();
+    }
+
+    private void updateRegionPolygons() {
+        if (!polygonList.isEmpty()) {
+            for (Polygon polygon : polygonList) {
+                polygon.remove();
+            }
+            polygonList.clear();
+        }
         int colorFill = Color.argb(90, 138, 119, 156);
+        List<Region> regionList = generateRegionList();
         for (Region region : regionList) {
             PolygonOptions options = new PolygonOptions();
             for (LatLng latLng : region.getCoordsList()) {
@@ -93,21 +116,20 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback, G
             options.strokeWidth(2);
             options.zIndex(90f);
             options.clickable(true);
-            Polygon polygon = map.addPolygon(options);
+            polygonList.add(map.addPolygon(options));
         }
+    }
+
+    private List<Region> generateRegionList() {
+        List<Integer> regionIdList = ((MasterTabActivity) getActivity()).getRegionIdList();
+        if (regionIdList.isEmpty()) return RealmHelper.getRegionList();
+        else return RealmHelper.getRegionListForIds(regionIdList);
     }
 
     @NeedsPermission(Manifest.permission.ACCESS_FINE_LOCATION)
     @SuppressWarnings("All")
     void addMyLocation() {
         map.setMyLocationEnabled(true);
-    }
-
-    protected void setupMap() {
-        for (Master master : masterList) {
-            if (master.getMasterLocation() != null) addMarker(master);
-        }
-        setBounds();
     }
 
     protected void addMarker(Master masterItem) {
@@ -174,6 +196,12 @@ public class MasterMapFragment extends Fragment implements OnMapReadyCallback, G
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         MasterMapFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+    @Override
+    public void onUpdate() {
+        updateMasterList();
+        setupMap();
     }
 
     private class MasterInfoWindowAdpater implements GoogleMap.InfoWindowAdapter {

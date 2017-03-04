@@ -65,6 +65,9 @@
     <string name="cancel_order">Отменить запись?</string>
     <string name="back">Назад</string>
 
+    <!-- SelectDistrictActivity -->
+    <string name="warning">Внимание</string>
+    <string name="confirmation_apply">Вы ходите сохранить изменения?</string>
 
 
     <plurals name="numberOfHands">

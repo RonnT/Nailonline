@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="?actionBarSize"
         android:background="?attr/colorPrimary"
+        android:paddingBottom="1dp"
         android:elevation="@dimen/toolbar_elevation"
         app:tabGravity="fill"
         app:tabIndicatorHeight="3dp"
