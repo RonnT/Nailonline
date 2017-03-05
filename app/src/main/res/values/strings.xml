@@ -69,6 +69,11 @@
     <string name="warning">Внимание</string>
     <string name="confirmation_apply">Вы ходите сохранить изменения?</string>
 
+    <!-- JobListActivity -->
+    <string name="pay">Оплатить</string>
+    <string name="repeat">Повторить</string>
+    <string name="cancel_successed">Запись успешно отменена</string>
+    <string name="cancel_error">При отмене записи произошла ошибка</string>
 
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>

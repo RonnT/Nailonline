@@ -3,6 +3,8 @@ package com.nailonline.client.entity;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import io.realm.annotations.Ignore;
+
 /**
  * Created by Roman T. on 16.02.2017.
  */
@@ -20,6 +22,9 @@ public class Job implements Parcelable {
     private Long endDate;
     private Integer jobAmount;
     private String jobComments;
+
+    @Ignore
+    private boolean bonusPay;
 
     protected Job(Parcel in) {
         jobId = in.readInt();
@@ -130,6 +135,14 @@ public class Job implements Parcelable {
 
     public void setJobComments(String jobComments) {
         this.jobComments = jobComments;
+    }
+
+    public boolean isBonusPay() {
+        return bonusPay;
+    }
+
+    public void setBonusPay(boolean bonusPay) {
+        this.bonusPay = bonusPay;
     }
 
     public static Creator<Job> getCREATOR() {

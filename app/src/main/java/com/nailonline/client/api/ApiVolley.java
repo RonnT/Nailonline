@@ -269,4 +269,10 @@ public class ApiVolley {
         String url = BuildConfig.SERVER_REGIONS_JSON;
         sendRequest(GET, url, pRL, pEL);
     }
+
+    public void isJobBonusPayEnable(int jobId, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
+        Map<String, String> params = getDefaultParams("is_JobBonusPay_enable");
+        params.put(JOB_ID, String.valueOf(jobId));
+        sendRequest(POST, params, pRL, pEL);
+    }
 }

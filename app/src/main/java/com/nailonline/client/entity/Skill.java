@@ -20,6 +20,7 @@ public class Skill extends RealmObject{
     private Integer templateId;
     private Integer unitId;
     private Integer userBonus;
+    private Integer bonusPay;
 
     public Integer getDuration() {
         return duration;
@@ -99,5 +100,13 @@ public class Skill extends RealmObject{
 
     public void setUserBonus(Integer userBonus) {
         this.userBonus = userBonus;
+    }
+
+    public Integer getBonusPay() {
+        return bonusPay;
+    }
+
+    public void setBonusPay(Integer bonusPay) {
+        this.bonusPay = bonusPay;
     }
 }
