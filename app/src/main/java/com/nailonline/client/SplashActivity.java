@@ -19,8 +19,8 @@ import com.nailonline.client.entity.UserTheme;
 import com.nailonline.client.helper.ParserHelper;
 import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;
-import com.nailonline.client.server.ErrorHttp;
-import com.nailonline.client.server.ResponseHttp;
+import com.nailonline.client.api.ErrorHttp;
+import com.nailonline.client.api.ResponseHttp;
 
 import org.json.JSONException;
 import org.json.JSONObject;

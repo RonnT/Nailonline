@@ -270,8 +270,8 @@ public class ApiVolley {
         sendRequest(GET, url, pRL, pEL);
     }
 
-    public void isJobBonusPayEnable(int jobId, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
-        Map<String, String> params = getDefaultParams("is_JobBonusPay_enable");
+    public void payJob(int jobId, Response.Listener<JSONObject> pRL, Response.ErrorListener pEL){
+        Map<String, String> params = getDefaultParams("pay_job");
         params.put(JOB_ID, String.valueOf(jobId));
         sendRequest(POST, params, pRL, pEL);
     }

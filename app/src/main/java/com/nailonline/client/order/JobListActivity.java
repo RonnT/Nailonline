@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.nailonline.client.BaseActivity;
@@ -31,8 +34,8 @@ import com.nailonline.client.entity.Skill;
 import com.nailonline.client.helper.ParserHelper;
 import com.nailonline.client.helper.RealmHelper;
 import com.nailonline.client.order.makenew.NewOrderActivity;
-import com.nailonline.client.server.ErrorHttp;
-import com.nailonline.client.server.ResponseHttp;
+import com.nailonline.client.api.ErrorHttp;
+import com.nailonline.client.api.ResponseHttp;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -100,7 +103,6 @@ public class JobListActivity extends BaseActivity {
         }
     };
 
-
     @Override
     protected int getLayoutId() {
         return R.layout.activity_order_list;
@@ -113,10 +115,10 @@ public class JobListActivity extends BaseActivity {
 
         ButterKnife.bind(this);
         itemList = getIntent().getParcelableArrayListExtra(JOB_LIST_KEY);
-        //it use from push
+        //it using from push
         final int jobId = getIntent().getIntExtra(JOB_KEY, -1);
 
-        if ((itemList == null || itemList.isEmpty()) && jobId > 0) {
+        if (jobId > 0 && (itemList == null || itemList.isEmpty())) {
             ApiVolley.getInstance().getUserJobs(0, 0, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
@@ -126,10 +128,10 @@ public class JobListActivity extends BaseActivity {
                         for (Job job : jobList) {
                             if (job.getJobId() == jobId) {
                                 itemList.add(job);
-                                initRecyclerView();
                                 return;
                             }
                         }
+                        fillBonusPayForJobs();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -140,7 +142,9 @@ public class JobListActivity extends BaseActivity {
 
                 }
             });
-        } else initRecyclerView();
+        }
+        fillBonusPayForJobs();
+        initRecyclerView();
     }
 
     private void initRecyclerView() {
@@ -151,6 +155,13 @@ public class JobListActivity extends BaseActivity {
     private RecyclerView.Adapter<JobViewHolder> getAdapter() {
         if (adapter == null) adapter = new JobListAdapter();
         return adapter;
+    }
+
+    private void fillBonusPayForJobs() {
+        for (Job job : itemList) {
+            int bonusPay = RealmHelper.getSkillById(job.getJobSkillId()).getBonusPay();
+            job.setBonusPay(bonusPay == 1);
+        }
     }
 
     private class JobListAdapter extends RecyclerView.Adapter<JobViewHolder> {
@@ -195,21 +206,21 @@ public class JobListActivity extends BaseActivity {
                     break;
             }
             holder.jobDescription.setText(description);
-
-            if (getFilledButtonText(job.getJobStateId()) != null) {
-                holder.filledButton.setText(getFilledButtonText(job.getJobStateId()));
+            String filledButtonText = getFilledButtonText(job.getJobStateId(), job.isBonusPay());
+            if (filledButtonText != null) {
+                holder.filledButton.setText(filledButtonText);
                 holder.filledButton.getBackground().setColorFilter(getUserTheme().getParsedMC(), PorterDuff.Mode.MULTIPLY);
                 holder.filledButton.setTextColor(getUserTheme().getParsedWC());
                 holder.filledButton.setTag(position);
-                holder.filledButton.setOnClickListener(getFilledButtonClick(job.getJobStateId()));
+                holder.filledButton.setOnClickListener(getFilledButtonClick(job.getJobStateId(), job.isBonusPay()));
             } else holder.filledButtonLayout.setVisibility(View.GONE);
 
-            if (getBlankButtonText(job.getJobStateId()) != null) {
+            String blankButtonText = getBlankButtonText(job.getJobStateId(), job.isBonusPay());
+            if (blankButtonText != null) {
                 holder.blankButtonLayout.setVisibility(View.VISIBLE);
-                holder.blankButton.setText(getBlankButtonText(job.getJobStateId()));
                 holder.blankButton.getBackground().setColorFilter(getUserTheme().getParsedWC(), PorterDuff.Mode.MULTIPLY);
                 holder.blankButton.setTextColor(getUserTheme().getParsedMC());
-                holder.blankButton.setText(getBlankButtonText(job.getJobStateId()));
+                holder.blankButton.setText(blankButtonText);
                 holder.blankButton.setTag(position);
                 holder.blankButton.setOnClickListener(getBlankButtonClick(job.getJobStateId()));
             } else holder.blankButtonLayout.setVisibility(View.GONE);
@@ -221,18 +232,19 @@ public class JobListActivity extends BaseActivity {
         }
     }
 
-    private String getFilledButtonText(int statusId) {
+    private String getFilledButtonText(int statusId, boolean isBonusPay) {
         JobState state = JobState.getById(statusId);
         if (state == null) return null;
         switch (state) {
             case COMPLETE:
-                return getString(R.string.pay);
+                if (isBonusPay) return getString(R.string.pay);
+                else return getString(R.string.repeat);
             default:
                 return getString(R.string.repeat);
         }
     }
 
-    private String getBlankButtonText(int statusId) {
+    private String getBlankButtonText(int statusId, boolean isBonusPay) {
         JobState state = JobState.getById(statusId);
         if (state == null) return null;
         switch (state) {
@@ -243,7 +255,8 @@ public class JobListActivity extends BaseActivity {
             case POSTPONED:
                 return getString(android.R.string.cancel);
             case COMPLETE:
-                return getString(R.string.repeat);
+                if (isBonusPay) return getString(R.string.repeat);
+                else return null;
             default:
                 return null;
         }
@@ -263,8 +276,12 @@ public class JobListActivity extends BaseActivity {
         }
     }
 
-    private View.OnClickListener getFilledButtonClick(int statusId) {
-        if (statusId == JobState.COMPLETE.getId()) return onPayClickListener;
+    private View.OnClickListener getFilledButtonClick(int statusId, boolean isBonusPay) {
+        if (statusId == JobState.COMPLETE.getId()) {
+            if (isBonusPay) return onPayClickListener;
+            else return onRepeatClickListener;
+        }
+        //in other cases this button is 'Повторить'
         else return onRepeatClickListener;
     }
 
@@ -312,22 +329,38 @@ public class JobListActivity extends BaseActivity {
         dialog.show();
     }
 
-    private void doPayment(Job job) {
-        ApiVolley.getInstance().isJobBonusPayEnable(job.getJobId(), new Response.Listener<JSONObject>() {
+    private void doPayment(final Job job) {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+        builder.customView(R.layout.dialog_pay_job, false)
+                .positiveText(R.string.pay)
+                .negativeText(android.R.string.cancel)
+                .positiveColor(getUserTheme().getParsedAC())
+                .negativeColor(getUserTheme().getParsedAC())
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        sendPayRequest(job.getJobId());
+                    }
+                })
+                .show();
+    }
+
+    private void sendPayRequest(int jobId) {
+        ApiVolley.getInstance().payJob(jobId, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    int isEnable = response.getInt("bonusPay");
-
+                    if (response.getBoolean("success")) {
+                        showAlertDialog(-1, R.string.payment_success);
+                    } else showAlertDialog(R.string.error, R.string.error_unable_to_pay);
                 } catch (JSONException e) {
-                    Toast.makeText(JobListActivity.this, R.string.unexpected_error, Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(JobListActivity.this, R.string.unexpected_error, Toast.LENGTH_SHORT).show();
+                showAlertDialog(R.string.error, R.string.error_unable_to_pay);
             }
         });
     }
@@ -379,6 +412,7 @@ public class JobListActivity extends BaseActivity {
                             itemList.add(job);
                         }
                     }
+                    fillBonusPayForJobs();
                     Collections.sort(itemList, new Comparator<Job>() {
                         @Override
                         public int compare(Job job, Job job2) {

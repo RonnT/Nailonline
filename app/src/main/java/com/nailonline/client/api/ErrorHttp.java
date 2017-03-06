@@ -1,4 +1,4 @@
-package com.nailonline.client.server;
+package com.nailonline.client.api;
 
 import android.content.Context;
 import android.widget.Toast;

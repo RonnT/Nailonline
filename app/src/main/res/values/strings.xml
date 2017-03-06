@@ -5,6 +5,7 @@
     <string name="tag_painted_mc">painted_mc</string>
 
     <!-- Errors -->
+    <string name="error">Ошибка</string>
     <string name="unexpected_error">Произошла ошибка, попробуйте позже</string>
     <string name="error_select_skill">Сначала выберите услугу</string>
     <string name="error_select_date">Выберите дату</string>
@@ -74,6 +75,10 @@
     <string name="repeat">Повторить</string>
     <string name="cancel_successed">Запись успешно отменена</string>
     <string name="cancel_error">При отмене записи произошла ошибка</string>
+    <string name="dialog_pay_title">Хотите оплатить эту услугу бонусами?</string>
+    <string name="dialog_pay_content">(Если Вы расплатились наличными, то попросите мастера выставить статус оплаты вручную)</string>
+    <string name="error_unable_to_pay">Оплата не может быть произведена</string>
+    <string name="payment_success">Оплата бонусами прошла успешно</string>
 
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>

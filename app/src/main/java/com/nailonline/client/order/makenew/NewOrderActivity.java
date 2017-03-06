@@ -38,7 +38,7 @@ import com.nailonline.client.extension.CustomTimePickerDialog;
 import com.nailonline.client.helper.ParserHelper;
 import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;
-import com.nailonline.client.server.ResponseHttp;
+import com.nailonline.client.api.ResponseHttp;
 import com.squareup.picasso.Picasso;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.Timepoint;

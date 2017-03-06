@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.nailonline.client.entity.UserTheme;
 import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;
@@ -52,14 +53,14 @@ public abstract class BaseActivity extends AppCompatActivity {
             toolbar.setBackgroundColor(userTheme.getParsedMC());
             toolbar.setTitleTextColor(Color.WHITE);
         }
-        if (isNeedDeepSetColor){
+        if (isNeedDeepSetColor) {
             ViewGroup viewGroup = (ViewGroup) findViewById(R.id.activityContent);
             changeColorsForTheme(viewGroup);
         }
     }
 
     private void changeColorsForTheme(ViewGroup parentLayout) {
-        if (parentLayout == null){
+        if (parentLayout == null) {
             Log.e("Nail", "activity content id not found");
             return;
         }
@@ -67,15 +68,15 @@ public abstract class BaseActivity extends AppCompatActivity {
             View view = parentLayout.getChildAt(count);
             if (view instanceof TextView && view.getTag() != null) {
                 if (view.getTag().equals(getString(R.string.tag_painted_ac))) {
-                    ((TextView)view).setTextColor(userTheme.getParsedAC());
-                } else  if (view.getTag().equals(getString(R.string.tag_painted_mc))){
-                    ((TextView)view).setTextColor(userTheme.getParsedMC());
+                    ((TextView) view).setTextColor(userTheme.getParsedAC());
+                } else if (view.getTag().equals(getString(R.string.tag_painted_mc))) {
+                    ((TextView) view).setTextColor(userTheme.getParsedMC());
                 }
             } else if (view instanceof ImageView && view.getTag() != null) {
-                if (view.getTag().equals(getString(R.string.tag_painted_ac))){
-                    ((ImageView)view).setColorFilter(userTheme.getParsedAC());
-                } else if (view.getTag().equals(getString(R.string.tag_painted_mc))){
-                    ((ImageView)view).setColorFilter(userTheme.getParsedMC());
+                if (view.getTag().equals(getString(R.string.tag_painted_ac))) {
+                    ((ImageView) view).setColorFilter(userTheme.getParsedAC());
+                } else if (view.getTag().equals(getString(R.string.tag_painted_mc))) {
+                    ((ImageView) view).setColorFilter(userTheme.getParsedMC());
                 }
             } else if (view instanceof ViewGroup) {
                 changeColorsForTheme((ViewGroup) view);
@@ -93,7 +94,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public UserTheme getUserTheme(){
+    public UserTheme getUserTheme() {
         return userTheme;
     }
 
@@ -103,8 +104,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         changeColorsForTheme();
     }
 
-    protected void setData(Bundle savedInstanceState){
+    protected void setData(Bundle savedInstanceState) {
         //nothing, can be overrided
+    }
+
+    protected void showAlertDialog(int titleStringId, int contentStringId) {
+        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+        if (titleStringId > 0) builder.title(titleStringId);
+        builder.content(contentStringId)
+                .positiveColor(getUserTheme().getParsedAC())
+               .positiveText(android.R.string.ok)
+               .show();
     }
 
     protected abstract int getLayoutId();
