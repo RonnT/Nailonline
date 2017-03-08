@@ -3,8 +3,10 @@ package com.nailonline.client;
 import android.app.Application;
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
 import com.facebook.stetho.Stetho;
 
+import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 
 /**
@@ -18,16 +20,11 @@ public class App extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        Crashlytics crashlytics = new Crashlytics.Builder().disabled(BuildConfig.DEBUG).build();
+        Fabric.with(this, crashlytics);
         Stetho.initializeWithDefaults(this);
         sContext = getApplicationContext();
         Realm.init(this);
-/*
-        RealmConfiguration realmConfiguration = new RealmConfiguration.Builder()
-                .name(Realm.DEFAULT_REALM_NAME)
-                .schemaVersion(0)
-                .deleteRealmIfMigrationNeeded()
-                .build();
-        Realm.setDefaultConfiguration(realmConfiguration);*/
     }
 
     public static Context getAppContext() {

@@ -56,6 +56,7 @@ import static com.nailonline.client.order.OrderTabActivity.parseJobs;
 import static com.nailonline.client.order.makenew.NewOrderActivity.UNIT_HAND;
 import static com.nailonline.client.order.makenew.NewOrderActivity.UNIT_NAIL;
 import static com.nailonline.client.order.makenew.NewOrderActivity.UNIT_PERSON;
+import static java.lang.Boolean.getBoolean;
 
 /**
  * Created by Roman T. on 17.02.2017.
@@ -128,23 +129,27 @@ public class JobListActivity extends BaseActivity {
                         for (Job job : jobList) {
                             if (job.getJobId() == jobId) {
                                 itemList.add(job);
+                                fillBonusPayForJobs();
+                                initRecyclerView();
                                 return;
                             }
                         }
-                        fillBonusPayForJobs();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        showAlertDialog(R.string.error, R.string.unexpected_error);
                     }
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-
+                    showAlertDialog(R.string.error, R.string.unexpected_error);
                 }
             });
+        } else {
+            fillBonusPayForJobs();
+            initRecyclerView();
         }
-        fillBonusPayForJobs();
-        initRecyclerView();
+
     }
 
     private void initRecyclerView() {
@@ -158,8 +163,10 @@ public class JobListActivity extends BaseActivity {
     }
 
     private void fillBonusPayForJobs() {
+        int bonusPay = 0;
         for (Job job : itemList) {
-            int bonusPay = RealmHelper.getSkillById(job.getJobSkillId()).getBonusPay();
+            Skill skill = RealmHelper.getSkillById(job.getJobSkillId());
+            if (skill != null) bonusPay = skill.getBonusPay();
             job.setBonusPay(bonusPay == 1);
         }
     }
@@ -350,11 +357,22 @@ public class JobListActivity extends BaseActivity {
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    if (response.getBoolean("success")) {
+                    if (response.has("success")) {
                         showAlertDialog(-1, R.string.payment_success);
-                    } else showAlertDialog(R.string.error, R.string.error_unable_to_pay);
+                        refreshData();
+                    } else {
+                        if (response.has("error")){
+                            int errorCode = response.getInt("error");
+                            if (errorCode == 124){
+                                showAlertDialog(R.string.error, R.string.error_insufficient_bonuses);
+                                return;
+                            }
+                        }
+
+                    } showAlertDialog(R.string.error, R.string.error_unable_to_pay);
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    showAlertDialog(R.string.error, R.string.error_unable_to_pay);
                 }
             }
         }, new Response.ErrorListener() {

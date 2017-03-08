@@ -2,6 +2,7 @@ package com.nailonline.client;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.nailonline.client.entity.UserTheme;
 import com.nailonline.client.helper.PrefsHelper;
@@ -109,12 +111,22 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void showAlertDialog(int titleStringId, int contentStringId) {
-        MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
+        showAlertDialog(titleStringId, contentStringId, null);
+    }
+
+    protected void showAlertDialog(int titleStringId, int contentStringId, final Runnable buttonRunnable) {
+        final MaterialDialog.Builder builder = new MaterialDialog.Builder(this);
         if (titleStringId > 0) builder.title(titleStringId);
         builder.content(contentStringId)
                 .positiveColor(getUserTheme().getParsedAC())
-               .positiveText(android.R.string.ok)
-               .show();
+                .positiveText(android.R.string.ok);
+        if (buttonRunnable != null) builder.onPositive(new MaterialDialog.SingleButtonCallback() {
+            @Override
+            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                buttonRunnable.run();
+            }
+        });
+        builder.show();
     }
 
     protected abstract int getLayoutId();

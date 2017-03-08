@@ -1,6 +1,8 @@
 package com.nailonline.client;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,6 +10,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.nailonline.client.api.ApiVolley;
+import com.nailonline.client.api.ErrorHttp;
+import com.nailonline.client.api.ResponseHttp;
 import com.nailonline.client.entity.DutyChart;
 import com.nailonline.client.entity.Master;
 import com.nailonline.client.entity.MasterLocation;
@@ -19,8 +23,6 @@ import com.nailonline.client.entity.UserTheme;
 import com.nailonline.client.helper.ParserHelper;
 import com.nailonline.client.helper.PrefsHelper;
 import com.nailonline.client.helper.RealmHelper;
-import com.nailonline.client.api.ErrorHttp;
-import com.nailonline.client.api.ResponseHttp;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,14 +54,25 @@ public class SplashActivity extends BaseActivity {
     }
 
     @Override
-    protected void initTheme() {
-        //don't need to init
-    }
-
-    @Override
     protected void setData(Bundle savedInstanceState) {
         super.setData(savedInstanceState);
         fromPush = getIntent().getBooleanExtra(FROM_PUSH, false);
+        checkNetworkConnection();
+
+    }
+
+    private void checkNetworkConnection(){
+        if (isNetworkConnected()){
+            startWorkingWithApi();
+        } else showAlertDialog(R.string.error_network_connection_title, R.string.error_network_connection, new Runnable() {
+            @Override
+            public void run() {
+                checkNetworkConnection();
+            }
+        });
+    }
+
+    private void startWorkingWithApi(){
         if (PrefsHelper.getInstance().getToken().isEmpty()) getTokenFromApi();
         else {
             syncronizeData();
@@ -411,54 +424,11 @@ public class SplashActivity extends BaseActivity {
                 checkSyncronizeFinish();
             }
         });
+    }
 
-/*
-        AsyncTask<Void, String, JSONObject> asyncTask = new AsyncTask<Void, String, JSONObject>() {
-            @Override
-            protected JSONObject doInBackground(Void... voids) {
-                HttpURLConnection connection = null;
-                BufferedReader reader = null;
-
-                try {
-                    URL url = new URL(BuildConfig.SERVER_REGIONS_JSON);
-                    connection = (HttpURLConnection) url.openConnection();
-                    connection.connect();
-                    InputStream stream = connection.getInputStream();
-                    reader = new BufferedReader(new InputStreamReader(stream));
-                    StringBuffer buffer = new StringBuffer();
-                    String line = "";
-
-                    while ((line = reader.readLine()) != null) {
-                        buffer.append(line+"\n");
-                        Log.d("Response: ", "> " + line);   //here u ll get whole response...... :-)
-                    }
-                    return new JSONObject(buffer.toString());
-
-                } catch (JSONException | IOException e) {
-                    e.printStackTrace();
-                } finally {
-                    if (connection != null) {
-                        connection.disconnect();
-                    }
-                    try {
-                        if (reader != null) {
-                            reader.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            protected void onPostExecute(JSONObject jsonObject) {
-                super.onPostExecute(jsonObject);
-                ParserHelper.parseAndSaveRegions(jsonObject);
-                isRegionsReady = true;
-            }
-        };
-        asyncTask.execute();*/
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null;
     }
 
     private void checkSyncronizeFinish(){

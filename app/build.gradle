@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'realm-android'
+apply plugin: 'io.fabric'
 
 android {
     compileSdkVersion 25
@@ -28,16 +29,6 @@ android {
 
         }
     }
-    /*
-    static NSString *const kERegionsUrl = @"https://www.nail-on-line.pro:8443/images/eRegions.json";
-    static NSString *const kUrlImages = @"https://www.nail-on-line.pro:8443/images/";
-    static NSString *const kUrlImagesPresents = @"https://www.nail-on-line.pro:8443/images/presents/";
-    static NSString *const kUrlImagesPromo = @"http://185.20.225.17/images/promo/";
-    static NSString *const tUUID = @"";
-    static NSString *const kUrlImagesTbs = @"http://185.20.225.17/images/mastersTbs/";
-    static NSString *const kUrlImagesMasterPhoto = @"http://185.20.225.17/images/mastersPhoto/";
-    Eregions  это районы города
-       */
 }
 
 dependencies {
@@ -87,6 +78,10 @@ dependencies {
     //autoscroll view pager
     compile('cn.trinea.android.view.autoscrollviewpager:android-auto-scroll-view-pager:1.1.2') {
         exclude module: 'support-v4'
+    }
+
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+        transitive = true;
     }
 
     compile 'com.jakewharton:butterknife:8.5.1'

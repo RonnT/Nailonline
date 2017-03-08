@@ -9,6 +9,9 @@
     <string name="unexpected_error">Произошла ошибка, попробуйте позже</string>
     <string name="error_select_skill">Сначала выберите услугу</string>
     <string name="error_select_date">Выберите дату</string>
+    <string name="error_network_connection_title">Ошибка подключения</string>
+    <string name="error_network_connection">Проверьте интернет соединение</string>
+    <string name="error_insufficient_bonuses">Не достаточно бонусов для оплаты</string>
 
     <!-- General menu -->
     <string name="menu_find_master">Найти мастера</string>
@@ -79,6 +82,7 @@
     <string name="dialog_pay_content">(Если Вы расплатились наличными, то попросите мастера выставить статус оплаты вручную)</string>
     <string name="error_unable_to_pay">Оплата не может быть произведена</string>
     <string name="payment_success">Оплата бонусами прошла успешно</string>
+
 
     <plurals name="numberOfHands">
         <item quantity="one">%d рука</item>

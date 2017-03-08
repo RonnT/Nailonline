@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".App"
@@ -13,14 +14,15 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:label="Nail-on-line"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".SplashActivity"
-            android:screenOrientation="portrait"
-            android:noHistory="true">
+        <activity
+            android:name=".SplashActivity"
+            android:noHistory="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,53 +30,56 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".profile.UserThemeActivity"
-            android:screenOrientation="portrait"
-            android:label="">
-        </activity>
+        <activity
+            android:name=".profile.UserThemeActivity"
+            android:label=""
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".master.MasterTabActivity"
-            android:screenOrientation="portrait"
-            android:label="Выбрать мастера">
-        </activity>
+        <activity
+            android:name=".master.MasterTabActivity"
+            android:label="Выбрать мастера"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".ServiceListActivity"
-            android:screenOrientation="portrait"
-            android:label="Типы услуг">
-
-        </activity>
-
-        <activity android:name=".order.makenew.NewOrderActivity"
-            android:screenOrientation="portrait"
-            android:label="Новый заказ">
+        <activity
+            android:name=".ServiceListActivity"
+            android:label="Типы услуг"
+            android:screenOrientation="portrait">
 
         </activity>
 
-        <activity android:name=".order.makenew.SelectSkillActivity"
-            android:screenOrientation="portrait"
-            android:label="Выберите услугу">
+        <activity
+            android:name=".order.makenew.NewOrderActivity"
+            android:label="Новый заказ"
+            android:screenOrientation="portrait">
 
         </activity>
 
-        <activity android:name=".order.OrderTabActivity"
-            android:screenOrientation="portrait"
-            android:label="Мои записи">
+        <activity
+            android:name=".order.makenew.SelectSkillActivity"
+            android:label="Выберите услугу"
+            android:screenOrientation="portrait">
+
         </activity>
 
-        <activity android:name=".order.JobListActivity"
-            android:screenOrientation="portrait"
-            android:label="Мои записи">
-        </activity>
+        <activity
+            android:name=".order.OrderTabActivity"
+            android:label="Мои записи"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".profile.ProfileActivity"
-            android:screenOrientation="portrait"
-            android:label="Мой профиль">
-        </activity>
+        <activity
+            android:name=".order.JobListActivity"
+            android:label="Мои записи"
+            android:screenOrientation="portrait"></activity>
 
-        <activity android:name=".region.SelectDistrictActivity"
-            android:screenOrientation="portrait"
-            android:label="Выбрать район">
-        </activity>
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:label="Мой профиль"
+            android:screenOrientation="portrait"></activity>
+
+        <activity
+            android:name=".region.SelectDistrictActivity"
+            android:label="Выбрать район"
+            android:screenOrientation="portrait"></activity>
 
         <service android:name=".fcm.MyFirebaseMessagingService">
             <intent-filter>
@@ -90,7 +95,9 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAGBXMMFB64ey2Psp4SHitDtg1sabg34aE" />
-
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="413e7489d14b1d734c8da1ac47e4441b7d5a0d70" />
     </application>
 
 </manifest>
